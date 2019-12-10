@@ -11,6 +11,8 @@ import org.matsim.core.scenario.ScenarioUtils;
 
 import com.google.inject.Singleton;
 
+import ch.ethz.matsim.supernetwork.utilities.analysis.inputData.SupNetDefaultActivitiesAnalysis;
+
 public class SupernetworkRunTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -20,6 +22,8 @@ public class SupernetworkRunTest {
 
 		        Scenario scenario = ScenarioUtils.loadScenario(config);
 
+		        SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario);
+		        
 		        // controler
 		        Controler controler = new Controler(scenario);
 		        
