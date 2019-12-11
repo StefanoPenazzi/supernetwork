@@ -5,11 +5,14 @@ package ch.ethz.matsim.supernetwork.utilities.analysis.inputData;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.Math;
 
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
@@ -47,8 +50,39 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	 * necessary finding the wedges
 	 */
 	private List<Triplet<Node, Node, Node>> wedgesFinder(Scenario scenario) {
-		List<Triplet<Node, Node, Node>> wedges = new ArrayList();
 		Network net = directedCompleteNetwork(scenario);
+		List<Triplet<Node, Node,Double>> linkAngles = new ArrayList();
+		List<Triplet<Node, Node, Node>> wedges = new ArrayList();
+		
+		//step 1
+		//Each link needs the angle with respect to the horizontal line passing through the fromNode
+		for (Link l : net.getLinks().values()) {
+			double deltaX = l.getToNode().getCoord().getX() - l.getFromNode().getCoord().getX();
+			double deltaY = l.getToNode().getCoord().getY() - l.getFromNode().getCoord().getY();
+			double angle = Math.atan(deltaY/deltaX);
+			//redo considering deltaX = 0
+			if (deltaX > 0 && deltaY <0) {
+				angle = angle + 2*Math.PI;
+			}
+			else if(deltaX < 0 && deltaY >0) {
+				angle = angle + Math.PI;
+			}
+			Triplet<Node, Node,Double> nna = new Triplet<Node, Node,Double>(l.getFromNode(),l.getToNode(),angle);
+			linkAngles.add(nna);
+		} 
+		
+		//step2
+		//sort the list into ascending order using nodefrom and the angle as primary and secondary key
+		Collections.sort(linkAngles, new Comparator<Triplet<Node, Node,Double>>(){
+			@Override
+			  public int compare(Triplet<Node, Node,Double> u1, Triplet<Node, Node,Double> u2) {
+				int c;
+			    c = u1.getValue0().getId().toString().compareTo(u2.getValue0().getId().toString());
+			    if(c == 0)
+			    	c = u1.getValue2().compareTo(u2.getValue2());
+			    return c;
+			  }
+		});
 		return wedges;
 	}
 
@@ -88,7 +122,6 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 				newLinksFromToNodes.add(nn);
 			}
 		}
-		
 		for(Pair<Node,Node> nn: newLinksFromToNodes) {
 			Id<Link> idl = Id.createLinkId(idCounter);
 			Link ll = NetworkUtils.createLink(idl, nn.getValue0(), nn.getValue1(), net, 1, 1, 1, 1);
@@ -96,7 +129,8 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			idCounter--;
 		}
 		return net;
-	}
+	} 
+	
 
 	public HashMap<Integer, List<Activity>> getActivitiesClusteringResult() {
 		return clusteringActivitiesResult;
