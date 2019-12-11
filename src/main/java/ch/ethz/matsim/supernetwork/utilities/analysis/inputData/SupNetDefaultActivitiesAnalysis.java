@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import static java.util.stream.Collectors.*;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
@@ -42,14 +45,22 @@ public class SupNetDefaultActivitiesAnalysis implements ActivitiesAnalysis {
 			if(p.getPlans().size() >= 1) {
 				for (PlanElement pe : p.getPlans().get(0).getPlanElements()) {
 					if ( !(pe instanceof Activity) ) continue;
-					activities.add((Activity) pe);
+					Activity act = (Activity) pe;
+					if (act.getType() != "pt interaction" && act.getType() != "car interaction" && act.getType() != "ride interaction" 
+							&& act.getType() != "bike interaction") {		
+					activities.add(act);
+					}
 				}
 			}
 		}
 	}
 	
 	private void joinedActivitiesFactory(Scenario scenario) {
+		//Map<Id<Link>, List<Activity>> res = activities.stream().filter(x -> x.getLinkId() != null).collect(groupingBy(Activity::getLinkId));
 		
+		ActivitiesClusteringAlgo clusters = new RegionsPlaneClustering(scenario);
+		
+		System.out.println("");
 	}
 	
     private void activityToActivitiesFactory (Scenario scenario) {

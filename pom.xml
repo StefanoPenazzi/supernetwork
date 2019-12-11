@@ -115,8 +115,17 @@
 			<artifactId>matsim-berlin</artifactId>
 			<version>5.3</version>
 		</dependency>
+		
+		
+		<dependency>
+		    <groupId>org.javatuples</groupId>
+		    <artifactId>javatuples</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		
+		
 	</dependencies>
-
+	
 	<profiles>
 		<profile>
 			<id>standalone</id>
