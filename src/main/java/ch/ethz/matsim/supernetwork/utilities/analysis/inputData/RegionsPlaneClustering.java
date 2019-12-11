@@ -51,7 +51,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	 */
 	private List<Triplet<Node, Node, Node>> wedgesFinder(Scenario scenario) {
 		Network net = directedCompleteNetwork(scenario);
-		List<Triplet<Node, Node,Double>> linkAngles = new ArrayList();
+		List<Triplet<Node, Node,Double>> linksAngle = new ArrayList();
 		List<Triplet<Node, Node, Node>> wedges = new ArrayList();
 		
 		//step 1
@@ -68,12 +68,12 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 				angle = angle + Math.PI;
 			}
 			Triplet<Node, Node,Double> nna = new Triplet<Node, Node,Double>(l.getFromNode(),l.getToNode(),angle);
-			linkAngles.add(nna);
+			linksAngle.add(nna);
 		} 
 		
 		//step2
 		//sort the list into ascending order using nodefrom and the angle as primary and secondary key
-		Collections.sort(linkAngles, new Comparator<Triplet<Node, Node,Double>>(){
+		Collections.sort(linksAngle, new Comparator<Triplet<Node, Node,Double>>(){
 			@Override
 			  public int compare(Triplet<Node, Node,Double> u1, Triplet<Node, Node,Double> u2) {
 				int c;
@@ -83,6 +83,17 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			    return c;
 			  }
 		});
+		
+		//step3
+		//scan the groups in linkAngles, combine each pair of consecutive entries
+		//with the same fromNode to build a 
+		//wedge
+		for(int j =0 ;j<linksAngle.size();++j) {
+			if(linksAngle.get(j).getValue0().getId().equals(linksAngle.get(j+1).getValue0().getId())) {
+				Triplet<Node, Node,Node> nna = new Triplet<Node, Node,Node>(linksAngle.get(j+1).getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1());
+			}
+		}
+		
 		return wedges;
 	}
 
