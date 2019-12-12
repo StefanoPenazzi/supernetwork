@@ -202,8 +202,15 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			for (Link l : net.getLinks().values()) {
 				if(l.getToNode().getOutLinks().size() == 0) {
 					deadEndLinks.add(l);
+					stopDeadEnds = false;
 				}
-				stopDeadEnds = false;
+				if(l.getToNode().getOutLinks().size() == 1) {
+					if(l.getToNode().getOutLinks().entrySet().iterator().next().getValue().getToNode() == l.getFromNode()) {
+						deadEndLinks.add(l);
+						deadEndLinks.add(l.getToNode().getOutLinks().entrySet().iterator().next().getValue());
+						stopDeadEnds = false;
+					}
+				}
 			}
 			//erase these links from the graph
 			for (Link deadEndLink : deadEndLinks) {
@@ -232,6 +239,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			net.addLink(ll);
 			idCounter--;
 		}
+		NetworkUtils.writeNetwork(net, "/home/stefanopenazzi/git/supernetwork/output/supernetworkNoDeadWnds.xml" ); 
 		return net;
 	} 
 	
