@@ -181,7 +181,9 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		Map<Class<?>, AttributeConverter<?>> attributeConverters = Collections.emptyMap();
 		Network net = NetworkUtils.createNetwork(scenario.getConfig());
 		List<Pair<Node,Node>> newLinksFromToNodes = new ArrayList();
+		List<Link> deadEndLinks = new ArrayList();
 		long idCounter = 1; //redo
+		boolean stopDeadEnds = false;
 
 		// read the network from the xml file
 		if ((scenario.getConfig().network() != null) && (scenario.getConfig().network().getInputFile() != null)) {
@@ -192,6 +194,21 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 					scenario.getConfig().global().getCoordinateSystem(), net);
 			reader.putAttributeConverters(attributeConverters);
 			reader.parse(networkUrl);
+		}
+		//the algorithm requires a plane graph
+		//1)elimination of dead ends
+		while(!stopDeadEnds) {
+			stopDeadEnds = true;
+			for (Link l : net.getLinks().values()) {
+				if(l.getToNode().getOutLinks().size() == 0) {
+					deadEndLinks.add(l);
+				}
+				stopDeadEnds = false;
+			}
+			//erase these links from the graph
+			for (Link deadEndLink : deadEndLinks) {
+				net.removeLink(deadEndLink.getId());
+			}
 		}
 
 		//the algorithm requires that each link has its inverse
