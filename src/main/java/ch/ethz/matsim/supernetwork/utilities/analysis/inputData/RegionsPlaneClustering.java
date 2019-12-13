@@ -38,13 +38,16 @@ import org.matsim.core.network.io.MatsimNetworkReader;
  */
 public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 
-	private List<List<Node>> regions = new ArrayList();
+	private List<Region> regions = new ArrayList();
+	//private List<List<Node>> regions = new ArrayList();
 	private HashMap<Integer, List<Activity>> clusteringActivitiesResult = new LinkedHashMap<>();
 	private HashMap<Integer, Pair<Double, Double>> clusteringCoordinatesResult = new LinkedHashMap<>();
 
 	public RegionsPlaneClustering(Scenario scenario) {
 		regions = regionsFinder(wedgesFinder(scenario));
+		regionsCentroid(regions);
 		activitiesRegionsMatch(regions,scenario);
+		
 	}
 
 	/**
@@ -115,8 +118,8 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	 * The output is a list of list of nodes where the nodes are sorted such that they
 	 * represent a polygon.  
 	 */
-	private List<List<Node>> regionsFinder(List<Triplet<Node, Node, Node>> wedges){
-		List<List<Node>> regions = new ArrayList();
+	private List<Region> regionsFinder(List<Triplet<Node, Node, Node>> wedges){
+		List<Region> regions = new ArrayList();
 		List<Boolean> wedgesUsed = new ArrayList(Collections.nCopies(wedges.size(),false));
 		
 		Comparator<Triplet<Node, Node, Node>> wedgeComparator = new Comparator<Triplet<Node, Node, Node>>() {
@@ -140,22 +143,23 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		for(int j = 0;j < wedgesUsed.size();++j) {
 			//Start a new region
 			if(!wedgesUsed.get(j)) {
+				Region reg = new Region();
 				wedgesUsed.set(j,true);
-				List<Node> newRegion = new ArrayList();
-				newRegion.add(wedges.get(j).getValue0());
-				newRegion.add(wedges.get(j).getValue1());
-				newRegion.add(wedges.get(j).getValue2());
+				List<Node> newRegionNodes = new ArrayList();
+				newRegionNodes.add(wedges.get(j).getValue0());
+				newRegionNodes.add(wedges.get(j).getValue1());
+				newRegionNodes.add(wedges.get(j).getValue2());
 				//find the next wedge to insert in the region
 				while(true) {
-					int indexNewWedge = wedgeBinarySearch(wedges, 0, wedges.size()-1  ,new Pair<Node,Node>(newRegion.get(newRegion.size()-2),newRegion.get(newRegion.size()-1)));
+					int indexNewWedge = wedgeBinarySearch(wedges, 0, wedges.size()-1  ,new Pair<Node,Node>(newRegionNodes.get(newRegionNodes.size()-2),newRegionNodes.get(newRegionNodes.size()-1)));
 					//in this case the area can not be found. the graph in fact is not a perfect planar graph
 					//all these not closed area need to be managed in different a way
 					if(indexNewWedge == -1) break;
 					wedgesUsed.set(indexNewWedge,true);
-					if(wedges.get(indexNewWedge).getValue1() == newRegion.get(0) && wedges.get(indexNewWedge).getValue2() == newRegion.get(1)) break;
-					newRegion.add(wedges.get(indexNewWedge).getValue2());
+					if(wedges.get(indexNewWedge).getValue1() == newRegionNodes.get(0) && wedges.get(indexNewWedge).getValue2() == newRegionNodes.get(1)) break;
+					newRegionNodes.add(wedges.get(indexNewWedge).getValue2());
 				}
-				regions.add(newRegion);
+				regions.add(reg);
 			}
 		}
 		return regions;
@@ -312,23 +316,31 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	/**
 	 * this method search in which region an activity is located 
 	 */
-	private HashMap<Integer, List<Activity>> activitiesRegionsMatch(List<List<Node>> regions, Scenario scenario){
-		HashMap<Integer, List<Activity>> activitiesRegions = new LinkedHashMap<>();
-		return activitiesRegions;
+	private void activitiesRegionsMatch(List<Region> regions, Scenario scenario){
+		//order the region by the centroid coordinates x first key y second key
+		/*
+		 * Comparator<Region> regionCentroidComparator = new Comparator<Region>() {
+		 * 
+		 * @Override public int compare(Region u1, Region u2) { int c; c =
+		 * u1.getCentroidCoord().getValue0().compareTo(u2.getCentroidCoord().getValue0()
+		 * ); if(c == 0) c =
+		 * u1.getValue1().getId().toString().compareTo(u2.getValue1().getId().toString()
+		 * ); return c; } };
+		 */
+
 	}
 	
-	private HashMap<Integer, Pair<Double, Double>> regionsCentroid(List<List<Node>> regions){
-		HashMap<Integer, Pair<Double, Double>> rc = new LinkedHashMap<>();
-		int counter = 0;
-		for(List<Node> ln: regions) {
+	private void regionsCentroid(List<Region> regions){
+		
+		for(Region r: regions) {
 			double x = 0;
 			double y = 0;
 			double area = 0;
-			for(int j =0;j<ln.size()-2;++j) {
-				double currX = ln.get(j).getCoord().getX();
-				double currXPlusOne = ln.get(j+1).getCoord().getX();
-				double currY = ln.get(j).getCoord().getY();;
-				double currYPlusOne = ln.get(j+1).getCoord().getY();;
+			for(int j =0;j<r.getNodes().size()-2;++j) {
+				double currX = r.getNodeCoord(j).getValue0();//ln.get(j).getCoord().getX();
+				double currXPlusOne = r.getNodeCoord(j+1).getValue0();//ln.get(j+1).getCoord().getX();
+				double currY = r.getNodeCoord(j).getValue1();
+				double currYPlusOne = r.getNodeCoord(j+1).getValue1();
 				x += (currX + currXPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
 				y += (currY + currYPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
 				area += currX*currYPlusOne - currXPlusOne*currY;
@@ -336,10 +348,10 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			area = area/2;
 			x = (1/(6*area))*x;
 			y = (1/(6*area))*y;
-			rc.put(counter,new Pair<Double, Double>(x,y));
-			++counter;
+			r.setArea(area);
+			r.setCentroidCoord(new Pair<Double,Double>(x,y));
 		}
-		return rc;
+
 	}
 	
 	
@@ -351,4 +363,42 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		return clusteringCoordinatesResult;
 	}
 
+	
+	class Region{
+		private List<Node> nodes = new ArrayList();
+		private double area = 0;
+		private int id = -1;
+		private Pair<Double,Double> centroidCoord = new Pair<Double,Double>(-1.0,-1.0);
+		
+		public List<Node> getNodes(){
+			return nodes;
+		}
+		public double getArea() {
+			return area;
+		}
+		public int getId() {
+			return id;
+		}
+		public Pair<Double,Double> getCentroidCoord(){
+			return centroidCoord;
+		} 
+		public void setNodes(List<Node> nodes){
+			 this.nodes = nodes;
+		}
+		public void setArea( double area) {
+			 this.area = area;
+		}
+		public void setId(int id) {
+			 this.id = id;
+		}
+		public void setCentroidCoord(Pair<Double,Double> centroidCoord){
+			 this.centroidCoord = centroidCoord;
+		} 
+		public void addNodes(Node node){
+			 this.nodes.add(node);
+		}
+		public Pair<Double,Double> getNodeCoord(int i){
+			return new Pair<Double,Double>(nodes.get(i).getCoord().getX(),nodes.get(i).getCoord().getY());
+		}
+	}
 }
