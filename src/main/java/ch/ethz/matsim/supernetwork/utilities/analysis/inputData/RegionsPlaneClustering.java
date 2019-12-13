@@ -38,11 +38,13 @@ import org.matsim.core.network.io.MatsimNetworkReader;
  */
 public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 
+	private List<List<Node>> regions = new ArrayList();
 	private HashMap<Integer, List<Activity>> clusteringActivitiesResult = new LinkedHashMap<>();
 	private HashMap<Integer, Pair<Double, Double>> clusteringCoordinatesResult = new LinkedHashMap<>();
 
 	public RegionsPlaneClustering(Scenario scenario) {
-		List<List<Node>> regions = regionsFinder(wedgesFinder(scenario));
+		regions = regionsFinder(wedgesFinder(scenario));
+		activitiesRegionsMatch(regions,scenario);
 	}
 
 	/**
@@ -307,6 +309,40 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	    return -1; 
 	} 
 
+	/**
+	 * this method search in which region an activity is located 
+	 */
+	private HashMap<Integer, List<Activity>> activitiesRegionsMatch(List<List<Node>> regions, Scenario scenario){
+		HashMap<Integer, List<Activity>> activitiesRegions = new LinkedHashMap<>();
+		return activitiesRegions;
+	}
+	
+	private HashMap<Integer, Pair<Double, Double>> regionsCentroid(List<List<Node>> regions){
+		HashMap<Integer, Pair<Double, Double>> rc = new LinkedHashMap<>();
+		int counter = 0;
+		for(List<Node> ln: regions) {
+			double x = 0;
+			double y = 0;
+			double area = 0;
+			for(int j =0;j<ln.size()-2;++j) {
+				double currX = ln.get(j).getCoord().getX();
+				double currXPlusOne = ln.get(j+1).getCoord().getX();
+				double currY = ln.get(j).getCoord().getY();;
+				double currYPlusOne = ln.get(j+1).getCoord().getY();;
+				x += (currX + currXPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
+				y += (currY + currYPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
+				area += currX*currYPlusOne - currXPlusOne*currY;
+			}
+			area = area/2;
+			x = (1/(6*area))*x;
+			y = (1/(6*area))*y;
+			rc.put(counter,new Pair<Double, Double>(x,y));
+			++counter;
+		}
+		return rc;
+	}
+	
+	
 	public HashMap<Integer, List<Activity>> getActivitiesClusteringResult() {
 		return clusteringActivitiesResult;
 	}
