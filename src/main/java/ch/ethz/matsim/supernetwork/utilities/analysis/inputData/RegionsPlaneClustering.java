@@ -67,6 +67,9 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			else if(deltaX < 0 && deltaY >0) {
 				angle = angle + Math.PI;
 			}
+			else if(deltaX < 0 && deltaY <0) {
+				angle = angle + Math.PI;
+			}
 			Triplet<Node, Node,Double> nna = new Triplet<Node, Node,Double>(l.getFromNode(),l.getToNode(),angle);
 			linksAngle.add(nna);
 		} 
@@ -86,11 +89,19 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		
 		//step3
 		//scan the groups in linkAngles, combine each pair of consecutive entries
-		//with the same fromNode to build a 
-		//wedge
+		//with the same fromNode to build a wedge. last and first link with same fromNode
+		//have to be combined in a wedge 
+		Triplet<Node, Node,Double>  firstLink = linksAngle.get(0);
 		for(int j =0 ;j<linksAngle.size()-1;++j) {
+			
+			if(!firstLink.getValue0().equals(linksAngle.get(j).getValue0())) {
+				firstLink = linksAngle.get(j);
+			}
 			if(linksAngle.get(j).getValue0().getId().equals(linksAngle.get(j+1).getValue0().getId())) {
 				wedges.add(new Triplet<Node, Node,Node>(linksAngle.get(j+1).getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1()));
+			}
+			else {
+				wedges.add(new Triplet<Node, Node,Node>(firstLink.getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1()));
 			}
 		}
 		
@@ -121,9 +132,6 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		//step 1)
 		//sort the wedge list using the first two nodes as primary and secondary key
 		Collections.sort(wedges,wedgeComparator);
-		for(Triplet<Node, Node, Node> r: wedges) {
-			System.out.println(r.getValue0().getId().toString() + " - " + r.getValue1().getId().toString() + " - " + r.getValue2().getId().toString());
-		}
 		
 		//step 2)
 		//find the regions
@@ -131,57 +139,38 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			//Start a new region
 			if(!wedgesUsed.get(j)) {
 				wedgesUsed.set(j,true);
-				
 				List<Node> newRegion = new ArrayList();
 				newRegion.add(wedges.get(j).getValue0());
 				newRegion.add(wedges.get(j).getValue1());
 				newRegion.add(wedges.get(j).getValue2());
-				
 				//find the next wedge to insert in the region
-				boolean stopRegion = false;
-				while(!stopRegion) {
+				while(true) {
 					int indexNewWedge = wedgeBinarySearch(wedges, 0, wedges.size()-1  ,new Pair<Node,Node>(newRegion.get(newRegion.size()-2),newRegion.get(newRegion.size()-1)));
-					
-					if(indexNewWedge == -1) {
-						//in this case the area can not be found. the graph in fact is not a perfect planar graph
-						//all these not closed area need to be managed in different a way
-						break;
-					}
-					
+					//in this case the area can not be found. the graph in fact is not a perfect planar graph
+					//all these not closed area need to be managed in different a way
+					if(indexNewWedge == -1) break;
 					wedgesUsed.set(indexNewWedge,true);
-					if(wedges.get(indexNewWedge).getValue1() == newRegion.get(0) && wedges.get(indexNewWedge).getValue2() == newRegion.get(1))
-					{
-						newRegion.add(wedges.get(indexNewWedge).getValue1());
-						stopRegion = true;
-					}
-					else {
-						//newRegion.add(wedges.get(indexNewWedge).getValue1());
-						newRegion.add(wedges.get(indexNewWedge).getValue2());
-					}
+					if(wedges.get(indexNewWedge).getValue1() == newRegion.get(0) && wedges.get(indexNewWedge).getValue2() == newRegion.get(1)) break;
+					newRegion.add(wedges.get(indexNewWedge).getValue2());
 				}
 				regions.add(newRegion);
 			}
 		}
-		
-		for(List<Node> r: regions) {
-			for(Node n:r) {
-				System.out.print(n.getId().toString() + " -- ");
-			}
-			System.out.println("");
-		}
-		
 		return regions;
 	}
 	
 	/**
-	 * The wedges search require edges i->j j->i. If they are not in the network
-	 * builded by the config they have to be added.
+	 * Build the network needed by the algorithm
 	 */
 	private Network directedCompleteNetwork(Scenario scenario) {
 		Map<Class<?>, AttributeConverter<?>> attributeConverters = Collections.emptyMap();
 		Network net = NetworkUtils.createNetwork(scenario.getConfig());
 		List<Pair<Node,Node>> newLinksFromToNodes = new ArrayList();
 		List<Link> deadEndLinks = new ArrayList();
+		List<Link> twinLinks = new ArrayList();
+		List<Node> deadEndNodes = new ArrayList();
+		List<Link> ptLinks = new ArrayList();
+		List<Node> ptNodes = new ArrayList();
 		long idCounter = 1; //redo
 		boolean stopDeadEnds = false;
 
@@ -195,6 +184,26 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			reader.putAttributeConverters(attributeConverters);
 			reader.parse(networkUrl);
 		}
+		
+		//Pt network is not considered
+		for (Link l : net.getLinks().values()) {
+			if(l.getId().toString().contains("pt")) {
+				ptLinks.add(l);
+			}
+		}
+		for (Link l: ptLinks) {
+			net.removeLink(l.getId());
+		}
+		for (Node n : net.getNodes().values()) {
+			if(n.getId().toString().contains("pt")) {
+				ptNodes.add(n);
+			}
+		}
+		for (Node n: ptNodes) {
+			net.removeNode(n.getId());
+		}
+		
+		
 		//the algorithm requires a plane graph
 		//1)elimination of dead ends
 		while(!stopDeadEnds) {
@@ -202,12 +211,14 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			for (Link l : net.getLinks().values()) {
 				if(l.getToNode().getOutLinks().size() == 0) {
 					deadEndLinks.add(l);
+					deadEndNodes.add(l.getToNode());
 					stopDeadEnds = false;
 				}
 				if(l.getToNode().getOutLinks().size() == 1) {
 					if(l.getToNode().getOutLinks().entrySet().iterator().next().getValue().getToNode() == l.getFromNode()) {
 						deadEndLinks.add(l);
 						deadEndLinks.add(l.getToNode().getOutLinks().entrySet().iterator().next().getValue());
+						deadEndNodes.add(l.getToNode());
 						stopDeadEnds = false;
 					}
 				}
@@ -216,6 +227,26 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			for (Link deadEndLink : deadEndLinks) {
 				net.removeLink(deadEndLink.getId());
 			}
+			//erase the nodes from the graph
+			for (Node deadEndNode : deadEndNodes) {
+				net.removeNode(deadEndNode.getId());
+			}
+		}
+		//2)two nodes cannot have more than 1 link connected them
+		for(Node n: net.getNodes().values()){
+			List<Node> visitedNode = new ArrayList();
+			for(Link l: n.getOutLinks().values()) {
+				if(visitedNode.stream().filter(o -> o.equals(l.getToNode())).findFirst().isPresent()) {
+					twinLinks.add(l);
+				}
+				else {
+					visitedNode.add(l.getToNode());
+				}
+			}
+		}
+		//erase twin links from the graph
+		for (Link twinLink : twinLinks) {
+			net.removeLink(twinLink.getId());
 		}
 
 		//the algorithm requires that each link has its inverse
@@ -239,7 +270,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			net.addLink(ll);
 			idCounter--;
 		}
-		NetworkUtils.writeNetwork(net, "/home/stefanopenazzi/git/supernetwork/output/supernetworkNoDeadWnds.xml" ); 
+		//NetworkUtils.writeNetwork(net, "/home/stefanopenazzi/git/supernetwork/output/supernetworkNoDeadEnds.xml" ); 
 		return net;
 	} 
 	
@@ -250,18 +281,12 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	private int wedgeBinarySearch(List<Triplet<Node, Node, Node>> wedges,int t , int h,Pair<Node, Node> tailWedge) 
 	{ 
 	    if (h >= t) { 
-	        int mid = t + (h - t) / 2; 
-	  
-	        // If the element is present at the middle 
-	        // itself 
-	        if (wedges.get(mid).getValue0().getId().toString() == tailWedge.getValue0().getId().toString()
-	        		&& wedges.get(mid).getValue1().getId().toString() == tailWedge.getValue1().getId().toString()) 
-	            return mid; 
-	  
-	        // If element is smaller than mid, then 
-	        // it can only be present in left subarray 
+	        int mid = t + (h - t) / 2; 	 
 	        int compFirstNode = wedges.get(mid).getValue0().getId().toString().compareTo(tailWedge.getValue0().getId().toString());
 	        int compSecondNode = wedges.get(mid).getValue1().getId().toString().compareTo(tailWedge.getValue1().getId().toString());
+	        if(compFirstNode == 0 && compSecondNode ==0) {
+	        	return mid;
+	        }
 	        if (compFirstNode > 0) 
 	            return wedgeBinarySearch(wedges, t, mid - 1, tailWedge); 
 	        else if(compFirstNode == 0) {
