@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.lang.Math;
 
 import org.javatuples.Pair;
@@ -39,9 +40,9 @@ import org.matsim.core.network.io.MatsimNetworkReader;
 public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 
 	private List<Region> regions = new ArrayList();
-	//private List<List<Node>> regions = new ArrayList();
 	private HashMap<Integer, List<Activity>> clusteringActivitiesResult = new LinkedHashMap<>();
 	private HashMap<Integer, Pair<Double, Double>> clusteringCoordinatesResult = new LinkedHashMap<>();
+	
 
 	public RegionsPlaneClustering(Scenario scenario) {
 		regions = regionsFinder(wedgesFinder(scenario));
@@ -156,9 +157,15 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 					//all these not closed area need to be managed in different a way
 					if(indexNewWedge == -1) break;
 					wedgesUsed.set(indexNewWedge,true);
-					if(wedges.get(indexNewWedge).getValue1() == newRegionNodes.get(0) && wedges.get(indexNewWedge).getValue2() == newRegionNodes.get(1)) break;
+					if(wedges.get(indexNewWedge).getValue1() == newRegionNodes.get(0) && wedges.get(indexNewWedge).getValue2() == newRegionNodes.get(1))
+					{
+						//last value is equal to the first this is useful for the area computation
+						newRegionNodes.add(wedges.get(indexNewWedge).getValue2());
+					    break;
+					}
 					newRegionNodes.add(wedges.get(indexNewWedge).getValue2());
 				}
+				reg.setNodes(newRegionNodes);
 				regions.add(reg);
 			}
 		}
@@ -318,16 +325,9 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	 */
 	private void activitiesRegionsMatch(List<Region> regions, Scenario scenario){
 		//order the region by the centroid coordinates x first key y second key
-		/*
-		 * Comparator<Region> regionCentroidComparator = new Comparator<Region>() {
-		 * 
-		 * @Override public int compare(Region u1, Region u2) { int c; c =
-		 * u1.getCentroidCoord().getValue0().compareTo(u2.getCentroidCoord().getValue0()
-		 * ); if(c == 0) c =
-		 * u1.getValue1().getId().toString().compareTo(u2.getValue1().getId().toString()
-		 * ); return c; } };
-		 */
 
+		TreeRegions tr = new TreeRegions(regions);
+		tr.print();
 	}
 	
 	private void regionsCentroid(List<Region> regions){
@@ -345,7 +345,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 				y += (currY + currYPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
 				area += currX*currYPlusOne - currXPlusOne*currY;
 			}
-			area = area/2;
+			area = Math.abs(area/2);
 			x = (1/(6*area))*x;
 			y = (1/(6*area))*y;
 			r.setArea(area);
@@ -364,7 +364,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	}
 
 	
-	class Region{
+	private class Region{
 		private List<Node> nodes = new ArrayList();
 		private double area = 0;
 		private int id = -1;
@@ -401,4 +401,331 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			return new Pair<Double,Double>(nodes.get(i).getCoord().getX(),nodes.get(i).getCoord().getY());
 		}
 	}
+
+	//k-d tree implementation for regions. this is a structure used to quickly find the region centroid to an input point
+	//[] {}
+    private class TreeRegionsNode{
+		 private Region reg = null;
+		 private TreeRegionsNode child = null;
+		 private TreeRegionsNode left = null;
+		 private TreeRegionsNode right = null;
+		 private boolean lr = false;
+		 private boolean checked;
+		 
+		 public TreeRegionsNode(Region reg,boolean lr,TreeRegionsNode child){
+			 this.reg= reg;
+			 this.lr = lr;
+			 this.child = child;
+		 }
+		 
+		 public Region getReg() {
+			 return this.reg;
+		 }
+		 public TreeRegionsNode getChild() {
+			 return this.child;
+		 }
+		 public TreeRegionsNode getLeft() {
+			 return this.left;
+		 }
+		 public TreeRegionsNode getRight() {
+			 return this.right;
+		 }
+		 public boolean getLr() {
+			 return this.lr;
+		 }
+		 public void setChild(TreeRegionsNode child){
+			 this.child = child;
+		 }
+		 public void setLeft(TreeRegionsNode left){
+			 this.left = left;
+		 }
+		 public void setRight(TreeRegionsNode right){
+			 this.right = right;
+		 }
+		 
+		 public boolean getChecked() {
+			 return this.checked;
+		 }
+		 
+		 public void setChecked(boolean checked) {
+			 this.checked = checked;
+		 }
+		 
+		 public double squareDist(Activity act) {
+			 return Math.sqrt(this.reg.getCentroidCoord().getValue0() - act.getCoord().getX()) + Math.sqrt(this.reg.getCentroidCoord().getValue1() - act.getCoord().getY());
+		 }
+		 
+		 public TreeRegionsNode findParent(Activity act) {
+			 TreeRegionsNode parent = null;
+			 TreeRegionsNode next = this;
+			 boolean split;
+			 while (next != null) {
+				 split = next.lr;
+				 parent = next;
+				 if(lr) {
+					 if(next.getReg().getCentroidCoord().getValue0()<=act.getCoord().getX()){
+						 next = next.getRight();
+					 }
+					 else{
+						 next = next.getLeft();
+					 }
+				 }
+				 else {
+					 if(next.getReg().getCentroidCoord().getValue1()<=act.getCoord().getY()){
+						 next = next.getRight();
+					 }
+					 else{
+						 next = next.getLeft();
+					 }
+				 }
+			 }
+			 return parent;
+		 }
+		 
+		 public void print(){
+			 String sRight = this.getRight() == null ? "null" : "x = "+this.getRight().getReg().getCentroidCoord().getValue0().toString()+ " y = "+this.getRight().getReg().getCentroidCoord().getValue1().toString();
+			 String sLeft = this.getLeft() == null ? "null" : "x = " + this.getLeft().getReg().getCentroidCoord().getValue0().toString()+ " y = "+this.getLeft().getReg().getCentroidCoord().getValue1().toString();
+			 System.out.println("--> x = "+reg.getCentroidCoord().getValue0()+" y = "+ reg.getCentroidCoord().getValue1()+" >(right) " + sRight
+					 +" <(left) "+ sLeft + " <>(left or right) : "+ lr);
+		 }
+	}	 
+	
+   private class TreeRegions{
+	   
+	   private TreeRegionsNode root = null;
+	   List<Region> regions;
+	   TreeRegionsNode CheckedNodes[];
+	   TreeRegionsNode nearestNeighbour;
+	   int checkedNodes;
+	   int nBoundary;
+	   double xMin, xMax;
+	   double yMin, yMax;
+	   double dMin;
+	   boolean xMaxBoundary, xMinBoundary;
+	   boolean yMaxBoundary, yMinBoundary;
+	   
+	   
+	   public TreeRegions(List<Region> regions){
+		   this.regions = regions;
+		   for(Region r:regions){
+			   root = insert(root,r);
+			   //this.print();
+		   }
+	   }
+	   
+	   public TreeRegionsNode getRoot(){
+		   return this.root;
+	   }
+	   
+	   public TreeRegionsNode newTreeNode(Region reg,boolean lr,TreeRegionsNode child){
+			return new TreeRegionsNode(reg,lr,child);
+	   }
+	   public TreeRegionsNode insertRec(TreeRegionsNode root, Region newReg, boolean lr,TreeRegionsNode child)
+		 {
+			 if(root == null){
+				 return newTreeNode(newReg,lr,null);
+			 }
+			 else{
+				 if(lr) // x
+				 { 
+					 if(root.getReg().getCentroidCoord().getValue0()<=newReg.getCentroidCoord().getValue0()){
+						 root.setRight(this.insertRec(root.getRight(), newReg, !lr,root));
+					 }
+					 else{
+						 root.setLeft(this.insertRec(root.getLeft(), newReg, !lr,root));
+					 }
+				 }
+				 else
+				 {
+					 if(root.getReg().getCentroidCoord().getValue1()<=newReg.getCentroidCoord().getValue1()){
+						 root.setRight(this.insertRec(root.getRight(), newReg, !lr,root));
+					 }
+					 else{
+						 root.setLeft(this.insertRec(root.getLeft(), newReg, !lr,root));
+					 }
+				 }
+				 return root;
+			 }
+			 
+		 }
+	   
+	   public TreeRegionsNode insert(TreeRegionsNode node, Region newReg){
+		   return insertRec(node, newReg, false,null);
+	   }
+	   
+	   private TreeRegionsNode nearestNeighbourSearch(Activity act) {
+		   
+		   if (root == null)
+	            return null;
+		   
+		   checkedNodes = 0;
+		   TreeRegionsNode parent = root.findParent(act);
+		   nearestNeighbour = parent;
+		   dMin = parent.squareDist(act);
+		   
+		   if(parent.getReg().getCentroidCoord().getValue0() == act.getCoord().getX() &&
+				   parent.getReg().getCentroidCoord().getValue1() == act.getCoord().getY()) {
+			   return parent;
+		   }
+		   searchParent(parent, act);
+		   //clean for the next query
+		   uncheck();
+		   return nearestNeighbour; 
+	   }
+	   
+	   public void setBoundingCube(TreeRegionsNode node, Activity act)
+	    {
+	        if (node == null)
+	            return;
+	        double d = 0;
+	        double dx;
+	        double dy;
+	        
+	        //xbound
+            dx = node.getReg().getCentroidCoord().getValue0() - act.getCoord().getX();
+            if (dx > 0)
+            {
+                dx *= dx;
+                if (!xMaxBoundary)
+                {
+                    if (dx > xMax)
+                        xMax = dx;
+                    if (xMax > dMin)
+                    {
+                        xMaxBoundary = true;
+                        nBoundary++;
+                    }
+                }
+            } else
+            {
+                dx *= dx;
+                if (!xMinBoundary)
+                {
+                    if (dx > xMin)
+                        xMin = dx;
+                    if (xMin > dMin)
+                    {
+                        xMinBoundary = true;
+                        nBoundary++;
+                    }
+                }
+            }
+            //ybound
+            dy = node.getReg().getCentroidCoord().getValue1() - act.getCoord().getY();
+            if (dy > 0)
+            {
+                dy *= dy;
+                if (!yMaxBoundary)
+                {
+                    if (dy > yMax)
+                        yMax = dy;
+                    if (yMax > dMin)
+                    {
+                        yMaxBoundary = true;
+                        nBoundary++;
+                    }
+                }
+            } else
+            {
+                dy *= dy;
+                if (!yMinBoundary)
+                {
+                    if (dy > yMin)
+                        yMin = dy;
+                    if (yMin > dMin)
+                    {
+                        yMinBoundary = true;
+                        nBoundary++;
+                    }
+                }
+            }
+            
+            d =  dx + dy;
+            if (d > dMin)
+                return;
+	        
+	        if (d < dMin)
+	        {
+	            dMin = d;
+	            nearestNeighbour = node;
+	        }
+	    }
+	   
+	   // this is method check the subtree considering as the root the node in the param
+	   public void checkSubtree(TreeRegionsNode node, Activity act)
+	    {
+	        if ((node == null) || node.checked)
+	            return;
+	 
+	        CheckedNodes[checkedNodes++] = node;
+	        node.checked = true;
+	        setBoundingCube(node, act);
+	 
+	        boolean lr = node.getLr();
+	        double dist;
+	        if (lr) {
+	        	dist = node.getReg().getCentroidCoord().getValue0() - act.getCoord().getX();
+	        }
+	        else {
+	        	dist = node.getReg().getCentroidCoord().getValue1() - act.getCoord().getY();
+	        }
+	        
+	        if (dist * dist > dMin)
+	        {
+	        	if(lr) {
+	        		if (node.getReg().getCentroidCoord().getValue0() > act.getCoord().getX())
+		                checkSubtree(node.getLeft(), act);
+		            else
+		                checkSubtree(node.getRight(), act);
+	        	}
+	        	else {
+	        		if (node.getReg().getCentroidCoord().getValue1() > act.getCoord().getY())
+		                checkSubtree(node.getLeft(), act);
+		            else
+		                checkSubtree(node.getRight(), act);
+	        	}
+	            
+	        } else
+	        {
+	            checkSubtree(node.getLeft(), act);
+	            checkSubtree(node.getRight(), act);
+	        }
+	    }
+	   
+	   public TreeRegionsNode searchParent(TreeRegionsNode parent, Activity act)
+	    {
+		    xMin = xMax = yMin = yMax =0;
+		    xMaxBoundary = xMinBoundary = yMaxBoundary = yMinBoundary = false;
+	        nBoundary = 0;
+	 
+	        TreeRegionsNode searchRoot = parent;
+	        while (parent != null && (nBoundary != 4))
+	        {
+	            checkSubtree(parent, act);
+	            searchRoot = parent;
+	            //backtracking
+	            parent = parent.getChild();
+	        }
+	 
+	        return searchRoot;
+	    }
+	 
+	    public void uncheck()
+	    {
+	        for (int n = 0; n < checkedNodes; n++)
+	            CheckedNodes[n].checked = false;
+	    }
+	   
+	   public void print(){
+		   Stack<TreeRegionsNode> waitingNode = new Stack();
+		   waitingNode.push(root);
+		   while(!waitingNode.isEmpty()){
+			   TreeRegionsNode ext = waitingNode.pop();
+			   ext.print();
+			   if(ext.getLeft() != null) waitingNode.push(ext.getLeft());
+			   if(ext.getRight() != null) waitingNode.push(ext.getRight());
+		   }
+	   }
+   }	 
+	
 }
