@@ -17,6 +17,7 @@ import java.lang.Math;
 
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.scenario.*;
@@ -25,6 +26,8 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.MatsimNetworkReader;
 
@@ -42,13 +45,21 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	private List<Region> regions = new ArrayList();
 	private HashMap<Integer, List<Activity>> clusteringActivitiesResult = new LinkedHashMap<>();
 	private HashMap<Integer, Pair<Double, Double>> clusteringCoordinatesResult = new LinkedHashMap<>();
+	private TreeRegions treeReg;
 	
 
 	public RegionsPlaneClustering(Scenario scenario) {
 		regions = regionsFinder(wedgesFinder(scenario));
-		regionsCentroid(regions);
-		activitiesRegionsMatch(regions,scenario);
 		
+		for(Region r : regions) {
+			r.print();
+		}
+		
+		regionsCentroid(regions);
+		treeReg = new TreeRegions(regions);
+		treeReg.print();
+		activitiesRegionsMatch(treeReg,scenario);
+		System.out.println();
 	}
 
 	/**
@@ -65,20 +76,41 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		for (Link l : net.getLinks().values()) {
 			double deltaX = l.getToNode().getCoord().getX() - l.getFromNode().getCoord().getX();
 			double deltaY = l.getToNode().getCoord().getY() - l.getFromNode().getCoord().getY();
-			double angle = Math.atan(deltaY/deltaX);
-			//redo considering deltaX = 0
-			if (deltaX > 0 && deltaY <0) {
-				angle = angle + 2*Math.PI;
+			double angle;
+			
+			if(deltaX==0) {
+				if(deltaY >= 0) { 
+					angle = Math.PI/2;
+					}
+				else{
+					angle = Math.PI*1.5;
+					}
 			}
-			else if(deltaX < 0 && deltaY >0) {
-				angle = angle + Math.PI;
+			else if(deltaY==0) {
+				if(deltaX >= 0) { 
+					angle = 0;
+					}
+				else{
+					angle = Math.PI;
+					}
 			}
-			else if(deltaX < 0 && deltaY <0) {
-				angle = angle + Math.PI;
+			else {
+				angle = Math.atan(deltaY/deltaX);
+				//redo considering deltaX = 0
+				if (deltaX > 0 && deltaY <0) {
+					angle = angle + 2*Math.PI;
+				}
+				else if(deltaX < 0 && deltaY >0) {
+					angle = angle + Math.PI;
+				}
+				else if(deltaX < 0 && deltaY <0) {
+					angle = angle + Math.PI;
+				}
 			}
 			Triplet<Node, Node,Double> nna = new Triplet<Node, Node,Double>(l.getFromNode(),l.getToNode(),angle);
 			linksAngle.add(nna);
 		} 
+		
 		
 		//step2
 		//sort the list into ascending order using nodefrom and the angle as primary and secondary key
@@ -93,22 +125,36 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			  }
 		});
 		
+		for(Triplet<Node, Node,Double> nnn: linksAngle ) {
+			System.out.println(nnn.getValue0().getId().toString() + " - " + nnn.getValue1().getId().toString() + " - " +nnn.getValue2());
+		}
+		
 		//step3
 		//scan the groups in linkAngles, combine each pair of consecutive entries
 		//with the same fromNode to build a wedge. last and first link with same fromNode
 		//have to be combined in a wedge 
 		Triplet<Node, Node,Double>  firstLink = linksAngle.get(0);
-		for(int j =0 ;j<linksAngle.size()-1;++j) {
+		for(int j = 0 ;j<linksAngle.size();j++) {
 			
 			if(!firstLink.getValue0().equals(linksAngle.get(j).getValue0())) {
 				firstLink = linksAngle.get(j);
 			}
+			
+			if(j == linksAngle.size()-1) {
+				wedges.add(new Triplet<Node, Node,Node>(firstLink.getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1()));
+				continue;
+			}
+			
 			if(linksAngle.get(j).getValue0().getId().equals(linksAngle.get(j+1).getValue0().getId())) {
 				wedges.add(new Triplet<Node, Node,Node>(linksAngle.get(j+1).getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1()));
 			}
 			else {
 				wedges.add(new Triplet<Node, Node,Node>(firstLink.getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1()));
 			}
+		}
+		
+		for(Triplet<Node, Node,Node> nnn: wedges) {
+			System.out.println(nnn.getValue0().getId().toString() + " - " + nnn.getValue1().getId().toString() + " - " +nnn.getValue2().getId().toString());
 		}
 		
 		return wedges;
@@ -160,15 +206,16 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 					if(wedges.get(indexNewWedge).getValue1() == newRegionNodes.get(0) && wedges.get(indexNewWedge).getValue2() == newRegionNodes.get(1))
 					{
 						//last value is equal to the first this is useful for the area computation
-						newRegionNodes.add(wedges.get(indexNewWedge).getValue2());
+						//newRegionNodes.add(wedges.get(indexNewWedge).getValue2());
+						reg.setNodes(newRegionNodes);
+						regions.add(reg);
 					    break;
 					}
 					newRegionNodes.add(wedges.get(indexNewWedge).getValue2());
 				}
-				reg.setNodes(newRegionNodes);
-				regions.add(reg);
 			}
 		}
+		
 		return regions;
 	}
 	
@@ -323,11 +370,16 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	/**
 	 * this method search in which region an activity is located 
 	 */
-	private void activitiesRegionsMatch(List<Region> regions, Scenario scenario){
-		//order the region by the centroid coordinates x first key y second key
-
-		TreeRegions tr = new TreeRegions(regions);
-		tr.print();
+	private void activitiesRegionsMatch(TreeRegions tr, Scenario scenario){
+		for(Person p: scenario.getPopulation().getPersons().values()) {
+			if(p.getPlans().size() >= 1) {
+		     for(PlanElement pe: p.getPlans().get(0).getPlanElements()) {
+		    	 if ( !(pe instanceof Activity) ) continue;
+		    	 TreeRegionsNode trn = tr.nearestNeighbourSearch((Activity)pe);
+		    	 trn.getReg().addActivity((Activity)pe);
+		     }	
+		   }
+		}
 	}
 	
 	private void regionsCentroid(List<Region> regions){
@@ -336,19 +388,22 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			double x = 0;
 			double y = 0;
 			double area = 0;
-			for(int j =0;j<r.getNodes().size()-2;++j) {
-				double currX = r.getNodeCoord(j).getValue0();//ln.get(j).getCoord().getX();
-				double currXPlusOne = r.getNodeCoord(j+1).getValue0();//ln.get(j+1).getCoord().getX();
-				double currY = r.getNodeCoord(j).getValue1();
-				double currYPlusOne = r.getNodeCoord(j+1).getValue1();
-				x += (currX + currXPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
-				y += (currY + currYPlusOne)*(currX* currYPlusOne - currXPlusOne*currY);
-				area += currX*currYPlusOne - currXPlusOne*currY;
+			for(int j =0;j<r.getNodes().size()-1;j++) {
+				double currX = r.getNodeCoord(j).getX();//ln.get(j).getCoord().getX();
+				double currXPlusOne = r.getNodeCoord(j+1).getX();//ln.get(j+1).getCoord().getX();
+				double currY = r.getNodeCoord(j).getY();
+				double currYPlusOne = r.getNodeCoord(j+1).getY();
+				
+				x = x + ((currX + currXPlusOne)*(currX* currYPlusOne - currXPlusOne*currY));
+				y = y + ((currY + currYPlusOne)*(currX* currYPlusOne - currXPlusOne*currY));
+				area = area + ((currX*currYPlusOne) - (currXPlusOne*currY));
+				
 			}
-			area = Math.abs(area/2);
+			area = area/2;
 			x = (1/(6*area))*x;
 			y = (1/(6*area))*y;
-			r.setArea(area);
+			
+			r.setArea(Math.abs(area));
 			r.setCentroidCoord(new Pair<Double,Double>(x,y));
 		}
 
@@ -369,6 +424,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		private double area = 0;
 		private int id = -1;
 		private Pair<Double,Double> centroidCoord = new Pair<Double,Double>(-1.0,-1.0);
+		private List<Activity> activities = new ArrayList();
 		
 		public List<Node> getNodes(){
 			return nodes;
@@ -397,8 +453,23 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		public void addNodes(Node node){
 			 this.nodes.add(node);
 		}
-		public Pair<Double,Double> getNodeCoord(int i){
-			return new Pair<Double,Double>(nodes.get(i).getCoord().getX(),nodes.get(i).getCoord().getY());
+		public Coord getNodeCoord(int i){
+			return nodes.get(i).getCoord();
+		}
+		
+		public List<Activity> getActivities(){
+			return activities;
+		}
+		public void addActivity(Activity act) {
+			activities.add(act);
+		}
+		
+		public void print() {
+			String nn = "";
+			for(Node n:nodes) {
+				nn = nn + n.getId().toString() + " - ";
+			}
+			System.out.println(nn);
 		}
 	}
 
@@ -494,9 +565,9 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   
 	   private TreeRegionsNode root = null;
 	   List<Region> regions;
-	   TreeRegionsNode CheckedNodes[];
+	   TreeRegionsNode checkedNodes[];
 	   TreeRegionsNode nearestNeighbour;
-	   int checkedNodes;
+	   int checkedNodesCounter;
 	   int nBoundary;
 	   double xMin, xMax;
 	   double yMin, yMax;
@@ -507,6 +578,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   
 	   public TreeRegions(List<Region> regions){
 		   this.regions = regions;
+		   checkedNodes = new TreeRegionsNode[regions.size()];
 		   for(Region r:regions){
 			   root = insert(root,r);
 			   //this.print();
@@ -558,7 +630,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		   if (root == null)
 	            return null;
 		   
-		   checkedNodes = 0;
+		   checkedNodesCounter = 0;
 		   TreeRegionsNode parent = root.findParent(act);
 		   nearestNeighbour = parent;
 		   dMin = parent.squareDist(act);
@@ -657,7 +729,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	        if ((node == null) || node.checked)
 	            return;
 	 
-	        CheckedNodes[checkedNodes++] = node;
+	        checkedNodes[checkedNodesCounter++] = node;
 	        node.checked = true;
 	        setBoundingCube(node, act);
 	 
@@ -712,8 +784,8 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	 
 	    public void uncheck()
 	    {
-	        for (int n = 0; n < checkedNodes; n++)
-	            CheckedNodes[n].checked = false;
+	        for (int n = 0; n < checkedNodesCounter; n++)
+	            checkedNodes[n].checked = false;
 	    }
 	   
 	   public void print(){

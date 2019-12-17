@@ -18,7 +18,7 @@ public class SupernetworkRunTest {
 		// TODO Auto-generated method stub
 				System.setProperty("matsim.preferLocalDtds", "true");
 				
-		        final Config config = ConfigUtils.loadConfig("/home/stefanopenazzi/git/supernetwork/input/berlin-v5.3-1pct/berlin-v5.1.config.xml");
+		        final Config config = ConfigUtils.loadConfig("/home/stefanopenazzi/git/supernetwork/input/equil/config.xml");
 
 		        Scenario scenario = ScenarioUtils.loadScenario(config);
 
