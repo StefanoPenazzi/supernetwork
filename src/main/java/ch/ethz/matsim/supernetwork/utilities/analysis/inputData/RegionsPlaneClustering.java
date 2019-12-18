@@ -397,6 +397,16 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	}
 	
 	public void stat() {
+		
+		int nAct = 0;
+		
+		for(Region r: regions) {
+			nAct += r.getActivities().size();
+		}
+		
+		System.out.println( "Tot number of regions: " + regions.size());
+		System.out.println( "Tot number of activities: " + nAct);
+		
 		   actFreqAnalysis(10);
 		   distFreqAnalysis(100);
 		   areaFreqAnalysis(10000);

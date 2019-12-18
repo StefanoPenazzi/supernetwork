@@ -18,17 +18,17 @@ public class SupernetworkRunTest {
 		// TODO Auto-generated method stub
 				System.setProperty("matsim.preferLocalDtds", "true");
 				
-		        final Config config = ConfigUtils.loadConfig("/home/stefanopenazzi/git/supernetwork/input/berlin/config.xml");
+		        final Config config = ConfigUtils.loadConfig("/home/stefanopenazzi/git/supernetwork/input/sbb10pct/config/config_parsed.xml");
 
 		        Scenario scenario = ScenarioUtils.loadScenario(config);
 
 		        SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario);
 		        
 		        // controler
-		        Controler controler = new Controler(scenario);
+		        //Controler controler = new Controler(scenario);
 		        
-		        System.setProperty("scenario","sbb");
+		        //System.setProperty("scenario","sbb");
 		        
-		        controler.run();
+		        //controler.run();
 	}
 }
