@@ -52,9 +52,9 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		regions = regionsFinder(wedgesFinder(scenario));
 		regionsCentroid(regions);
 		treeReg = new TreeRegions(regions);
-		treeReg.print();
 		activitiesRegionsMatch(treeReg,scenario);
-		System.out.println();
+		stat();
+		
 	}
 
 	/**
@@ -120,10 +120,6 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			  }
 		});
 		
-		for(Triplet<Node, Node,Double> nnn: linksAngle ) {
-			System.out.println(nnn.getValue0().getId().toString() + " - " + nnn.getValue1().getId().toString() + " - " +nnn.getValue2());
-		}
-		
 		//step3
 		//scan the groups in linkAngles, combine each pair of consecutive entries
 		//with the same fromNode to build a wedge. last and first link with same fromNode
@@ -146,10 +142,6 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			else {
 				wedges.add(new Triplet<Node, Node,Node>(firstLink.getValue1(),linksAngle.get(j).getValue0(),linksAngle.get(j).getValue1()));
 			}
-		}
-		
-		for(Triplet<Node, Node,Node> nnn: wedges) {
-			System.out.println(nnn.getValue0().getId().toString() + " - " + nnn.getValue1().getId().toString() + " - " +nnn.getValue2().getId().toString());
 		}
 		
 		return wedges;
@@ -404,6 +396,117 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 
 	}
 	
+	public void stat() {
+		   actFreqAnalysis(10);
+		   distFreqAnalysis(100);
+		   areaFreqAnalysis(10000);
+    }
+   
+   public void actFreqAnalysis(int range) {
+	  
+	   Collections.sort(regions, new Comparator<Region>(){
+			@Override
+			  public int compare(Region u1, Region u2) {
+				int c;
+				
+			    c = u1.getActivities().size() == u2.getActivities().size()? 0 : u1.getActivities().size() < u2.getActivities().size() ? -1:1; 
+			    return c;
+			  }
+		});
+	   
+	   int maxAct = regions.get(regions.size()-1).getActivities().size();
+	   int minAct = 0;
+	   if (range == 0 || range>maxAct) return;
+	   int classes = (int) (Math.ceil(maxAct/range) + 1);
+	   int[][] res = new int[classes][3];
+	   res[0][0] = 0;
+	   res[0][1] = 0;
+	   for(int i = 1;i<classes;i++) {
+		   res[i][0] = i*range - (range-1);
+		   res[i][1] = i*range;
+	   }
+	   
+	   for(Region r:regions) {
+		  int pos = (int) (Math.ceil(r.getActivities().size()/range));
+		  res[pos][2] =  res[pos][2] + 1; 
+	   }
+	   
+	   int regWithAct =0;
+	   for(int i = 0;i<classes;i++) {
+		   regWithAct += res[i][2];
+	   }
+	   
+	   //print stat
+	   System.out.println("N. of regions with more than 1 act = "+ regWithAct);
+	   System.out.println("Freq analysis");
+	   for(int i = 0;i<classes;i++) {
+		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
+	   }
+   }
+   
+   public void distFreqAnalysis(double range) {
+		  
+	   if (range == 0 || range> 4000) return;
+	   int classes = (int) (Math.ceil(4000/range) + 1);
+	   double[][] res = new double[classes][3];
+	   for(int i = 0;i<classes;i++) {
+		   int j = i+1;
+		   res[i][0] = j*range - (range-0.9);
+		   res[i][1] = j*range;
+	   }
+	   for(Region r:regions) {
+		   double avgDist =0;
+		   for(Activity act:r.getActivities()){
+			   avgDist += Math.sqrt( Math.pow((r.centroidCoord.getValue0() - act.getCoord().getX() ),2) + Math.pow((r.centroidCoord.getValue1() - act.getCoord().getY() ),2));
+		   }
+		   avgDist = avgDist/ r.getActivities().size();
+		   int pos = (int) (Math.ceil(avgDist/range));
+		   if(pos>classes-1) {
+			   res[classes-1][2] =  res[classes-1][2] + 1; 
+		   }
+		   else {
+			   res[pos][2] =  res[pos][2] + 1; 
+		   }
+		   
+	    }
+	   
+	   //print stat
+	   System.out.println("Average dist from centroid");
+	   System.out.println("Freq analysis");
+	   for(int i = 0;i<classes;i++) {
+		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
+	   }
+   }
+   
+   public void areaFreqAnalysis(double range) {
+		  
+	   if (range == 0 || range> 1000000) return;
+	   int classes = (int) (Math.ceil(1000000/range) + 1);
+	   double[][] res = new double[classes][3];
+	   for(int i = 0;i<classes;i++) {
+		   int j = i+1;
+		   res[i][0] = j*range - (range-0.9);
+		   res[i][1] = j*range;
+	   }
+	   for(Region r:regions) {
+		   int pos = (int) (Math.ceil(r.getArea()/range));
+		   if(pos>classes-1) {
+			   res[classes-1][2] =  res[classes-1][2] + 1; 
+		   }
+		   else {
+			   res[pos][2] =  res[pos][2] + 1; 
+		   }
+		   
+	    }
+	   
+	   //print stat
+	   System.out.println("Regions area");
+	   System.out.println("Freq analysis");
+	   for(int i = 0;i<classes;i++) {
+		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
+	   }
+   }
+   
 	
 	public HashMap<Integer, List<Activity>> getActivitiesClusteringResult() {
 		return clusteringActivitiesResult;
@@ -779,13 +882,14 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	        return searchRoot;
 	    }
 	 
-	    public void uncheck()
+	   public void uncheck()
 	    {
 	        for (int n = 0; n < checkedNodesCounter; n++)
 	            checkedNodes[n].checked = false;
 	    }
 	   
 	   public void print(){
+
 		   Stack<TreeRegionsNode> waitingNode = new Stack();
 		   waitingNode.push(root);
 		   while(!waitingNode.isEmpty()){
