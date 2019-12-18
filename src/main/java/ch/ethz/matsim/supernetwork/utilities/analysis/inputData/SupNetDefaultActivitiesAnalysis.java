@@ -31,9 +31,9 @@ public class SupNetDefaultActivitiesAnalysis implements ActivitiesAnalysis {
 	private HashMap<Activity,List<String>> activitySubpopulation = new LinkedHashMap<>();
 	private HashMap<Activity,Network> activitySubNetwork = new LinkedHashMap<>();
 	
-	public SupNetDefaultActivitiesAnalysis(Scenario scenario){
+	public SupNetDefaultActivitiesAnalysis(Scenario scenario , String outputPath){
 		activitiesFactory(scenario);
-		joinedActivitiesFactory(scenario);
+		joinedActivitiesFactory(scenario,outputPath);
 		activityToActivitiesFactory(scenario);
 		activityPersonsFactory(scenario);
 		activitySubpopulationFactory(scenario);
@@ -55,10 +55,10 @@ public class SupNetDefaultActivitiesAnalysis implements ActivitiesAnalysis {
 		}
 	}
 	
-	private void joinedActivitiesFactory(Scenario scenario) {
+	private void joinedActivitiesFactory(Scenario scenario,String outputPath) {
 		//Map<Id<Link>, List<Activity>> res = activities.stream().filter(x -> x.getLinkId() != null).collect(groupingBy(Activity::getLinkId));
 		
-		ActivitiesClusteringAlgo clusters = new RegionsPlaneClustering(scenario);
+		ActivitiesClusteringAlgo clusters = new RegionsPlaneClustering(scenario,outputPath);
 		
 		System.out.println("");
 	}

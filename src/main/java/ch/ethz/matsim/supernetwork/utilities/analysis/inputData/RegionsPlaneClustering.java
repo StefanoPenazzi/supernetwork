@@ -13,6 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.Math;
 
 import org.javatuples.Pair;
@@ -46,14 +50,15 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	private HashMap<Integer, List<Activity>> clusteringActivitiesResult = new LinkedHashMap<>();
 	private HashMap<Integer, Pair<Double, Double>> clusteringCoordinatesResult = new LinkedHashMap<>();
 	private TreeRegions treeReg;
+	private String outputPath;
 	
 
-	public RegionsPlaneClustering(Scenario scenario) {
+	public RegionsPlaneClustering(Scenario scenario ,String outputPath) {
 		regions = regionsFinder(wedgesFinder(scenario));
 		regionsCentroid(regions);
 		treeReg = new TreeRegions(regions);
 		activitiesRegionsMatch(treeReg,scenario);
-		stat();
+		stat(outputPath);
 		
 	}
 
@@ -396,7 +401,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 
 	}
 	
-	public void stat() {
+	public void stat(String outputPath) {
 		
 		int nAct = 0;
 		
@@ -407,12 +412,51 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		System.out.println( "Tot number of regions: " + regions.size());
 		System.out.println( "Tot number of activities: " + nAct);
 		
-		   actFreqAnalysis(10);
-		   distFreqAnalysis(100);
-		   areaFreqAnalysis(10000);
+		int[][] actFA = actFreqAnalysis(10);
+	    double[][] distFA = distFreqAnalysis(100);
+	    double[][] areaFA = areaFreqAnalysis(10000);
+	    
+	    File file = new File("outputPath");
+	    FileWriter fr = null;
+        BufferedWriter br = null;
+        
+        String results = "";
+        results += " actFreqAnalysis \n";
+        for(int i =0;i<actFA.length;++i) {
+        	
+        	results += " Range ( "+ actFA[i][0]+ " - "+ actFA[i][1]+ " ) -> "+ actFA[i][2] + "\n";
+        	
+        }
+        results += " distFreqAnalysis \n";
+        for(int i =0;i<distFA.length;++i) {
+        	
+        	results += " Range ( "+ distFA[i][0]+ " - "+ distFA[i][1]+ " ) -> "+ distFA[i][2] + "\n";
+        	
+        }
+        results += " areaFreqAnalysis \n";
+        for(int i =0;i<areaFA.length;++i) {
+        	
+        	results += " Range ( "+ areaFA[i][0]+ " - "+ areaFA[i][1]+ " ) -> "+ areaFA[i][2] + "\n";
+        	
+        }
+        
+        try{
+            fr = new FileWriter(file);
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
    
-   public void actFreqAnalysis(int range) {
+   public int[][] actFreqAnalysis(int range) {
 	  
 	   Collections.sort(regions, new Comparator<Region>(){
 			@Override
@@ -426,7 +470,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   
 	   int maxAct = regions.get(regions.size()-1).getActivities().size();
 	   int minAct = 0;
-	   if (range == 0 || range>maxAct) return;
+	   if (range == 0 || range>maxAct) return null;
 	   int classes = (int) (Math.ceil(maxAct/range) + 1);
 	   int[][] res = new int[classes][3];
 	   res[0][0] = 0;
@@ -452,11 +496,12 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   for(int i = 0;i<classes;i++) {
 		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
 	   }
+	   return res;
    }
    
-   public void distFreqAnalysis(double range) {
+   public double[][] distFreqAnalysis(double range) {
 		  
-	   if (range == 0 || range> 4000) return;
+	   if (range == 0 || range> 4000) return null;
 	   int classes = (int) (Math.ceil(4000/range) + 1);
 	   double[][] res = new double[classes][3];
 	   for(int i = 0;i<classes;i++) {
@@ -486,11 +531,12 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   for(int i = 0;i<classes;i++) {
 		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
 	   }
+	   return res;
    }
    
-   public void areaFreqAnalysis(double range) {
+   public double[][] areaFreqAnalysis(double range) {
 		  
-	   if (range == 0 || range> 1000000) return;
+	   if (range == 0 || range> 1000000) return null;
 	   int classes = (int) (Math.ceil(1000000/range) + 1);
 	   double[][] res = new double[classes][3];
 	   for(int i = 0;i<classes;i++) {
@@ -515,6 +561,8 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   for(int i = 0;i<classes;i++) {
 		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
 	   }
+	   
+	   return res;
    }
    
 	
