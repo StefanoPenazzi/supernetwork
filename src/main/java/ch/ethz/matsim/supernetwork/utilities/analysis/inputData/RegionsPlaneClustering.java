@@ -50,11 +50,6 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 
 	public RegionsPlaneClustering(Scenario scenario) {
 		regions = regionsFinder(wedgesFinder(scenario));
-		
-		for(Region r : regions) {
-			r.print();
-		}
-		
 		regionsCentroid(regions);
 		treeReg = new TreeRegions(regions);
 		treeReg.print();
@@ -523,7 +518,8 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		 }
 		 
 		 public double squareDist(Activity act) {
-			 return Math.sqrt(this.reg.getCentroidCoord().getValue0() - act.getCoord().getX()) + Math.sqrt(this.reg.getCentroidCoord().getValue1() - act.getCoord().getY());
+			 double res = Math.pow(this.reg.getCentroidCoord().getValue0() - act.getCoord().getX(),2) + Math.pow(this.reg.getCentroidCoord().getValue1() - act.getCoord().getY(),2);
+			 return res;
 		 }
 		 
 		 public TreeRegionsNode findParent(Activity act) {
@@ -533,7 +529,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			 while (next != null) {
 				 split = next.lr;
 				 parent = next;
-				 if(lr) {
+				 if(split) {
 					 if(next.getReg().getCentroidCoord().getValue0()<=act.getCoord().getX()){
 						 next = next.getRight();
 					 }
@@ -557,7 +553,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			 String sRight = this.getRight() == null ? "null" : "x = "+this.getRight().getReg().getCentroidCoord().getValue0().toString()+ " y = "+this.getRight().getReg().getCentroidCoord().getValue1().toString();
 			 String sLeft = this.getLeft() == null ? "null" : "x = " + this.getLeft().getReg().getCentroidCoord().getValue0().toString()+ " y = "+this.getLeft().getReg().getCentroidCoord().getValue1().toString();
 			 System.out.println("--> x = "+reg.getCentroidCoord().getValue0()+" y = "+ reg.getCentroidCoord().getValue1()+" >(right) " + sRight
-					 +" <(left) "+ sLeft + " <>(left or right) : "+ lr);
+					 +" <(left) "+ sLeft + " <>(X(True) or Y(False)) : "+ lr);
 		 }
 	}	 
 	
@@ -595,7 +591,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   public TreeRegionsNode insertRec(TreeRegionsNode root, Region newReg, boolean lr,TreeRegionsNode child)
 		 {
 			 if(root == null){
-				 return newTreeNode(newReg,lr,null);
+				 return newTreeNode(newReg,lr,child);
 			 }
 			 else{
 				 if(lr) // x
@@ -769,6 +765,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		    xMin = xMax = yMin = yMax =0;
 		    xMaxBoundary = xMinBoundary = yMaxBoundary = yMinBoundary = false;
 	        nBoundary = 0;
+	         
 	 
 	        TreeRegionsNode searchRoot = parent;
 	        while (parent != null && (nBoundary != 4))
