@@ -22,12 +22,13 @@ public class SupernetworkRunTest {
 		CommandLine cmd = new CommandLine.Builder(args)
                 .allowOptions("configPath", "output")
                 .build();
+		
 		final String configFile = cmd.getOption("configPath").orElse("..\\input\\CNB\\config\\config_parsed.xml");
 		String outputPath = cmd.getOption("output").orElse("output_sbb_dmc");
 		
 		System.setProperty("matsim.preferLocalDtds", "true");
 		
-        final Config config = ConfigUtils.loadConfig("/home/stefanopenazzi/git/supernetwork/input/sbb10pct/config/config_parsed.xml");
+        final Config config = ConfigUtils.loadConfig(configFile);
 
         Scenario scenario = ScenarioUtils.loadScenario(config);
 

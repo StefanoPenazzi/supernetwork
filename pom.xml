@@ -37,18 +37,73 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>2.1.13</version>
 				<executions>
 					<execution>
-						<id>attach-sources</id>
+						<id>get-the-git-infos</id>
 						<goals>
-							<goal>jar</goal>
+							<goal>revision</goal>
+						</goals>
+						<phase>compile</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+					<dateFormat>yyyyMMdd_HHmmss</dateFormat>
+				</configuration>
+
+
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<showWarnings>false</showWarnings>
+					<showDeprecation>false</showDeprecation>
+					<encoding>UTF-8</encoding>
+					<!-- configure initial and maximal memory for compiling -->
+					<fork>true</fork>
+					<meminitial>128m</meminitial>
+					<maxmem>512m</maxmem>
+					<compilerArguments>
+						<Xmaxwarns>4000</Xmaxwarns>
+						<Xmaxerrs>100</Xmaxerrs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-eclipse-plugin</artifactId>
+			  <configuration>
+			    <downloadSources>true</downloadSources>
+			    <downloadJavadocs>true</downloadJavadocs>
+			  </configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>org.matsim.gui.MATSimGUI</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -103,6 +158,17 @@
 			<artifactId>commons-math3</artifactId>
 			<version>3.6.1</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-api</artifactId>
+		    <version>2.13.0</version>
+		  </dependency>
+		  <dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>2.13.0</version>
+		  </dependency>
 
 		<dependency>
 			<groupId>org.matsim</groupId>
@@ -110,11 +176,11 @@
 			<version>0.11.0-SNAPSHOT</version>
 		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.matsim</groupId>
 			<artifactId>matsim-berlin</artifactId>
 			<version>5.3</version>
-		</dependency>
+		</dependency> -->
 		
 		
 		<dependency>

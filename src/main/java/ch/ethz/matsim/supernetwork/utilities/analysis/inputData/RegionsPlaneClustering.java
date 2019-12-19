@@ -409,18 +409,17 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 			nAct += r.getActivities().size();
 		}
 		
-		System.out.println( "Tot number of regions: " + regions.size());
-		System.out.println( "Tot number of activities: " + nAct);
-		
 		int[][] actFA = actFreqAnalysis(10);
 	    double[][] distFA = distFreqAnalysis(100);
 	    double[][] areaFA = areaFreqAnalysis(10000);
 	    
-	    File file = new File("outputPath");
+	    File file = new File(outputPath);
 	    FileWriter fr = null;
         BufferedWriter br = null;
         
         String results = "";
+        results += "Tot number of regions: " + regions.size() +" \n";
+        results += "Tot number of activities: " + nAct +" \n";
         results += " actFreqAnalysis \n";
         for(int i =0;i<actFA.length;++i) {
         	
@@ -430,7 +429,7 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
         results += " distFreqAnalysis \n";
         for(int i =0;i<distFA.length;++i) {
         	
-        	results += " Range ( "+ distFA[i][0]+ " - "+ distFA[i][1]+ " ) -> "+ distFA[i][2] + "\n";
+        	results += " Range ( "+ distFA[i][0]+ " - "+ distFA[i][1]+ " ) -> "+ distFA[i][2] + " -> "+ distFA[i][3] +"\n";
         	
         }
         results += " areaFreqAnalysis \n";
@@ -491,11 +490,12 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 	   }
 	   
 	   //print stat
-	   System.out.println("N. of regions with more than 1 act = "+ regWithAct);
-	   System.out.println("Freq analysis");
-	   for(int i = 0;i<classes;i++) {
-		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
-	   }
+		/*
+		 * System.out.println("N. of regions with more than 1 act = "+ regWithAct);
+		 * System.out.println("Freq analysis"); for(int i = 0;i<classes;i++) {
+		 * System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+
+		 * res[i][2] ); }
+		 */
 	   return res;
    }
    
@@ -503,34 +503,38 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		  
 	   if (range == 0 || range> 4000) return null;
 	   int classes = (int) (Math.ceil(4000/range) + 1);
-	   double[][] res = new double[classes][3];
+	   double[][] res = new double[classes][4];
 	   for(int i = 0;i<classes;i++) {
 		   int j = i+1;
 		   res[i][0] = j*range - (range-0.9);
 		   res[i][1] = j*range;
 	   }
 	   for(Region r:regions) {
-		   double avgDist =0;
-		   for(Activity act:r.getActivities()){
-			   avgDist += Math.sqrt( Math.pow((r.centroidCoord.getValue0() - act.getCoord().getX() ),2) + Math.pow((r.centroidCoord.getValue1() - act.getCoord().getY() ),2));
+		   if(r.getActivities().size()>0) {
+			   double avgDist =0;
+			   for(Activity act:r.getActivities()){
+				   avgDist += Math.sqrt( Math.pow((r.centroidCoord.getValue0() - act.getCoord().getX() ),2) + Math.pow((r.centroidCoord.getValue1() - act.getCoord().getY() ),2));
+			   }
+			   avgDist = avgDist/ r.getActivities().size();
+			   int pos = (int) (Math.ceil(avgDist/range));
+			   if(pos>classes-1) {
+				   res[classes-1][2] =  res[classes-1][2] + 1; 
+				   res[classes-1][3] =  res[classes-1][3] + r.getActivities().size();
+			   }
+			   else {
+				   res[pos][2] =  res[pos][2] + 1; 
+				   res[pos][3] =  res[pos][3] + r.getActivities().size(); 
+			   }
 		   }
-		   avgDist = avgDist/ r.getActivities().size();
-		   int pos = (int) (Math.ceil(avgDist/range));
-		   if(pos>classes-1) {
-			   res[classes-1][2] =  res[classes-1][2] + 1; 
-		   }
-		   else {
-			   res[pos][2] =  res[pos][2] + 1; 
-		   }
-		   
 	    }
 	   
 	   //print stat
-	   System.out.println("Average dist from centroid");
-	   System.out.println("Freq analysis");
-	   for(int i = 0;i<classes;i++) {
-		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
-	   }
+		/*
+		 * System.out.println("Average dist from centroid");
+		 * System.out.println("Freq analysis"); for(int i = 0;i<classes;i++) {
+		 * System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+
+		 * res[i][2] ); }
+		 */
 	   return res;
    }
    
@@ -545,23 +549,23 @@ public class RegionsPlaneClustering implements ActivitiesClusteringAlgo {
 		   res[i][1] = j*range;
 	   }
 	   for(Region r:regions) {
-		   int pos = (int) (Math.ceil(r.getArea()/range));
-		   if(pos>classes-1) {
-			   res[classes-1][2] =  res[classes-1][2] + 1; 
+		   if(r.getActivities().size()>0) {
+			   int pos = (int) (Math.ceil(r.getArea()/range));
+			   if(pos>classes-1) {
+				   res[classes-1][2] =  res[classes-1][2] + 1; 
+			   }
+			   else {
+				   res[pos][2] =  res[pos][2] + 1; 
+			   }
 		   }
-		   else {
-			   res[pos][2] =  res[pos][2] + 1; 
-		   }
-		   
 	    }
 	   
 	   //print stat
-	   System.out.println("Regions area");
-	   System.out.println("Freq analysis");
-	   for(int i = 0;i<classes;i++) {
-		   System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+ res[i][2] );
-	   }
-	   
+		/*
+		 * System.out.println("Regions area"); System.out.println("Freq analysis");
+		 * for(int i = 0;i<classes;i++) { System.out.println(" Range ( "+ res[i][0]+
+		 * " - "+ res[i][1]+ " ) -> "+ res[i][2] ); }
+		 */
 	   return res;
    }
    
