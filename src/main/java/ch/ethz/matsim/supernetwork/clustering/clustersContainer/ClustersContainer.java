@@ -14,8 +14,8 @@ import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
  */
 public interface ClustersContainer {
 
-	void addCluster();
-	void deleteCluster();
+	void addCluster(Cluster c);
+	void deleteCluster(Cluster c);
 	void merge2Cluster(Cluster c1, Cluster c2);
 	Cluster[] splitCluster(Cluster c);
 	Cluster getCluster(Coord c);
