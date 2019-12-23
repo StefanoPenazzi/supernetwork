@@ -11,6 +11,9 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
+
+
 
 /**
  * @author stefanopenazzi
@@ -30,7 +33,167 @@ public class KDTreeClustersContainer implements ClustersContainer {
     private boolean xMaxBoundary, xMinBoundary;
     private boolean yMaxBoundary, yMinBoundary;
 	
+	public KDNode nearestNeighbourSearch(Coord coord) {
+		if (this.root == null)
+            return null;
+	   
+	   ClusterNetworkRegionImpl cn = new ClusterNetworkRegionImpl(0,null,coord);
+	   checkedNodesCounter = 0;
+	   KDNode child = root.FindChild(cn);
+	   nearestNeighbour = child;
+	   dMin = child.distance2(cn, child.getCluster());
+	   
+	   if(child.getCluster().getCentroid().getX() == coord.getX() && child.getCluster().getCentroid().getY() == coord.getY()) {
+		   return child;
+	   }
+	   searchChild(child, coord);
+	   //clean for the next query
+	   uncheck();
+	   return nearestNeighbour; 
+	}
 	
+	public KDNode searchChild(KDNode child, Coord coord)
+    {
+	    xMin = xMax = yMin = yMax =0;
+	    xMaxBoundary = xMinBoundary = yMaxBoundary = yMinBoundary = false;
+        nBoundary = 0;
+         
+ 
+        KDNode searchRoot = child;
+        while (child != null && (nBoundary != 4))
+        {
+            checkSubtree(child, coord);
+            searchRoot = child;
+            //backtracking
+            child = child.getChild();
+        }
+ 
+        return searchRoot;
+    }
+	
+	public void checkSubtree(KDNode node, Coord coord)
+    {
+        if ((node == null) || node.getChecked())
+            return;
+ 
+        checkedNodes[checkedNodesCounter++] = node;
+        node.setChecked(true);
+        setBoundingCube(node, coord);
+ 
+        boolean lr = node.getLr();
+        double dist;
+        if (lr) {
+        	dist = node.getCluster().getCentroid().getX() - coord.getX();
+        }
+        else {
+        	dist = node.getCluster().getCentroid().getY() - coord.getY();
+        }
+        
+        if (dist * dist > dMin)
+        {
+        	if(lr) {
+        		if (node.getCluster().getCentroid().getX() > coord.getX())
+	                checkSubtree(node.getLeft(), coord);
+	            else
+	                checkSubtree(node.getRight(), coord);
+        	}
+        	else {
+        		if (node.getCluster().getCentroid().getY() > coord.getY())
+	                checkSubtree(node.getLeft(), coord);
+	            else
+	                checkSubtree(node.getRight(), coord);
+        	}
+            
+        } else
+        {
+            checkSubtree(node.getLeft(), coord);
+            checkSubtree(node.getRight(), coord);
+        }
+    }
+	
+	public void setBoundingCube(KDNode node, Coord coord)
+    {
+        if (node == null)
+            return;
+        double d = 0;
+        double dx;
+        double dy;
+        
+        //xbound
+        dx = node.getCluster().getCentroid().getX() - coord.getX();
+        if (dx > 0)
+        {
+            dx *= dx;
+            if (!xMaxBoundary)
+            {
+                if (dx > xMax)
+                    xMax = dx;
+                if (xMax > dMin)
+                {
+                    xMaxBoundary = true;
+                    nBoundary++;
+                }
+            }
+        } else
+        {
+            dx *= dx;
+            if (!xMinBoundary)
+            {
+                if (dx > xMin)
+                    xMin = dx;
+                if (xMin > dMin)
+                {
+                    xMinBoundary = true;
+                    nBoundary++;
+                }
+            }
+        }
+        //ybound
+        dy = node.getCluster().getCentroid().getY() - coord.getY();
+        if (dy > 0)
+        {
+            dy *= dy;
+            if (!yMaxBoundary)
+            {
+                if (dy > yMax)
+                    yMax = dy;
+                if (yMax > dMin)
+                {
+                    yMaxBoundary = true;
+                    nBoundary++;
+                }
+            }
+        } else
+        {
+            dy *= dy;
+            if (!yMinBoundary)
+            {
+                if (dy > yMin)
+                    yMin = dy;
+                if (yMin > dMin)
+                {
+                    yMinBoundary = true;
+                    nBoundary++;
+                }
+            }
+        }
+        
+        d =  dx + dy;
+        if (d > dMin)
+            return;
+        
+        if (d < dMin)
+        {
+            dMin = d;
+            nearestNeighbour = node;
+        }
+    }
+	
+	private void uncheck()
+    {
+        for (int n = 0; n < checkedNodesCounter; n++)
+            checkedNodes[n].setChecked(false);
+    }
     
     public void addCluster(Cluster c) {
 		

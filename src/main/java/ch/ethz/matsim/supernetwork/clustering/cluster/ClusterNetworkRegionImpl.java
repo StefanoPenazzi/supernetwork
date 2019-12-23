@@ -24,7 +24,7 @@ public class ClusterNetworkRegionImpl implements Cluster {
 	private List<Node> nodes = new ArrayList();
 	private double area = 0;
 	
-	ClusterNetworkRegionImpl(int id,List<Activity> activities,Coord centroid){
+	public ClusterNetworkRegionImpl(int id,List<Activity> activities,Coord centroid){
 		this.id = id;
 		this.activities = activities;
 		this.centroid = centroid;

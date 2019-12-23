@@ -17,7 +17,7 @@ public class KDNode {
 	 private KDNode left = null;
 	 private KDNode right = null;
 	 private boolean lr = false;
-	 private boolean checked;
+	 private boolean checked = false;
 	 
 	 public KDNode(Cluster cluster,boolean lr,KDNode child){
 		 this.cluster= cluster;
@@ -34,6 +34,9 @@ public class KDNode {
 	 public KDNode getRight() {
 		 return right;
 	 }
+	 public KDNode getChild() {
+		 return child;
+	 }
 	 public boolean getLr() {
 		 return lr;
 	 }
@@ -43,6 +46,16 @@ public class KDNode {
 	 public void setRight(KDNode right) {
 		 this.right = right;
 	 }
+	 public void setChild(KDNode right) {
+		 this.child= child;
+	 }
+	 public boolean getChecked() {
+		 return checked;
+	 }
+	 public void setChecked(boolean checked) {
+		 this.checked = checked;
+	 }
+	 
 	 
 	 public KDNode FindChild(Cluster cl)
 	 {
@@ -108,7 +121,7 @@ public class KDNode {
 		 }
 		 return false;
 	 }
-	 private double distance2(Cluster cl1, Cluster cl2) {
+	 public double distance2(Cluster cl1, Cluster cl2) {
 		 double dist = Math.pow(cl1.getCentroid().getX()-cl2.getCentroid().getX(),2) + Math.pow(cl1.getCentroid().getY()-cl2.getCentroid().getY(),2);
 		 return dist;
 	 }
