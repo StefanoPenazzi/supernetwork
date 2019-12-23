@@ -33,7 +33,11 @@ public class KDTreeClustersContainer implements ClustersContainer {
     private boolean xMaxBoundary, xMinBoundary;
     private boolean yMaxBoundary, yMinBoundary;
 	
-	public KDNode nearestNeighbourSearch(Coord coord) {
+	public KDTreeClustersContainer(KDNode root) {
+		this.root = root;
+	}
+
+    public KDNode nearestNeighbourSearch(Coord coord) {
 		if (this.root == null)
             return null;
 	   

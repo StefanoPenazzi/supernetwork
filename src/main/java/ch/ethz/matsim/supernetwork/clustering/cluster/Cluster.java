@@ -17,5 +17,6 @@ public interface Cluster {
 	List<Activity> getActivities();
 	int getId();
 	Coord getCentroid();
+	void addActivity(Activity act);
 
 }
