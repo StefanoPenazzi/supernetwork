@@ -3,6 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.clustering.cluster;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.matsim.api.core.v01.population.Activity;
 public class ClusterDefaultImpl implements Cluster {
 	
 	private final int id;
-	private List<Activity> activities;
+	private List<Activity> activities  = new ArrayList();
 	private Coord centroid;
 	
 	ClusterDefaultImpl(int id,List<Activity> activities,Coord centroid){

@@ -29,7 +29,7 @@ public class ClusterNetworkRegionImpl implements Cluster {
 		this.activities = activities;
 		this.centroid = centroid;
 	}
-	ClusterNetworkRegionImpl(int id){
+	public ClusterNetworkRegionImpl(int id){
 		this.id = id;
 	}
 	
@@ -38,6 +38,9 @@ public class ClusterNetworkRegionImpl implements Cluster {
 	}
 	public List<Node> getNodes(){
 		return Collections.unmodifiableList(nodes);
+	}
+	public void setNodes(List<Node> nodes) {
+		this.nodes = nodes;
 	}
 	public int getId() {
 		return this.id;
