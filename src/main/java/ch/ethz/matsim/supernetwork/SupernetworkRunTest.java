@@ -13,6 +13,7 @@ import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 
 import com.google.inject.Singleton;
 
+import ch.ethz.matsim.supernetwork.model.ClusteringActivities;
 import ch.ethz.matsim.supernetwork.utilities.analysis.inputData.SupNetDefaultActivitiesAnalysis;
 
 public class SupernetworkRunTest {
@@ -32,7 +33,8 @@ public class SupernetworkRunTest {
 
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
-        SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario,outputPath);
+        //SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario,outputPath);
+        ClusteringActivities ca = new ClusteringActivities(scenario,outputPath);
         
         // controler
         //Controler controler = new Controler(scenario);

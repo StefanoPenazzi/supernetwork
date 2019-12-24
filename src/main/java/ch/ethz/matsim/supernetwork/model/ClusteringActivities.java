@@ -29,19 +29,16 @@ import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersCo
  */
 public class ClusteringActivities {
 
-	public ClusteringActivities(Scenario scenario) {
+	public ClusteringActivities(Scenario scenario,String outputPath) {
 		
 		List<ClusterNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);
 		regions = cn.getRegions();
 		
-		KDNode root = null;
-		
+		KDTreeClustersContainer container = new KDTreeClustersContainer(null,regions.size());
 		for(ClusterNetworkRegionImpl reg: regions) {
-			root = root.Insert(reg);
+			container.add(reg);
 		}
-		
-		KDTreeClustersContainer container = new KDTreeClustersContainer(root);
 		
 		for(Person p: scenario.getPopulation().getPersons().values()) {
 			if(p.getPlans().size() >= 1) {
@@ -52,6 +49,7 @@ public class ClusteringActivities {
 		     }	
 		   }
 		}
+		stat(outputPath,regions);
 	}
 	
     public void stat(String outputPath,List<ClusterNetworkRegionImpl> regions) {
@@ -62,9 +60,9 @@ public class ClusteringActivities {
 			nAct += r.getActivities().size();
 		}
 		
-		int[][] actFA = actFreqAnalysis(10);
-	    double[][] distFA = distFreqAnalysis(100);
-	    double[][] areaFA = areaFreqAnalysis(10000);
+		int[][] actFA = actFreqAnalysis(10,regions);
+	    double[][] distFA = distFreqAnalysis(100,regions);
+	    double[][] areaFA = areaFreqAnalysis(10000,regions);
 	    
 	    File file = new File(outputPath);
 	    FileWriter fr = null;

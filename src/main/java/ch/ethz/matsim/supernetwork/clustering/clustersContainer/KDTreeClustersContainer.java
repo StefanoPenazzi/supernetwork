@@ -6,6 +6,7 @@ package ch.ethz.matsim.supernetwork.clustering.clustersContainer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
@@ -33,10 +34,25 @@ public class KDTreeClustersContainer implements ClustersContainer {
     private boolean xMaxBoundary, xMinBoundary;
     private boolean yMaxBoundary, yMinBoundary;
 	
-	public KDTreeClustersContainer(KDNode root) {
+	public KDTreeClustersContainer(KDNode root, int cn) {
 		this.root = root;
+		this.checkedNodes = new KDNode[cn];
 	}
 
+	public boolean add(Cluster x)
+    {
+        if (root == null)
+        {
+            root = new KDNode(x, false,null);
+           
+        } else
+        {
+            KDNode pNode = root.Insert(x);
+        }
+ 
+        return true;
+    }
+	
     public KDNode nearestNeighbourSearch(Coord coord) {
 		if (this.root == null)
             return null;
@@ -227,4 +243,16 @@ public class KDTreeClustersContainer implements ClustersContainer {
 	public List<Cluster> getClusters(){
 		return Collections.unmodifiableList(clusters);
 	}
+	
+	public void print(){
+
+		   Stack<KDNode> waitingNode = new Stack();
+		   waitingNode.push(root);
+		   while(!waitingNode.isEmpty()){
+			   KDNode ext = waitingNode.pop();
+			   ext.print();
+			   if(ext.getLeft() != null) waitingNode.push(ext.getLeft());
+			   if(ext.getRight() != null) waitingNode.push(ext.getRight());
+		   }
+	   }
 }

@@ -94,9 +94,9 @@ public class KDNode {
 	 
 	        KDNode newNode = new KDNode(cl,!child.getLr(),child);
 	 
-	        if(lr) // x
+	        if(child.getLr()) // x
 			 { 
-				 if(newNode.getCluster().getCentroid().getX()<=newNode.getCluster().getCentroid().getX()){
+				 if(child.getCluster().getCentroid().getX()<=newNode.getCluster().getCentroid().getX()){
 					 child.setRight(newNode);
 				 }
 				 else{
@@ -105,7 +105,7 @@ public class KDNode {
 			 }
 			 else
 			 {
-				 if(newNode.getCluster().getCentroid().getY()<=newNode.getCluster().getCentroid().getY()){
+				 if(child.getCluster().getCentroid().getY()<=newNode.getCluster().getCentroid().getY()){
 					 child.setRight(newNode);
 				 }
 				 else{
@@ -124,5 +124,11 @@ public class KDNode {
 	 public double distance2(Cluster cl1, Cluster cl2) {
 		 double dist = Math.pow(cl1.getCentroid().getX()-cl2.getCentroid().getX(),2) + Math.pow(cl1.getCentroid().getY()-cl2.getCentroid().getY(),2);
 		 return dist;
+	 }
+	 public void print(){
+		 String sRight = this.getRight() == null ? "null" : "x = "+this.getRight().getCluster().getCentroid().getX()+ " y = "+this.getRight().getCluster().getCentroid().getY();
+		 String sLeft = this.getLeft() == null ? "null" : "x = " + this.getLeft().getCluster().getCentroid().getX()+ " y = "+this.getLeft().getCluster().getCentroid().getY();
+		 System.out.println("--> x = "+this.getCluster().getCentroid().getX()+" y = "+ this.getCluster().getCentroid().getY()+" >(right) " + sRight
+				 +" <(left) "+ sLeft + " <>(X(True) or Y(False)) : "+ lr);
 	 }
 }
