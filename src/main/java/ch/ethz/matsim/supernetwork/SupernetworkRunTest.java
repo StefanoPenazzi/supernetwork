@@ -14,7 +14,7 @@ import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 import com.google.inject.Singleton;
 
 import ch.ethz.matsim.supernetwork.model.ClusteringActivities;
-import ch.ethz.matsim.supernetwork.utilities.analysis.inputData.SupNetDefaultActivitiesAnalysis;
+
 
 public class SupernetworkRunTest {
 	public static void main(String[] args) throws ConfigurationException {
