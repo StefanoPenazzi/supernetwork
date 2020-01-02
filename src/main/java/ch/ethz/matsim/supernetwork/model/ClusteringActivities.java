@@ -42,10 +42,26 @@ public class ClusteringActivities {
 		
 		for(Person p: scenario.getPopulation().getPersons().values()) {
 			if(p.getPlans().size() >= 1) {
-		     for(PlanElement pe: p.getPlans().get(0).getPlanElements()) {
+			 List<PlanElement> le = p.getPlans().get(0).getPlanElements();
+		     for(PlanElement pe: le) {
 		    	 if ( !(pe instanceof Activity) ) continue;
 		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
 		    	 kdn.getCluster().addActivity((Activity)pe);
+		    	 //find the next activity 
+		    	 int activityListIndex = le.indexOf(pe);
+		    	 if(activityListIndex < le.size()-1) {
+			    	 for(int j =  activityListIndex+1; j<le.size() ;++j ) {
+			    		 if ( le.get(j) instanceof Activity) {
+			    			 double dist = Math.pow(((Activity)pe).getCoord().getX()-((Activity)le.get(j)).getCoord().getX(),2) + 
+			    					 Math.pow(((Activity)pe).getCoord().getY()-((Activity)le.get(j)).getCoord().getY(),2);
+			    			 if(dist > ((ClusterNetworkRegionImpl)kdn.getCluster()).getNetworkRadius()) 
+			    			 {
+			    				 ((ClusterNetworkRegionImpl)kdn.getCluster()).setNetworkRadius(dist);
+			    			 }
+			    			 break;
+			    		 }
+			    	 }
+		    	 }
 		     }	
 		   }
 		}
@@ -63,6 +79,7 @@ public class ClusteringActivities {
 		int[][] actFA = actFreqAnalysis(10,regions);
 	    double[][] distFA = distFreqAnalysis(100,regions);
 	    double[][] areaFA = areaFreqAnalysis(10000,regions);
+	    double[] subnetRadius = subnetworkRadius(regions);
 	    
 	    File file = new File(outputPath);
 	    FileWriter fr = null;
@@ -87,6 +104,12 @@ public class ClusteringActivities {
         for(int i =0;i<areaFA.length;++i) {
         	
         	results += " Range ( "+ areaFA[i][0]+ " - "+ areaFA[i][1]+ " ) -> "+ areaFA[i][2] + "\n";
+        	
+        }
+        results += " subnetworkRadius \n";
+        for(int i =0;i<regions.size();++i) {
+        	
+        	results += " " + i + " -> " + subnetRadius[i] + "\n";
         	
         }
         
@@ -220,4 +243,14 @@ public class ClusteringActivities {
 	   return res;
    }
    
+   public double[] subnetworkRadius(List<ClusterNetworkRegionImpl> regions) {
+	   
+	   double[] res = new double[regions.size()];
+	   int k = 0;
+	   for(ClusterNetworkRegionImpl r:regions) {
+		   res[k] = Math.sqrt(r.getNetworkRadius());
+		   k++;
+	   }
+	   return res;
+   }
 }

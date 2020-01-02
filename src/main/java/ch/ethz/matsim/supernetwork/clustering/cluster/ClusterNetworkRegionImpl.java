@@ -23,6 +23,7 @@ public class ClusterNetworkRegionImpl implements Cluster {
 	private Coord centroid = new Coord(-1,-1);
 	private List<Node> nodes = new ArrayList();
 	private double area = 0;
+	private double networkRadius = 0;
 	
 	public ClusterNetworkRegionImpl(int id,List<Activity> activities,Coord centroid){
 		this.id = id;
@@ -63,6 +64,13 @@ public class ClusterNetworkRegionImpl implements Cluster {
 	public double getArea() {
 		return area;
 	}
+	public double getNetworkRadius() {
+		return this.networkRadius;
+	}
+	public void setNetworkRadius(double radius) {
+		this.networkRadius = radius;
+	}
+	
 	public void setAreaAndCentroid() {
 		double x = 0;
 		double y = 0;
