@@ -54,6 +54,8 @@ public class ClusteringActivities {
 			    		 if ( le.get(j) instanceof Activity) {
 			    			 double dist = Math.pow(((Activity)pe).getCoord().getX()-((Activity)le.get(j)).getCoord().getX(),2) + 
 			    					 Math.pow(((Activity)pe).getCoord().getY()-((Activity)le.get(j)).getCoord().getY(),2);
+			    		 
+			    			 ((ClusterNetworkRegionImpl)kdn.getCluster()).addRadius(Math.sqrt(dist));
 			    			 if(dist > ((ClusterNetworkRegionImpl)kdn.getCluster()).getNetworkRadius()) 
 			    			 {
 			    				 ((ClusterNetworkRegionImpl)kdn.getCluster()).setNetworkRadius(dist);
@@ -80,6 +82,7 @@ public class ClusteringActivities {
 	    double[][] distFA = distFreqAnalysis(100,regions);
 	    double[][] areaFA = areaFreqAnalysis(10000,regions);
 	    double[] subnetRadius = subnetworkRadius(regions);
+	    int[][] snrFA = subnetworkRadiusFreqAnalysis(5000,regions);
 	    
 	    File file = new File(outputPath);
 	    FileWriter fr = null;
@@ -111,6 +114,14 @@ public class ClusteringActivities {
         	
         	results += " " + i + " -> " + subnetRadius[i] + "\n";
         	
+        }
+        results += " subnetworkRadiusFreqAnalysis \n";
+        for(int i =0;i<regions.size();++i) {
+        	results += " " + i + " -> ";
+        	for(int j=0; j< snrFA[0].length;++j) {
+        		results +=  snrFA[i][j] + " - ";
+        	}
+        	results += "\n";
         }
         
         try{
@@ -250,6 +261,27 @@ public class ClusteringActivities {
 	   for(ClusterNetworkRegionImpl r:regions) {
 		   res[k] = Math.sqrt(r.getNetworkRadius());
 		   k++;
+	   }
+	   return res;
+   }
+   
+   public int[][] subnetworkRadiusFreqAnalysis(double range,List<ClusterNetworkRegionImpl> regions) {
+	   
+	   int classes = (int) (Math.ceil(100000/range) + 1);
+	   int[][] res = new int[regions.size()][classes];
+	   
+	   int k = 0;
+	   for(ClusterNetworkRegionImpl r:regions) {
+		   for(Double rad: r.getNetworkRadiusArray()) {
+			   int pos = (int) (rad/range);
+			   if(pos>classes-1) {
+				   res[k][classes-1] =  res[k][classes-1] + 1; 
+			   }
+			   else {
+				   res[k][pos] =  res[k][pos] + 1; 
+			   }
+		   }
+		   ++k;
 	   }
 	   return res;
    }
