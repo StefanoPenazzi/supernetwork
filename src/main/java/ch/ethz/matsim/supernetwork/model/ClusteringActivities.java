@@ -67,7 +67,7 @@ public class ClusteringActivities {
 		     }	
 		   }
 		}
-		stat(outputPath,regions);
+		csvStat(outputPath,regions);
 	}
 	
     public void stat(String outputPath,List<ClusterNetworkRegionImpl> regions) {
@@ -138,6 +138,191 @@ public class ClusteringActivities {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public void csvStat(String outputPath,List<ClusterNetworkRegionImpl> regions) {
+		
+    	File file = null;// new File(outputPath);
+    	FileWriter fr = null;
+        BufferedWriter br = null;
+        String results = "";
+        
+    	// general stat
+    	int nAct = 0;
+		for(ClusterNetworkRegionImpl r: regions) {
+			nAct += r.getActivities().size();
+		}
+        results += "Tot number of regions: " + regions.size() +" \n";
+        results += "Tot number of activities: " + nAct +" \n";
+        try{
+        	file = new File(outputPath + "/generalStat.txt");
+            fr = new FileWriter(file);
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
+        
+	    //activities freq analysis
+        int[][] actFA = actFreqAnalysis(10,regions);
+        results += "range;n act \n";
+        for(int i =0;i<actFA.length;++i) {
+        	
+        	results += "("+ actFA[i][0]+ "-"+ actFA[i][1]+ ");"+ actFA[i][2] + "\n";
+        	
+        }
+        try{
+        	file = new File(outputPath + "/activitiesFreqAnalysis.txt");
+            fr = new FileWriter(file);
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
+	    
+        //distances freq analysis
+        double[][] distFA = distFreqAnalysis(100,regions);
+        results += "range;n regions;n activities \n";
+        for(int i =0;i<distFA.length;++i) {
+        	
+        	results += "("+ distFA[i][0]+ "-"+ distFA[i][1]+ ");"+ distFA[i][2] + ";"+ distFA[i][3] +"\n";
+        	
+        }
+        try{
+        	file = new File(outputPath + "/distancesFreqAnalysis.txt");
+            fr = new FileWriter(file);
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
+        
+        //areas freq analysis
+        double[][] areaFA = areaFreqAnalysis(10000,regions);
+        results += "range;area \n";
+        for(int i =0;i<areaFA.length;++i) {
+        	
+        	results += "("+ areaFA[i][0]+ "-"+ areaFA[i][1]+ ");"+ areaFA[i][2] + "\n";
+        	
+        }
+        try{
+        	file = new File(outputPath + "/areasFreqAnalysis.txt");
+            fr = new FileWriter(file);
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
+        
+        //subnetwork radius
+        double[] subnetRadius = subnetworkRadius(regions);
+        results += "region id;max radius \n";
+        for(int i =0;i<regions.size();++i) {
+        	
+        	results += i + ";" + subnetRadius[i] + "\n";
+        	
+        }
+        try{
+        	file = new File(outputPath + "/maxRadiusSubnetwork.txt");
+            fr = new FileWriter(file);
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
+        
+        //subnetwork radius freq analysis
+        double rangeRadius = 5000;
+	    int[][] snrFA = subnetworkRadiusFreqAnalysis(rangeRadius,regions);
+        results += "region id; \n";
+        for(int j=0; j< snrFA[0].length;++j) {
+    		results += j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ;
+    	}
+        results += "\n";
+        for(int i =0;i<regions.size();++i) {
+        	results += i + ";";
+        	for(int j=0; j< snrFA[0].length;++j) {
+        		results +=  snrFA[i][j] + ";";
+        	}
+        	results += "\n";
+        }
+        
+        try{
+            fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis");
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
+        
+        //regions data
+        results += "region id;n activities;area;coordX;coordY \n";
+        for(int i =0;i<regions.size();++i) {
+        	results += i + ";"+ regions.get(i).getActivities().size()+";"+regions.get(i).getArea()+";"+regions.get(i).getCentroid().getX()+";"+regions.get(i).getCentroid().getY()+"\n";
+        }
+        try{
+            fr = new FileWriter(outputPath + "/clusterAnalysis");
+            br = new BufferedWriter(fr);
+            br.write(results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        results = "";
     }
    
    public int[][] actFreqAnalysis(int range,List<ClusterNetworkRegionImpl> regions) {
@@ -212,14 +397,6 @@ public class ClusteringActivities {
 			   }
 		   }
 	    }
-	   
-	   //print stat
-		/*
-		 * System.out.println("Average dist from centroid");
-		 * System.out.println("Freq analysis"); for(int i = 0;i<classes;i++) {
-		 * System.out.println(" Range ( "+ res[i][0]+ " - "+ res[i][1]+ " ) -> "+
-		 * res[i][2] ); }
-		 */
 	   return res;
    }
    
@@ -244,13 +421,6 @@ public class ClusteringActivities {
 			   }
 		   }
 	    }
-	   
-	   //print stat
-		/*
-		 * System.out.println("Regions area"); System.out.println("Freq analysis");
-		 * for(int i = 0;i<classes;i++) { System.out.println(" Range ( "+ res[i][0]+
-		 * " - "+ res[i][1]+ " ) -> "+ res[i][2] ); }
-		 */
 	   return res;
    }
    
@@ -285,4 +455,5 @@ public class ClusteringActivities {
 	   }
 	   return res;
    }
+
 }
