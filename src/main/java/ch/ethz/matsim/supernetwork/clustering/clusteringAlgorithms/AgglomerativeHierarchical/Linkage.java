@@ -9,8 +9,8 @@ package ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.Agglomerativ
  */
 public abstract class Linkage {
 	
-	private int size;
-    private float[] proximity;
+	int size;
+    float[] proximity;
 
     /** Initialize the linkage with the lower triangular proximity matrix. */
     public Linkage(double[][] proximity) {
