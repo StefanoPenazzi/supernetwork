@@ -5,6 +5,10 @@ package ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.Agglomerativ
 
 /**
  * @author stefanopenazzi
+ * 
+ * https://www.ics.uci.edu/~eppstein/projects/pairs/Papers/Epp-SODA-98.pdf
+ * 
+ * find the nearest pair of clusters is a very expensive task.
  *
  */
 public class FastPair {

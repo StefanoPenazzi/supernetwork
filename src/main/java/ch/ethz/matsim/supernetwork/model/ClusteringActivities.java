@@ -18,6 +18,7 @@ import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.ClusteringNetworkRegionAlgorithm;
+import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.AgglomerativeHierarchical.HierarchicalClusteringActivities;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDNode;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersContainer;
 
@@ -67,7 +68,15 @@ public class ClusteringActivities {
 		     }	
 		   }
 		}
-		csvStat(outputPath,regions);
+		for(ClusterNetworkRegionImpl cnr: regions) {
+			if(cnr.getActivities().size()<10 && cnr.getActivities().size()>6) {
+				List<Activity> act = cnr.getActivities();
+				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act);
+				break;
+			}
+		}
+		
+		//csvStat(outputPath,regions);
 	}
 	
     public void stat(String outputPath,List<ClusterNetworkRegionImpl> regions) {

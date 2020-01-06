@@ -73,8 +73,15 @@ public class ClusteringAgglomerativeHierarchicalAlgorithm implements ClusteringA
             id[i] = i;
         }
 
+        //this keeps an MST used to find the new cluster based on the linkage
+        //Moreover implements efficient methods to update the structure (remove/add clusters)
         FastPair fp = new FastPair(points, linkage);
+        
+        //clustering algo
         for (int i = 0; i < n - 1; i++) {
+        	//save the distance between the two clusters merged in this iteration
+        	//this is useful in the tree cuts. 
+        	//merge[i]={cluster1id,cluster2id} contains the id of the two clusters merged
             height[i] = fp.getNearestPair(merge[i]);
             linkage.merge(merge[i][0], merge[i][1]);     // merge clusters into one
             fp.remove(merge[i][1]);           // drop b
