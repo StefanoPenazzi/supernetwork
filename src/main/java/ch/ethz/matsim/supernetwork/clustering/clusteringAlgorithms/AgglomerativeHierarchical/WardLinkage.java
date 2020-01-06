@@ -5,8 +5,14 @@ package ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.Agglomerativ
 
 /**
  * @author stefanopenazzi
+ * 
+ * Ward’s minimum variance method joins the two clusters and that minimise the increase
+ * in the sum of squared errors. 
+ * https://www.ufs.ac.za/docs/librariesprovider22/mathematical-statistics-and-actuarial-science-documents/technical-reports-documents/teg437-3941-eng.pdf?sfvrsn=303ef921_0
  *
  */
+
+
 public class WardLinkage extends Linkage {
 
 	/**
@@ -31,6 +37,8 @@ public class WardLinkage extends Linkage {
             n[i] = 1;
         }
 
+        //The initial cluster distances in Ward's minimum variance method are
+        //therefore defined to be the squared Euclidean distance between points
         for (int i = 0; i < proximity.length; i++) {
             proximity[i] *= proximity[i];
         }
@@ -41,6 +49,9 @@ public class WardLinkage extends Linkage {
         return "Ward's linkage";
     }
 
+	/* Lance-Williams Algorithm. the updated proximity value is done only on the first cluster in which the second
+	 * is merged */
+    
     @Override
     public void merge(int i, int j) {
         float nij = n[i] + n[j];
