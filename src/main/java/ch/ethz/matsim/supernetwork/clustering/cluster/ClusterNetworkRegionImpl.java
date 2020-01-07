@@ -100,4 +100,6 @@ public class ClusterNetworkRegionImpl implements Cluster {
 		this.area = Math.abs(area);
 		this.centroid = new Coord(x,y);
 	}
+	
+	public void computeCentroid() {}
 }

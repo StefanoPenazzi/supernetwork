@@ -19,6 +19,8 @@ public class ClusterDefaultImpl implements Cluster {
 	private final int id;
 	private List<Activity> activities  = new ArrayList();
 	private Coord centroid;
+	private double networkRadius = 0;
+	private List<Double> networkRadiusArray = new ArrayList(); 
 	
 	public ClusterDefaultImpl(int id,List<Activity> activities,Coord centroid){
 		this.id = id;
@@ -89,6 +91,19 @@ public class ClusterDefaultImpl implements Cluster {
 			}
 		}
 		return min;
+	}
+	
+	public double getNetworkRadius() {
+		return this.networkRadius;
+	}
+	public void setNetworkRadius(double radius) {
+		this.networkRadius = radius;
+	}
+	public List<Double> getNetworkRadiusArray(){
+		return Collections.unmodifiableList(this.networkRadiusArray);
+	}
+	public void addRadius(double r) {
+		this.networkRadiusArray.add(r);
 	}
 
 }
