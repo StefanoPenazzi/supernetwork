@@ -155,6 +155,11 @@ public class ClusteringAgglomerativeHierarchicalAlgorithm implements ClusteringA
                 throw new IllegalStateException("Non-monotonic cluster tree -- the linkage is probably not appropriate!");
             }
         }
+        
+        System.out.println(height.length);
+        if(h >= height[height.length - 1]) {
+        	return new int[merge.length + 1];
+        }
 
         int n = merge.length + 1;
         int k = 2;

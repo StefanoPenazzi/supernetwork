@@ -69,14 +69,17 @@ public class ClusteringActivities {
 		   }
 		}
 		for(ClusterNetworkRegionImpl cnr: regions) {
-			if(cnr.getActivities().size()<10 && cnr.getActivities().size()>6) {
+			//if(cnr.getActivities().size()<10 && cnr.getActivities().size()>6) {
+			if(cnr.getActivities().size() > 1) {
 				List<Activity> act = cnr.getActivities();
-				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act);
-				break;
+				//the value used for the cut of the clusters tree is related to the type of linkage used
+				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,1000);
+				//break;
+			//}
 			}
 		}
 		
-		//csvStat(outputPath,regions);
+		csvStat(outputPath,regions);
 	}
 	
     public void stat(String outputPath,List<ClusterNetworkRegionImpl> regions) {

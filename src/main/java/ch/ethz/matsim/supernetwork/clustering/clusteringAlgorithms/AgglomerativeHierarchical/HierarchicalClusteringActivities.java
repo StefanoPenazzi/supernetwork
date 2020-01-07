@@ -10,6 +10,7 @@ import java.util.List;
 import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterDefaultImpl;
 
 /**
  * @author stefanopenazzi
@@ -20,18 +21,19 @@ public class HierarchicalClusteringActivities {
 	private List<Activity> activities;
 	private List<Cluster> clusters;
 	
-	public HierarchicalClusteringActivities(List<Activity> activities) {
-		this.activities = Collections.unmodifiableList(activities);
+	public HierarchicalClusteringActivities(List<Activity> activities,double height) {
+		this.activities = activities;
 		clusters = new ArrayList();
-		run();
+		run(height);
 	}
 	
-	private void run(){
+	private void run(double height){
 		double[][] pm = proximityActivitiesMatrix();
 		WardLinkage wl = new WardLinkage(pm);
 		ClusteringAgglomerativeHierarchicalAlgorithm ca = new ClusteringAgglomerativeHierarchicalAlgorithm(null,null);
 		ClusteringAgglomerativeHierarchicalAlgorithm res = ca.fit(wl);
-		System.out.println("--");
+		clustersGenerator(res,height);
+		//System.out.println("...");
 	}
 	
 	private double[][] proximityActivitiesMatrix(){
@@ -46,10 +48,25 @@ public class HierarchicalClusteringActivities {
 		return pm;
 	}
 	
-	/*
-	 * private void clustersGenerator(ClusteringAgglomerativeHierarchicalAlgorithm
-	 * res,) {
-	 * 
-	 * }
-	 */
+	
+	private void clustersGenerator(ClusteringAgglomerativeHierarchicalAlgorithm res,double height) {
+	     int[] part = res.partition(height);
+	     int currentCluster = -1;
+	     int max = 0;
+	     for(int i =0;i<part.length;++i) {
+	    	 if(max<part[i]) {
+	    		 max= part[i];
+	    	 }
+	     }
+	     
+	     for(int j=0;j<max+1;++j) {
+	    	 clusters.add(new ClusterDefaultImpl(0));
+	     }
+		 
+	     for(int i =0;i<part.length;++i) {
+	    	 clusters.get(part[i]).addActivity(activities.get(i));
+	    
+	     }
+	}
+	
 }

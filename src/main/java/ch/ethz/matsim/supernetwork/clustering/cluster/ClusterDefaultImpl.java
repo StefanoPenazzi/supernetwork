@@ -20,10 +20,14 @@ public class ClusterDefaultImpl implements Cluster {
 	private List<Activity> activities  = new ArrayList();
 	private Coord centroid;
 	
-	ClusterDefaultImpl(int id,List<Activity> activities,Coord centroid){
+	public ClusterDefaultImpl(int id,List<Activity> activities,Coord centroid){
 		this.id = id;
 		this.activities = activities;
 		this.centroid = centroid;
+	}
+	
+	public ClusterDefaultImpl(int id){
+		this.id = id;
 	}
 	
 	public List<Activity> getActivities(){
