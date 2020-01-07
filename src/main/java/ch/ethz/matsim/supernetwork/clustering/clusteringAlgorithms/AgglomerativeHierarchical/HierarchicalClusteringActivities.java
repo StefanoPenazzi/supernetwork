@@ -69,4 +69,8 @@ public class HierarchicalClusteringActivities {
 	     }
 	}
 	
+	public List<Cluster> getClusters(){
+		return this.clusters;
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
 
+import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterDefaultImpl;
 import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.ClusteringNetworkRegionAlgorithm;
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.AgglomerativeHierarchical.HierarchicalClusteringActivities;
@@ -68,15 +71,23 @@ public class ClusteringActivities {
 		     }	
 		   }
 		}
+		
+		List<ClusterDefaultImpl> clusters = new ArrayList();
+		
 		for(ClusterNetworkRegionImpl cnr: regions) {
-			//if(cnr.getActivities().size()<10 && cnr.getActivities().size()>6) {
 			if(cnr.getActivities().size() > 1) {
 				List<Activity> act = cnr.getActivities();
 				//the value used for the cut of the clusters tree is related to the type of linkage used
 				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,1000);
-				//break;
-			//}
+				//add clusters
+				for(Cluster c:hca.getClusters()) {
+					clusters.add((ClusterDefaultImpl)c);
+				}
 			}
+		}
+		//set the centroid for each new cluster in clusters
+		for(ClusterDefaultImpl cdi: clusters) {
+			cdi.computeCentroid();
 		}
 		
 		csvStat(outputPath,regions);
