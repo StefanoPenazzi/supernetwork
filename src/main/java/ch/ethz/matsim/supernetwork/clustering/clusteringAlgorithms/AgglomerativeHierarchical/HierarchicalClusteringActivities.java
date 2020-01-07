@@ -14,6 +14,8 @@ import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterDefaultImpl;
 
 /**
  * @author stefanopenazzi
+ * 
+ * https://github.com/haifengl/smile/tree/master/core/src/main/java/smile/clustering
  *
  */
 public class HierarchicalClusteringActivities {
