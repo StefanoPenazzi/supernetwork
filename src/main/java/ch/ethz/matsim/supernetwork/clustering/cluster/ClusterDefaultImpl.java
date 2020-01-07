@@ -48,5 +48,47 @@ public class ClusterDefaultImpl implements Cluster {
 	public void removeActivity(Activity act) {
 		activities.remove(act);
 	}
+	public void computeCentroid() {
+		double x = 0;
+		double y = 0;
+		for(Activity act:activities) {
+			x += act.getCoord().getX();
+			y += act.getCoord().getY();
+		}
+		x = x/activities.size();
+		y = y/activities.size();
+		this.centroid = new Coord(x,y);
+	}
+	
+	public double variance() {
+		double var = 0;
+		for(Activity act:activities) {
+			var += Math.sqrt(Math.pow(act.getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getCoord().getY() - centroid.getY(), 2));
+		}
+		var = var/activities.size();
+		return var;
+	}
+	
+	public double maxDistAct() {
+		double max = 0;
+		for(Activity act:activities) {
+			double dist = Math.sqrt(Math.pow(act.getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getCoord().getY() - centroid.getY(), 2));
+			if(max < dist) {
+				max = dist;
+			}
+		}
+		return max;
+	}
+	
+	public double minDistAct() {
+		double min = Double.MAX_VALUE;
+		for(Activity act:activities) {
+			double dist = Math.sqrt(Math.pow(act.getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getCoord().getY() - centroid.getY(), 2));
+			if(min > dist) {
+				min = dist;
+			}
+		}
+		return min;
+	}
 
 }
