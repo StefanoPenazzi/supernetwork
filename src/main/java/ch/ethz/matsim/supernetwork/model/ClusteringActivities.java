@@ -33,7 +33,7 @@ import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersCo
  */
 public class ClusteringActivities {
 
-	public ClusteringActivities(Scenario scenario,String outputPath) {
+	public ClusteringActivities(Scenario scenario,String outputPath,double cut) {
 		
 		List<ClusterNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);
@@ -78,7 +78,7 @@ public class ClusteringActivities {
 			if(cnr.getActivities().size() > 1) {
 				List<Activity> act = cnr.getActivities();
 				//the value used for the cut of the clusters tree is related to the type of linkage used
-				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,1200);
+				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,cut);
 				//add clusters
 				for(Cluster c:hca.getClusters()) {
 					clusters.add((ClusterDefaultImpl)c);

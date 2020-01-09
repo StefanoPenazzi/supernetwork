@@ -21,11 +21,12 @@ public class SupernetworkRunTest {
 		// TODO Auto-generated method stub
 		
 		CommandLine cmd = new CommandLine.Builder(args)
-                .allowOptions("configPath", "output")
+                .allowOptions("configPath", "output", "cut")
                 .build();
 		
 		final String configFile = cmd.getOption("configPath").orElse("..\\input\\CNB\\config\\config_parsed.xml");
 		String outputPath = cmd.getOption("output").orElse("output_sbb_dmc");
+		double cut = cmd.getOption("cut").map(Double::parseDouble).orElse(0.0);
 		
 		System.setProperty("matsim.preferLocalDtds", "true");
 		
@@ -34,7 +35,7 @@ public class SupernetworkRunTest {
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
         //SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario,outputPath);
-        ClusteringActivities ca = new ClusteringActivities(scenario,outputPath);
+        ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
         
         // controler
         //Controler controler = new Controler(scenario);
