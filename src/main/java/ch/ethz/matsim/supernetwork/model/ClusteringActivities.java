@@ -75,23 +75,12 @@ public class ClusteringActivities {
 		List<Cluster> clusters = new ArrayList();
 		
 		for(ClusterNetworkRegionImpl cnr: regions) {
-			if(cnr.getActivities().size() > 1) {
-				List<Activity> act = cnr.getActivities();
-				//the value used for the cut of the clusters tree is related to the type of linkage used
-				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,cut);
-				//add clusters
-				for(Cluster c:hca.getClusters()) {
-					clusters.add((ClusterDefaultImpl)c);
-				}
-			}
+			
+			clusters.add(cnr);
+			
 		}
-		//set the centroid for each new cluster in clusters
-		for(Cluster cdi: clusters) {
-			cdi.computeCentroid();
-		}
+		csvStatRegions(outputPath,clusters);
 		
-		//csvStatRegions(outputPath,clusters);
-		csvStat(outputPath,clusters);
 	}
 	
     public void stat(String outputPath,List<Cluster> clusters) {
