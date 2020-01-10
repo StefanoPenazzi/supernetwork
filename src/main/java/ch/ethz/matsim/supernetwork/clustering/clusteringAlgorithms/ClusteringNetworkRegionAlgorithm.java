@@ -21,7 +21,7 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.utils.objectattributes.AttributeConverter;
 
-import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALNetworkRegionImpl;
 
 
 
@@ -32,15 +32,15 @@ import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
  */
 public class ClusteringNetworkRegionAlgorithm implements ClusteringAlgorithm {
 
-	private List<ClusterNetworkRegionImpl> regions = new ArrayList();
+	private List<CALNetworkRegionImpl> regions = new ArrayList();
 	
-	public List<ClusterNetworkRegionImpl> getRegions(){
+	public List<CALNetworkRegionImpl> getRegions(){
 		return regions;
 	}
 	
 	public ClusteringNetworkRegionAlgorithm(Scenario scenario) {
 		regions = regionsFinder(wedgesFinder(scenario));
-		for(ClusterNetworkRegionImpl r: regions) {
+		for(CALNetworkRegionImpl r: regions) {
 			r.setAreaAndCentroid();
 		}
 	}
@@ -140,8 +140,8 @@ public class ClusteringNetworkRegionAlgorithm implements ClusteringAlgorithm {
 	 * The output is a list of list of nodes where the nodes are sorted such that they
 	 * represent a polygon.  
 	 */
-	private List<ClusterNetworkRegionImpl> regionsFinder(List<Triplet<Node, Node, Node>> wedges){
-		List<ClusterNetworkRegionImpl> regions = new ArrayList();
+	private List<CALNetworkRegionImpl> regionsFinder(List<Triplet<Node, Node, Node>> wedges){
+		List<CALNetworkRegionImpl> regions = new ArrayList();
 		List<Boolean> wedgesUsed = new ArrayList(Collections.nCopies(wedges.size(),false));
 		
 		Comparator<Triplet<Node, Node, Node>> wedgeComparator = new Comparator<Triplet<Node, Node, Node>>() {
@@ -165,7 +165,7 @@ public class ClusteringNetworkRegionAlgorithm implements ClusteringAlgorithm {
 		for(int j = 0;j < wedgesUsed.size();++j) {
 			//Start a new region
 			if(!wedgesUsed.get(j)) {
-				ClusterNetworkRegionImpl reg = new ClusterNetworkRegionImpl(0);
+				CALNetworkRegionImpl reg = new CALNetworkRegionImpl(0);
 				wedgesUsed.set(j,true);
 				List<Node> newRegionNodes = new ArrayList();
 				newRegionNodes.add(wedges.get(j).getValue0());

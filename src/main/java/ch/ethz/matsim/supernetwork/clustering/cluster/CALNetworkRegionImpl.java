@@ -16,48 +16,24 @@ import org.matsim.api.core.v01.population.Activity;
  * @author stefanopenazzi
  *
  */
-public class ClusterNetworkRegionImpl implements Cluster {
+public class CALNetworkRegionImpl extends ClusterActivitiesLocation {
 
-	private final int id;
-	private List<Activity> activities = new ArrayList();
-	private Coord centroid = new Coord(-1,-1);
 	private List<Node> nodes = new ArrayList();
 	private double area = 0;
 	private double networkRadius = 0;
 	private List<Double> networkRadiusArray = new ArrayList(); 
 	
-	public ClusterNetworkRegionImpl(int id,List<Activity> activities,Coord centroid){
-		this.id = id;
-		this.activities = activities;
-		this.centroid = centroid;
+	public CALNetworkRegionImpl(int id,List<Activity> activities,Coord centroid){
+		super(id,activities,centroid);
 	}
-	public ClusterNetworkRegionImpl(int id){
-		this.id = id;
-	}
-	
-	public List<Activity> getActivities(){
-		return Collections.unmodifiableList(activities);
+	public CALNetworkRegionImpl(int id){
+		super(id);
 	}
 	public List<Node> getNodes(){
 		return Collections.unmodifiableList(nodes);
 	}
 	public void setNodes(List<Node> nodes) {
 		this.nodes = nodes;
-	}
-	public int getId() {
-		return this.id;
-	}
-	public Coord getCentroid() {
-		return this.centroid;
-	}
-	public void setCentroid(Coord centroid) {
-		this.centroid = centroid;
-	}
-	public void addActivity(Activity act) {
-		activities.add(act);
-	}
-	public void removeActivity(Activity act) {
-		activities.remove(act);
 	}
 	public void addNode(Node n) {
 		nodes.add(n);
@@ -98,8 +74,6 @@ public class ClusterNetworkRegionImpl implements Cluster {
 		y = (1/(6*area))*y;
 		
 		this.area = Math.abs(area);
-		this.centroid = new Coord(x,y);
+		setCentroid(new Coord(x,y));
 	}
-	
-	public void computeCentroid() {}
 }

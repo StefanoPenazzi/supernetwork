@@ -12,7 +12,7 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALNetworkRegionImpl;
 
 
 
@@ -57,7 +57,7 @@ public class KDTreeClustersContainer implements ClustersContainer {
 		if (this.root == null)
             return null;
 	   
-	   ClusterNetworkRegionImpl cn = new ClusterNetworkRegionImpl(0,null,coord);
+	   CALNetworkRegionImpl cn = new CALNetworkRegionImpl(0,null,coord);
 	   checkedNodesCounter = 0;
 	   KDNode child = root.FindChild(cn);
 	   nearestNeighbour = child;
