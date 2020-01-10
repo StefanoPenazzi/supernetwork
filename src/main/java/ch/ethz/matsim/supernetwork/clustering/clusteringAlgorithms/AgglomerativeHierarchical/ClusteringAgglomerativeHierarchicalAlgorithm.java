@@ -10,7 +10,7 @@ import java.util.Queue;
 
 import org.matsim.api.core.v01.population.Activity;
 
-import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterDefaultImpl;
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.ClusteringAlgorithm;
 
 
@@ -20,7 +20,7 @@ import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.ClusteringAlg
  */
 public class ClusteringAgglomerativeHierarchicalAlgorithm implements ClusteringAlgorithm {
 
-	private List<ClusterDefaultImpl> clusters = new ArrayList();
+	private List<CALDefaultImpl> clusters = new ArrayList();
 	private List<Activity> activitiesBase = null;
 	
 	public ClusteringAgglomerativeHierarchicalAlgorithm(List<Activity> activitiesBase) {

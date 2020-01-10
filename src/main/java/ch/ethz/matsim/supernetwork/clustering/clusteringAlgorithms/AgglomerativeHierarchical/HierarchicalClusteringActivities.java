@@ -10,7 +10,7 @@ import java.util.List;
 import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterDefaultImpl;
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
 
 /**
  * @author stefanopenazzi
@@ -62,7 +62,7 @@ public class HierarchicalClusteringActivities {
 	     }
 	     
 	     for(int j=0;j<max+1;++j) {
-	    	 clusters.add(new ClusterDefaultImpl(0));
+	    	 clusters.add(new CALDefaultImpl(0));
 	     }
 		 
 	     for(int i =0;i<part.length;++i) {

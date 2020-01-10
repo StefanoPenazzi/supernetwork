@@ -18,7 +18,7 @@ import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterDefaultImpl;
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.clustering.cluster.ClusterNetworkRegionImpl;
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.ClusteringNetworkRegionAlgorithm;
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.AgglomerativeHierarchical.HierarchicalClusteringActivities;
@@ -81,7 +81,7 @@ public class ClusteringActivities {
 				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,cut);
 				//add clusters
 				for(Cluster c:hca.getClusters()) {
-					clusters.add((ClusterDefaultImpl)c);
+					clusters.add((CALDefaultImpl)c);
 				}
 			}
 		}
