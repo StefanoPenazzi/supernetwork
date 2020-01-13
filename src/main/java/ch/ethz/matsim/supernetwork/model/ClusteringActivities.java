@@ -25,6 +25,7 @@ import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.Agglomerative
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDNode;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersContainer;
 import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
 
 
 
@@ -53,21 +54,6 @@ public class ClusteringActivities {
 		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
 		    	 ElementActivity ea = new ElementActivity((Activity)pe,p,kdn.getCluster());
 		    	 kdn.getCluster().addComponent(ea);
-		    	 //find the next activity 
-					/*
-					 * int activityListIndex = le.indexOf(pe); if(activityListIndex < le.size()-1) {
-					 * for(int j = activityListIndex+1; j<le.size() ;++j ) { if ( le.get(j)
-					 * instanceof Activity) { double dist =
-					 * Math.pow(((Activity)pe).getCoord().getX()-((Activity)le.get(j)).getCoord().
-					 * getX(),2) +
-					 * Math.pow(((Activity)pe).getCoord().getY()-((Activity)le.get(j)).getCoord().
-					 * getY(),2);
-					 * 
-					 * ((CALNetworkRegionImpl)kdn.getCluster()).addRadius(Math.sqrt(dist)); if(dist
-					 * > ((CALNetworkRegionImpl)kdn.getCluster()).getNetworkRadius()) {
-					 * ((CALNetworkRegionImpl)kdn.getCluster()).setNetworkRadius(dist); } break; } }
-					 * }
-					 */
 		     }	
 		   }
 		}
@@ -393,32 +379,73 @@ public class ClusteringActivities {
         }
         results = "";
         
-		/*
-		 * //subnetwork radius double[] subnetRadius = subnetworkRadius(clusters);
-		 * results += "region id;max radius \n"; for(int i =0;i<clusters.size();++i) {
-		 * 
-		 * results += i + ";" + subnetRadius[i] + "\n";
-		 * 
-		 * } try{ file = new File(outputPath + "/maxRadiusSubnetwork.txt"); fr = new
-		 * FileWriter(file); br = new BufferedWriter(fr); br.write(results); } catch
-		 * (IOException e) { e.printStackTrace(); }finally{ try { br.close();
-		 * fr.close(); } catch (IOException e) { e.printStackTrace(); } } results = "";
-		 */
+		
+		 //subnetwork radius
+        double[] subnetRadius = subnetworkRadius(clusters);
+		results += "region id;max radius \n";
+		for(int i =0;i<clusters.size();++i) {
+			results += i + ";" + subnetRadius[i] + "\n";
+		} 
+		try
+		{ 
+			 file = new File(outputPath + "/maxRadiusSubnetwork.txt");
+			 fr = new FileWriter(file);
+			 br = new BufferedWriter(fr);
+			 br.write(results);
+		 } 
+		 catch
+		  (IOException e) { e.printStackTrace();
+		  }
+		 finally
+		 { 
+			 try 
+			 { 
+				 br.close();
+				 fr.close();
+			} catch (IOException e)
+			 {
+				e.printStackTrace();
+				}
+			 }
+		 results = "";
+		 
         
         //subnetwork radius freq analysis
-		/*
-		 * double rangeRadius = 5000; int[][] snrFA =
-		 * subnetworkRadiusFreqAnalysis(rangeRadius,clusters); results +=
-		 * "region id; \n"; for(int j=0; j< snrFA[0].length;++j) { results +=
-		 * j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ; } results += "\n"; for(int i
-		 * =0;i<clusters.size();++i) { results += i + ";"; for(int j=0; j<
-		 * snrFA[0].length;++j) { results += snrFA[i][j] + ";"; } results += "\n"; }
-		 * 
-		 * try{ fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis"); br =
-		 * new BufferedWriter(fr); br.write(results); } catch (IOException e) {
-		 * e.printStackTrace(); }finally{ try { br.close(); fr.close(); } catch
-		 * (IOException e) { e.printStackTrace(); } } results = "";
-		 */
+		
+		  double rangeRadius = 5000;
+		  int[][] snrFA = subnetworkRadiusFreqAnalysis(rangeRadius,clusters);
+		  results += "region id; \n";
+		  for(int j=0; j< snrFA[0].length;++j) { 
+			  results += j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ;
+			  }
+		  results += "\n";
+		  for(int i =0;i<clusters.size();++i) {
+			  results += i + ";";
+			  for(int j=0; j< snrFA[0].length;++j) {
+				  results += snrFA[i][j] + ";";
+				  }
+			  results += "\n";
+			  }
+		  
+		  try{ 
+			  fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis");
+			  br = new BufferedWriter(fr);
+			  br.write(results);
+			  }
+		  catch (IOException e) {
+			  e.printStackTrace();
+			  }
+		  finally{
+			  try {
+				  br.close();
+				  fr.close();
+				  }
+			  catch (IOException e) {
+				  e.printStackTrace();
+				  }
+			  }
+		  results = "";
+		 
         
         //regions data
         results += "cluster id;n activities;coordX;coordY \n";
@@ -533,22 +560,39 @@ public class ClusteringActivities {
 	   return res;
    }
    
-	/*
-	 * public double[] subnetworkRadius(List<Cluster<Activity>> clusters) {
-	 * 
-	 * double[] res = new double[clusters.size()]; int k = 0; for(Cluster
-	 * r:clusters) { res[k] = Math.sqrt(r.getNetworkRadius()); k++; } return res; }
-	 * 
-	 * public int[][] subnetworkRadiusFreqAnalysis(double
-	 * range,List<Cluster<Activity>> clusters) {
-	 * 
-	 * int classes = (int) (Math.ceil(100000/range) + 1); int[][] res = new
-	 * int[clusters.size()][classes];
-	 * 
-	 * int k = 0; for(Cluster<Activity> r:clusters) { for(Double rad:
-	 * r.getNetworkRadiusArray()) { int pos = (int) (rad/range); if(pos>classes-1) {
-	 * res[k][classes-1] = res[k][classes-1] + 1; } else { res[k][pos] = res[k][pos]
-	 * + 1; } } ++k; } return res; }
-	 */
+	
+	 public double[] subnetworkRadius(List<Cluster<ElementActivity>> clusters) {
+		 SubnetworkFactory sf = new SubnetworkFactory();
+		 double[] res = new double[clusters.size()];
+		 int k = 0;
+		 for(Cluster<ElementActivity> r:clusters)
+		 { 
+			 res[k] = sf.networkByActivitiesRadius(r);
+			 k++;
+			 }
+		 return res;
+	 }
+	  
+	  public int[][] subnetworkRadiusFreqAnalysis(double range,List<Cluster<ElementActivity>> clusters) {
+		  int classes = (int) (Math.ceil(100000/range) + 1);
+		  int[][] res = new int[clusters.size()][classes];
+		  int k = 0;
+		  for(Cluster<ElementActivity> r:clusters) { 
+			  for(ElementActivity ea: r.getComponents())
+			  { 
+				  int pos = (int) (ea.getDistNextActivity()/range);
+				  if(pos>classes-1)
+				  {
+					  res[k][classes-1] = res[k][classes-1] + 1;
+					  } 
+				  else { 
+					  res[k][pos] = res[k][pos]+ 1;
+					  }
+				  }
+			  ++k;
+			  }
+		  return res;
+		  }
+	 
 
 }
