@@ -28,6 +28,7 @@ public class SubnetworkFactory {
 	public Network circularNetworkCutByActivities(Network father, List<Activity> cutSet) {
 		Network net = null;
 		
+		
 		return net;
 	}
 }
