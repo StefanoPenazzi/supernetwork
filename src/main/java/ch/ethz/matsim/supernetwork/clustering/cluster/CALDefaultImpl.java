@@ -19,25 +19,11 @@ import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
 public class CALDefaultImpl extends ClusterActivitiesLocation {
 	
 	private double networkRadius = 0;
-	private List<Double> networkRadiusArray = new ArrayList(); 
 	
 	public CALDefaultImpl(int id,List<ElementActivity> activities,Coord centroid){
 		super(id,activities,centroid);
 	}
 	public CALDefaultImpl(int id){
 		super(id);
-	}
-	
-	public double getNetworkRadius() {
-		return this.networkRadius;
-	}
-	public void setNetworkRadius(double radius) {
-		this.networkRadius = radius;
-	}
-	public List<Double> getNetworkRadiusArray(){
-		return Collections.unmodifiableList(this.networkRadiusArray);
-	}
-	public void addRadius(double r) {
-		this.networkRadiusArray.add(r);
 	}
 }

@@ -9,6 +9,9 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
 
+import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+
 /**
  * @author stefanopenazzi
  *
@@ -30,5 +33,16 @@ public class SubnetworkFactory {
 		
 		
 		return net;
+	}
+	
+	public double networkByActivitiesRadius(Cluster<ElementActivity> cluster) {
+		double radius =0;
+		for(ElementActivity ea: cluster.getComponents()) {
+			//double dist = Math.pow(ea.getActivity().getCoord().getX() - ,2)
+			//if() {
+				
+			//}
+		}
+		return radius;
 	}
 }
