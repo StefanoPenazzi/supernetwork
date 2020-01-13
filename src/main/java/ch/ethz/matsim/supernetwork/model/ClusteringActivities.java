@@ -50,7 +50,7 @@ public class ClusteringActivities {
 		     for(PlanElement pe: le) {
 		    	 if ( !(pe instanceof Activity) ) continue;
 		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
-		    	 kdn.getCluster().addActivity((Activity)pe);
+		    	 kdn.getCluster().addComponent((Activity)pe);
 		    	 //find the next activity 
 		    	 int activityListIndex = le.indexOf(pe);
 		    	 if(activityListIndex < le.size()-1) {
@@ -72,11 +72,11 @@ public class ClusteringActivities {
 		   }
 		}
 		
-		List<Cluster> clusters = new ArrayList();
+		List<Cluster<Activity>> clusters = new ArrayList();
 		
 		for(CALNetworkRegionImpl cnr: regions) {
-			if(cnr.getActivities().size() > 1) {
-				List<Activity> act = cnr.getActivities();
+			if(cnr.getComponents().size() > 1) {
+				List<Activity> act = cnr.getComponents();
 				//the value used for the cut of the clusters tree is related to the type of linkage used
 				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,cut);
 				//add clusters
@@ -94,19 +94,19 @@ public class ClusteringActivities {
 		csvStat(outputPath,clusters);
 	}
 	
-    public void stat(String outputPath,List<Cluster> clusters) {
+    public void stat(String outputPath,List<Cluster<Activity>> clusters) {
 		
 		int nAct = 0;
 		
 		for(Cluster r: clusters) {
-			nAct += r.getActivities().size();
+			nAct += r.getComponents().size();
 		}
 		
 		int[][] actFA = actFreqAnalysis(10,clusters);
 	    double[][] distFA = distFreqAnalysis(100,clusters);
 	    double[][] areaFA = areaFreqAnalysis(10000,clusters);
-	    double[] subnetRadius = subnetworkRadius(clusters);
-	    int[][] snrFA = subnetworkRadiusFreqAnalysis(5000,clusters);
+	    //double[] subnetRadius = subnetworkRadius(clusters);
+	    //int[][] snrFA = subnetworkRadiusFreqAnalysis(5000,clusters);
 	    
 	    File file = new File(outputPath);
 	    FileWriter fr = null;
@@ -133,20 +133,15 @@ public class ClusteringActivities {
         	results += " Range ( "+ areaFA[i][0]+ " - "+ areaFA[i][1]+ " ) -> "+ areaFA[i][2] + "\n";
         	
         }
-        results += " subnetworkRadius \n";
-        for(int i =0;i<clusters.size();++i) {
-        	
-        	results += " " + i + " -> " + subnetRadius[i] + "\n";
-        	
-        }
-        results += " subnetworkRadiusFreqAnalysis \n";
-        for(int i =0;i<clusters.size();++i) {
-        	results += " " + i + " -> ";
-        	for(int j=0; j< snrFA[0].length;++j) {
-        		results +=  snrFA[i][j] + " - ";
-        	}
-        	results += "\n";
-        }
+		/*
+		 * results += " subnetworkRadius \n"; for(int i =0;i<clusters.size();++i) {
+		 * 
+		 * results += " " + i + " -> " + subnetRadius[i] + "\n";
+		 * 
+		 * } results += " subnetworkRadiusFreqAnalysis \n"; for(int i
+		 * =0;i<clusters.size();++i) { results += " " + i + " -> "; for(int j=0; j<
+		 * snrFA[0].length;++j) { results += snrFA[i][j] + " - "; } results += "\n"; }
+		 */
         
         try{
             fr = new FileWriter(file);
@@ -164,7 +159,7 @@ public class ClusteringActivities {
         }
     }
     
-    public void csvStatRegions(String outputPath,List<Cluster> clusters) {
+    public void csvStatRegions(String outputPath,List<Cluster<Activity>> clusters) {
 		
     	File file = null;// new File(outputPath);
     	FileWriter fr = null;
@@ -174,7 +169,7 @@ public class ClusteringActivities {
     	// general stat
     	int nAct = 0;
 		for(Cluster r: clusters) {
-			nAct += r.getActivities().size();
+			nAct += r.getComponents().size();
 		}
         results += "Tot number of regions: " + clusters.size() +" \n";
         results += "Tot number of activities: " + nAct +" \n";
@@ -271,66 +266,34 @@ public class ClusteringActivities {
         results = "";
         
         //subnetwork radius
-        double[] subnetRadius = subnetworkRadius(clusters);
-        results += "region id;max radius \n";
-        for(int i =0;i<clusters.size();++i) {
-        	
-        	results += i + ";" + subnetRadius[i] + "\n";
-        	
-        }
-        try{
-        	file = new File(outputPath + "/maxRadiusSubnetwork.txt");
-            fr = new FileWriter(file);
-            br = new BufferedWriter(fr);
-            br.write(results);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                br.close();
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        results = "";
-        
-        //subnetwork radius freq analysis
-        double rangeRadius = 5000;
-	    int[][] snrFA = subnetworkRadiusFreqAnalysis(rangeRadius,clusters);
-        results += "region id; \n";
-        for(int j=0; j< snrFA[0].length;++j) {
-    		results += j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ;
-    	}
-        results += "\n";
-        for(int i =0;i<clusters.size();++i) {
-        	results += i + ";";
-        	for(int j=0; j< snrFA[0].length;++j) {
-        		results +=  snrFA[i][j] + ";";
-        	}
-        	results += "\n";
-        }
-        
-        try{
-            fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis");
-            br = new BufferedWriter(fr);
-            br.write(results);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                br.close();
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        results = "";
+		/*
+		 * double[] subnetRadius = subnetworkRadius(clusters); results +=
+		 * "region id;max radius \n"; for(int i =0;i<clusters.size();++i) {
+		 * 
+		 * results += i + ";" + subnetRadius[i] + "\n";
+		 * 
+		 * } try{ file = new File(outputPath + "/maxRadiusSubnetwork.txt"); fr = new
+		 * FileWriter(file); br = new BufferedWriter(fr); br.write(results); } catch
+		 * (IOException e) { e.printStackTrace(); }finally{ try { br.close();
+		 * fr.close(); } catch (IOException e) { e.printStackTrace(); } } results = "";
+		 * 
+		 * //subnetwork radius freq analysis double rangeRadius = 5000; int[][] snrFA =
+		 * subnetworkRadiusFreqAnalysis(rangeRadius,clusters); results +=
+		 * "region id; \n"; for(int j=0; j< snrFA[0].length;++j) { results +=
+		 * j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ; } results += "\n"; for(int i
+		 * =0;i<clusters.size();++i) { results += i + ";"; for(int j=0; j<
+		 * snrFA[0].length;++j) { results += snrFA[i][j] + ";"; } results += "\n"; }
+		 * 
+		 * try{ fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis"); br =
+		 * new BufferedWriter(fr); br.write(results); } catch (IOException e) {
+		 * e.printStackTrace(); }finally{ try { br.close(); fr.close(); } catch
+		 * (IOException e) { e.printStackTrace(); } } results = "";
+		 */
         
         //regions data
         results += "region id;n activities;area;coordX;coordY \n";
         for(int i =0;i<clusters.size();++i) {
-        	results += i + ";"+ clusters.get(i).getActivities().size()+";"+((CALNetworkRegionImpl)clusters.get(i)).getArea()+";"+clusters.get(i).getCentroid().getX()+";"+clusters.get(i).getCentroid().getY()+"\n";
+        	results += i + ";"+ clusters.get(i).getComponents().size()+";"+((CALNetworkRegionImpl)clusters.get(i)).getArea()+";"+clusters.get(i).getCentroid().getX()+";"+clusters.get(i).getCentroid().getY()+"\n";
         }
         try{
             fr = new FileWriter(outputPath + "/clusterAnalysis");
@@ -349,7 +312,7 @@ public class ClusteringActivities {
         results = "";
     }
     
-   public void csvStat(String outputPath,List<Cluster> clusters) {
+   public void csvStat(String outputPath,List<Cluster<Activity>> clusters) {
 		
     	File file = null;// new File(outputPath);
     	FileWriter fr = null;
@@ -359,7 +322,7 @@ public class ClusteringActivities {
     	// general stat
     	int nAct = 0;
 		for(Cluster r: clusters) {
-			nAct += r.getActivities().size();
+			nAct += r.getComponents().size();
 		}
         results += "Tot number of clusters: " + clusters.size() +" \n";
         results += "Tot number of activities: " + nAct +" \n";
@@ -430,67 +393,37 @@ public class ClusteringActivities {
         }
         results = "";
         
-        //subnetwork radius
-        double[] subnetRadius = subnetworkRadius(clusters);
-        results += "region id;max radius \n";
-        for(int i =0;i<clusters.size();++i) {
-        	
-        	results += i + ";" + subnetRadius[i] + "\n";
-        	
-        }
-        try{
-        	file = new File(outputPath + "/maxRadiusSubnetwork.txt");
-            fr = new FileWriter(file);
-            br = new BufferedWriter(fr);
-            br.write(results);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                br.close();
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        results = "";
+		/*
+		 * //subnetwork radius double[] subnetRadius = subnetworkRadius(clusters);
+		 * results += "region id;max radius \n"; for(int i =0;i<clusters.size();++i) {
+		 * 
+		 * results += i + ";" + subnetRadius[i] + "\n";
+		 * 
+		 * } try{ file = new File(outputPath + "/maxRadiusSubnetwork.txt"); fr = new
+		 * FileWriter(file); br = new BufferedWriter(fr); br.write(results); } catch
+		 * (IOException e) { e.printStackTrace(); }finally{ try { br.close();
+		 * fr.close(); } catch (IOException e) { e.printStackTrace(); } } results = "";
+		 */
         
         //subnetwork radius freq analysis
-        double rangeRadius = 5000;
-	    int[][] snrFA = subnetworkRadiusFreqAnalysis(rangeRadius,clusters);
-        results += "region id; \n";
-        for(int j=0; j< snrFA[0].length;++j) {
-    		results += j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ;
-    	}
-        results += "\n";
-        for(int i =0;i<clusters.size();++i) {
-        	results += i + ";";
-        	for(int j=0; j< snrFA[0].length;++j) {
-        		results +=  snrFA[i][j] + ";";
-        	}
-        	results += "\n";
-        }
-        
-        try{
-            fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis");
-            br = new BufferedWriter(fr);
-            br.write(results);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                br.close();
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        results = "";
+		/*
+		 * double rangeRadius = 5000; int[][] snrFA =
+		 * subnetworkRadiusFreqAnalysis(rangeRadius,clusters); results +=
+		 * "region id; \n"; for(int j=0; j< snrFA[0].length;++j) { results +=
+		 * j*rangeRadius + "-" + (j+1)*rangeRadius + ";" ; } results += "\n"; for(int i
+		 * =0;i<clusters.size();++i) { results += i + ";"; for(int j=0; j<
+		 * snrFA[0].length;++j) { results += snrFA[i][j] + ";"; } results += "\n"; }
+		 * 
+		 * try{ fr = new FileWriter(outputPath + "/subnetworkRadiusFreqAnalysis"); br =
+		 * new BufferedWriter(fr); br.write(results); } catch (IOException e) {
+		 * e.printStackTrace(); }finally{ try { br.close(); fr.close(); } catch
+		 * (IOException e) { e.printStackTrace(); } } results = "";
+		 */
         
         //regions data
         results += "cluster id;n activities;coordX;coordY \n";
         for(int i =0;i<clusters.size();++i) {
-        	results += i + ";"+ clusters.get(i).getActivities().size()+";"+clusters.get(i).getCentroid().getX()+";"+clusters.get(i).getCentroid().getY()+"\n";
+        	results += i + ";"+ clusters.get(i).getComponents().size()+";"+clusters.get(i).getCentroid().getX()+";"+clusters.get(i).getCentroid().getY()+"\n";
         }
         try{
             fr = new FileWriter(outputPath + "/clusterAnalysis");
@@ -509,19 +442,19 @@ public class ClusteringActivities {
         results = "";
     }
    
-   public int[][] actFreqAnalysis(int range,List<Cluster> clusters) {
+   public int[][] actFreqAnalysis(int range,List<Cluster<Activity>> clusters) {
 	  
 	   Collections.sort(clusters, new Comparator<Cluster>(){
 			@Override
 			  public int compare(Cluster u1, Cluster u2) {
 				int c;
 				
-			    c = u1.getActivities().size() == u2.getActivities().size()? 0 : u1.getActivities().size() < u2.getActivities().size() ? -1:1; 
+			    c = u1.getComponents().size() == u2.getComponents().size()? 0 : u1.getComponents().size() < u2.getComponents().size() ? -1:1; 
 			    return c;
 			  }
 		});
 	   
-	   int maxAct = clusters.get(clusters.size()-1).getActivities().size();
+	   int maxAct = clusters.get(clusters.size()-1).getComponents().size();
 	   int minAct = 0;
 	   if (range == 0 || range>maxAct) return null;
 	   int classes = (int) (Math.ceil(maxAct/range) + 1);
@@ -534,7 +467,7 @@ public class ClusteringActivities {
 	   }
 	   
 	   for(Cluster r:clusters) {
-		  int pos = (int) (Math.ceil(r.getActivities().size()/range));
+		  int pos = (int) (Math.ceil(r.getComponents().size()/range));
 		  res[pos][2] =  res[pos][2] + 1; 
 	   }
 	   
@@ -545,7 +478,7 @@ public class ClusteringActivities {
 	   return res;
    }
    
-   public double[][] distFreqAnalysis(double range,List<Cluster> clusters) {
+   public double[][] distFreqAnalysis(double range,List<Cluster<Activity>> clusters) {
 		  
 	   if (range == 0 || range> 4000) return null;
 	   int classes = (int) (Math.ceil(4000/range) + 1);
@@ -555,28 +488,28 @@ public class ClusteringActivities {
 		   res[i][0] = j*range - (range-0.9);
 		   res[i][1] = j*range;
 	   }
-	   for(Cluster r:clusters) {
-		   if(r.getActivities().size()>0) {
+	   for(Cluster<Activity> r:clusters) {
+		   if(r.getComponents().size()>0) {
 			   double avgDist =0;
-			   for(Activity act:r.getActivities()){
+			   for(Activity act:r.getComponents()){
 				   avgDist += Math.sqrt( Math.pow((r.getCentroid().getX() - act.getCoord().getX() ),2) + Math.pow((r.getCentroid().getY() - act.getCoord().getY() ),2));
 			   }
-			   avgDist = avgDist/ r.getActivities().size();
+			   avgDist = avgDist/ r.getComponents().size();
 			   int pos = (int) (Math.ceil(avgDist/range));
 			   if(pos>classes-1) {
 				   res[classes-1][2] =  res[classes-1][2] + 1; 
-				   res[classes-1][3] =  res[classes-1][3] + r.getActivities().size();
+				   res[classes-1][3] =  res[classes-1][3] + r.getComponents().size();
 			   }
 			   else {
 				   res[pos][2] =  res[pos][2] + 1; 
-				   res[pos][3] =  res[pos][3] + r.getActivities().size(); 
+				   res[pos][3] =  res[pos][3] + r.getComponents().size(); 
 			   }
 		   }
 	    }
 	   return res;
    }
    
-   public double[][] areaFreqAnalysis(double range,List<Cluster> clusters) {
+   public double[][] areaFreqAnalysis(double range,List<Cluster<Activity>> clusters) {
 		  
 	   if (range == 0 || range> 1000000) return null;
 	   int classes = (int) (Math.ceil(1000000/range) + 1);
@@ -587,7 +520,7 @@ public class ClusteringActivities {
 		   res[i][1] = j*range;
 	   }
 	   for(Cluster r:clusters) {
-		   if(r.getActivities().size()>0) {
+		   if(r.getComponents().size()>0) {
 			   int pos = (int) (Math.ceil(((CALNetworkRegionImpl)r).getArea()/range));
 			   if(pos>classes-1) {
 				   res[classes-1][2] =  res[classes-1][2] + 1; 
@@ -600,36 +533,22 @@ public class ClusteringActivities {
 	   return res;
    }
    
-   public double[] subnetworkRadius(List<Cluster> clusters) {
-	   
-	   double[] res = new double[clusters.size()];
-	   int k = 0;
-	   for(Cluster r:clusters) {
-		   res[k] = Math.sqrt(r.getNetworkRadius());
-		   k++;
-	   }
-	   return res;
-   }
-   
-   public int[][] subnetworkRadiusFreqAnalysis(double range,List<Cluster> clusters) {
-	   
-	   int classes = (int) (Math.ceil(100000/range) + 1);
-	   int[][] res = new int[clusters.size()][classes];
-	   
-	   int k = 0;
-	   for(Cluster r:clusters) {
-		   for(Double rad: r.getNetworkRadiusArray()) {
-			   int pos = (int) (rad/range);
-			   if(pos>classes-1) {
-				   res[k][classes-1] =  res[k][classes-1] + 1; 
-			   }
-			   else {
-				   res[k][pos] =  res[k][pos] + 1; 
-			   }
-		   }
-		   ++k;
-	   }
-	   return res;
-   }
+	/*
+	 * public double[] subnetworkRadius(List<Cluster<Activity>> clusters) {
+	 * 
+	 * double[] res = new double[clusters.size()]; int k = 0; for(Cluster
+	 * r:clusters) { res[k] = Math.sqrt(r.getNetworkRadius()); k++; } return res; }
+	 * 
+	 * public int[][] subnetworkRadiusFreqAnalysis(double
+	 * range,List<Cluster<Activity>> clusters) {
+	 * 
+	 * int classes = (int) (Math.ceil(100000/range) + 1); int[][] res = new
+	 * int[clusters.size()][classes];
+	 * 
+	 * int k = 0; for(Cluster<Activity> r:clusters) { for(Double rad:
+	 * r.getNetworkRadiusArray()) { int pos = (int) (rad/range); if(pos>classes-1) {
+	 * res[k][classes-1] = res[k][classes-1] + 1; } else { res[k][pos] = res[k][pos]
+	 * + 1; } } ++k; } return res; }
+	 */
 
 }

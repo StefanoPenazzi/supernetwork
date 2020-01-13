@@ -14,7 +14,7 @@ import org.matsim.api.core.v01.population.Activity;
  * @author stefanopenazzi
  *
  */
-public abstract class ClusterActivitiesLocation implements Cluster{
+public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
 	
 	private final int id;
 	private List<Activity> activities  = new ArrayList();
@@ -30,7 +30,7 @@ public abstract class ClusterActivitiesLocation implements Cluster{
 		this.id = id;
 	}
 	
-	public List<Activity> getActivities(){
+	public List<Activity> getComponents(){
 		return Collections.unmodifiableList(activities);
 	}
 	public int getId() {
@@ -42,10 +42,10 @@ public abstract class ClusterActivitiesLocation implements Cluster{
 	public void setCentroid(Coord centroid) {
 		this.centroid = centroid;
 	}
-	public void addActivity(Activity act) {
+	public void addComponent(Activity act) {
 		activities.add(act);
 	}
-	public void removeActivity(Activity act) {
+	public void removeComponent(Activity act) {
 		activities.remove(act);
 	}
 	public void computeCentroid() {

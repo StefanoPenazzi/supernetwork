@@ -13,16 +13,18 @@ import org.matsim.api.core.v01.population.Activity;
  * @author stefanopenazzi
  *
  */
-public interface Cluster {
+public interface Cluster<T> {
 	
-	List<Activity> getActivities();
+	List<T> getComponents();
 	int getId();
 	Coord getCentroid();
-	void addActivity(Activity act);
+	void addComponent(T comp);
+	void removeComponent(T comp);
 	public void computeCentroid();
-	public double getNetworkRadius();
-	public void setNetworkRadius(double radius);
-	public List<Double> getNetworkRadiusArray();
-	public void addRadius(double r);
+	/*
+	 * public double getNetworkRadius(); public void setNetworkRadius(double
+	 * radius); public List<Double> getNetworkRadiusArray(); public void
+	 * addRadius(double r);
+	 */
 
 }
