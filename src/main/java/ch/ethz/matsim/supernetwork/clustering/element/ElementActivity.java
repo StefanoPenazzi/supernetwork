@@ -67,4 +67,8 @@ public class ElementActivity implements Element {
 		this.cluster = cluster;
 	}
 
+	public double getDistNextActivity() {
+		return Math.sqrt(Math.pow(activity.getCoord().getX() - nextActivity.getCoord().getX(),2) + 
+				Math.pow(activity.getCoord().getY() - nextActivity.getCoord().getY(),2));
+	}
 }
