@@ -26,12 +26,14 @@ public class ElementActivity implements Element {
 		this.activity = activity;
 		this.person = person;
 		this.cluster = null;
+		setNextActivity();
 	}
 	
-	public ElementActivity(Activity activity,Person plan,Cluster<ElementActivity> cluster) {
+	public ElementActivity(Activity activity,Person person,Cluster<ElementActivity> cluster) {
 		this.activity = activity;
 		this.person = person;
 		this.cluster = cluster;
+		setNextActivity();
 	}
 	
 	public Activity getActivity() {
@@ -44,6 +46,7 @@ public class ElementActivity implements Element {
 	
 	public void setNextActivity() {
 		
+		  this.nextActivity = null;
 		  List<PlanElement> le = person.getPlans().get(0).getPlanElements();
 		  int activityListIndex = le.indexOf(activity);
 		  if(activityListIndex < le.size()-1) {
@@ -68,7 +71,11 @@ public class ElementActivity implements Element {
 	}
 
 	public double getDistNextActivity() {
+		if(this.nextActivity == null) {
+			return 0;
+		}else {
 		return Math.sqrt(Math.pow(activity.getCoord().getX() - nextActivity.getCoord().getX(),2) + 
 				Math.pow(activity.getCoord().getY() - nextActivity.getCoord().getY(),2));
+		}
 	}
 }
