@@ -82,12 +82,13 @@ public class ClusteringActivities {
 				//add clusters
 				for(Cluster<ElementActivity> c:hca.getClusters()) {
 					clusters.add((CALDefaultImpl)c);
+					c.computeCentroid();
 				}
 			}
 		}
-		//set the centroid for each new cluster in clusters
-		for(Cluster cdi: clusters) {
-			cdi.computeCentroid();
+		container = new KDTreeClustersContainer(null,clusters.size());
+		for(Cluster<ElementActivity> c: clusters) {
+			container.add(c);
 		}
 		
 		//csvStatRegions(outputPath,clusters);
