@@ -10,6 +10,7 @@ import java.util.List;
 import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
 import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
 
 /**
@@ -20,10 +21,10 @@ import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
  */
 public class HierarchicalClusteringActivities {
 
-	private List<Activity> activities;
-	private List<Cluster> clusters;
+	private List<ElementActivity> activities;
+	private List<Cluster<ElementActivity>> clusters;
 	
-	public HierarchicalClusteringActivities(List<Activity> activities,double height) {
+	public HierarchicalClusteringActivities(List<ElementActivity> activities,double height) {
 		this.activities = activities;
 		clusters = new ArrayList();
 		run(height);
@@ -41,10 +42,10 @@ public class HierarchicalClusteringActivities {
 	private double[][] proximityActivitiesMatrix(){
 		double[][] pm = new double[activities.size()][activities.size()];
 		for(int i=0;i<activities.size();++i) {
-			double iX = activities.get(i).getCoord().getX();
-			double iY = activities.get(i).getCoord().getY();
+			double iX = activities.get(i).getActivity().getCoord().getX();
+			double iY = activities.get(i).getActivity().getCoord().getY();
 			for(int j=0;j<activities.size();++j) {
-				pm[i][j] = Math.sqrt(Math.pow(iX - activities.get(j).getCoord().getX(),2)+Math.pow(iY - activities.get(j).getCoord().getY(),2));
+				pm[i][j] = Math.sqrt(Math.pow(iX - activities.get(j).getActivity().getCoord().getX(),2)+Math.pow(iY - activities.get(j).getActivity().getCoord().getY(),2));
 			}
 		}
 		return pm;
@@ -71,7 +72,7 @@ public class HierarchicalClusteringActivities {
 	     }
 	}
 	
-	public List<Cluster> getClusters(){
+	public List<Cluster<ElementActivity>> getClusters(){
 		return this.clusters;
 	}
 	

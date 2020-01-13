@@ -12,6 +12,8 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
 
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+
 /**
  * @author stefanopenazzi
  *
@@ -23,7 +25,7 @@ public class CALNetworkRegionImpl extends ClusterActivitiesLocation {
 	private double networkRadius = 0;
 	private List<Double> networkRadiusArray = new ArrayList(); 
 	
-	public CALNetworkRegionImpl(int id,List<Activity> activities,Coord centroid){
+	public CALNetworkRegionImpl(int id,List<ElementActivity> activities,Coord centroid){
 		super(id,activities,centroid);
 	}
 	public CALNetworkRegionImpl(int id){

@@ -10,17 +10,19 @@ import java.util.List;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+
 /**
  * @author stefanopenazzi
  *
  */
-public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
+public abstract class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 	
 	private final int id;
-	private List<Activity> activities  = new ArrayList();
+	private List<ElementActivity> activities  = new ArrayList();
 	private Coord centroid;
 	
-	public ClusterActivitiesLocation(int id,List<Activity> activities,Coord centroid){
+	public ClusterActivitiesLocation(int id,List<ElementActivity> activities,Coord centroid){
 		this.id = id;
 		this.activities = activities;
 		this.centroid = centroid;
@@ -30,7 +32,7 @@ public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
 		this.id = id;
 	}
 	
-	public List<Activity> getComponents(){
+	public List<ElementActivity> getComponents(){
 		return Collections.unmodifiableList(activities);
 	}
 	public int getId() {
@@ -42,18 +44,18 @@ public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
 	public void setCentroid(Coord centroid) {
 		this.centroid = centroid;
 	}
-	public void addComponent(Activity act) {
+	public void addComponent(ElementActivity act) {
 		activities.add(act);
 	}
-	public void removeComponent(Activity act) {
+	public void removeComponent(ElementActivity act) {
 		activities.remove(act);
 	}
 	public void computeCentroid() {
 		double x = 0;
 		double y = 0;
-		for(Activity act:activities) {
-			x += act.getCoord().getX();
-			y += act.getCoord().getY();
+		for(ElementActivity act:activities) {
+			x += act.getActivity().getCoord().getX();
+			y += act.getActivity().getCoord().getY();
 		}
 		x = x/activities.size();
 		y = y/activities.size();
@@ -62,8 +64,8 @@ public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
 	
 	public double variance() {
 		double var = 0;
-		for(Activity act:activities) {
-			var += Math.sqrt(Math.pow(act.getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getCoord().getY() - centroid.getY(), 2));
+		for(ElementActivity act:activities) {
+			var += Math.sqrt(Math.pow(act.getActivity().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getActivity().getCoord().getY() - centroid.getY(), 2));
 		}
 		var = var/activities.size();
 		return var;
@@ -71,8 +73,8 @@ public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
 	
 	public double maxDistAct() {
 		double max = 0;
-		for(Activity act:activities) {
-			double dist = Math.sqrt(Math.pow(act.getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getCoord().getY() - centroid.getY(), 2));
+		for(ElementActivity act:activities) {
+			double dist = Math.sqrt(Math.pow(act.getActivity().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getActivity().getCoord().getY() - centroid.getY(), 2));
 			if(max < dist) {
 				max = dist;
 			}
@@ -82,8 +84,8 @@ public abstract class ClusterActivitiesLocation implements Cluster<Activity>{
 	
 	public double minDistAct() {
 		double min = Double.MAX_VALUE;
-		for(Activity act:activities) {
-			double dist = Math.sqrt(Math.pow(act.getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getCoord().getY() - centroid.getY(), 2));
+		for(ElementActivity act:activities) {
+			double dist = Math.sqrt(Math.pow(act.getActivity().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getActivity().getCoord().getY() - centroid.getY(), 2));
 			if(min > dist) {
 				min = dist;
 			}

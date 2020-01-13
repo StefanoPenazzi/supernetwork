@@ -4,7 +4,7 @@
 package ch.ethz.matsim.supernetwork.clustering.element;
 
 import org.matsim.api.core.v01.population.Activity;
-import org.matsim.api.core.v01.population.Plan;
+import org.matsim.api.core.v01.population.Person;
 
 /**
  * @author stefanopenazzi
@@ -13,19 +13,19 @@ import org.matsim.api.core.v01.population.Plan;
 public class ElementActivity implements Element {
 	
 	private Activity activity;
-	private Plan plan;
+	private Person person;
 	
-	public ElementActivity(Activity activity,Plan plan) {
+	public ElementActivity(Activity activity,Person plan) {
 		this.activity = activity;
-		this.plan = plan;
+		this.person = person;
 	}
 	
 	public Activity getActivity() {
 		return this.activity;
 	}
 	
-	public Plan getPlan() {
-		return this.plan;
+	public Person getPlan() {
+		return this.person;
 	}
 
 }

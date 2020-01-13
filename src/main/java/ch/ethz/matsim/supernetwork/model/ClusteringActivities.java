@@ -24,6 +24,7 @@ import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.ClusteringNet
 import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.AgglomerativeHierarchical.HierarchicalClusteringActivities;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDNode;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersContainer;
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
 
 
 
@@ -50,37 +51,36 @@ public class ClusteringActivities {
 		     for(PlanElement pe: le) {
 		    	 if ( !(pe instanceof Activity) ) continue;
 		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
-		    	 kdn.getCluster().addComponent((Activity)pe);
+		    	 ElementActivity ea = new ElementActivity((Activity)pe,p);
+		    	 kdn.getCluster().addComponent(ea);
 		    	 //find the next activity 
-		    	 int activityListIndex = le.indexOf(pe);
-		    	 if(activityListIndex < le.size()-1) {
-			    	 for(int j =  activityListIndex+1; j<le.size() ;++j ) {
-			    		 if ( le.get(j) instanceof Activity) {
-			    			 double dist = Math.pow(((Activity)pe).getCoord().getX()-((Activity)le.get(j)).getCoord().getX(),2) + 
-			    					 Math.pow(((Activity)pe).getCoord().getY()-((Activity)le.get(j)).getCoord().getY(),2);
-			    		 
-			    			 ((CALNetworkRegionImpl)kdn.getCluster()).addRadius(Math.sqrt(dist));
-			    			 if(dist > ((CALNetworkRegionImpl)kdn.getCluster()).getNetworkRadius()) 
-			    			 {
-			    				 ((CALNetworkRegionImpl)kdn.getCluster()).setNetworkRadius(dist);
-			    			 }
-			    			 break;
-			    		 }
-			    	 }
-		    	 }
+					/*
+					 * int activityListIndex = le.indexOf(pe); if(activityListIndex < le.size()-1) {
+					 * for(int j = activityListIndex+1; j<le.size() ;++j ) { if ( le.get(j)
+					 * instanceof Activity) { double dist =
+					 * Math.pow(((Activity)pe).getCoord().getX()-((Activity)le.get(j)).getCoord().
+					 * getX(),2) +
+					 * Math.pow(((Activity)pe).getCoord().getY()-((Activity)le.get(j)).getCoord().
+					 * getY(),2);
+					 * 
+					 * ((CALNetworkRegionImpl)kdn.getCluster()).addRadius(Math.sqrt(dist)); if(dist
+					 * > ((CALNetworkRegionImpl)kdn.getCluster()).getNetworkRadius()) {
+					 * ((CALNetworkRegionImpl)kdn.getCluster()).setNetworkRadius(dist); } break; } }
+					 * }
+					 */
 		     }	
 		   }
 		}
 		
-		List<Cluster<Activity>> clusters = new ArrayList();
+		List<Cluster<ElementActivity>> clusters = new ArrayList();
 		
 		for(CALNetworkRegionImpl cnr: regions) {
 			if(cnr.getComponents().size() > 1) {
-				List<Activity> act = cnr.getComponents();
+				List<ElementActivity> act = cnr.getComponents();
 				//the value used for the cut of the clusters tree is related to the type of linkage used
 				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,cut);
 				//add clusters
-				for(Cluster c:hca.getClusters()) {
+				for(Cluster<ElementActivity> c:hca.getClusters()) {
 					clusters.add((CALDefaultImpl)c);
 				}
 			}
@@ -94,7 +94,7 @@ public class ClusteringActivities {
 		csvStat(outputPath,clusters);
 	}
 	
-    public void stat(String outputPath,List<Cluster<Activity>> clusters) {
+    public void stat(String outputPath,List<Cluster<ElementActivity>> clusters) {
 		
 		int nAct = 0;
 		
@@ -159,7 +159,7 @@ public class ClusteringActivities {
         }
     }
     
-    public void csvStatRegions(String outputPath,List<Cluster<Activity>> clusters) {
+    public void csvStatRegions(String outputPath,List<Cluster<ElementActivity>> clusters) {
 		
     	File file = null;// new File(outputPath);
     	FileWriter fr = null;
@@ -312,7 +312,7 @@ public class ClusteringActivities {
         results = "";
     }
     
-   public void csvStat(String outputPath,List<Cluster<Activity>> clusters) {
+   public void csvStat(String outputPath,List<Cluster<ElementActivity>> clusters) {
 		
     	File file = null;// new File(outputPath);
     	FileWriter fr = null;
@@ -442,7 +442,7 @@ public class ClusteringActivities {
         results = "";
     }
    
-   public int[][] actFreqAnalysis(int range,List<Cluster<Activity>> clusters) {
+   public int[][] actFreqAnalysis(int range,List<Cluster<ElementActivity>> clusters) {
 	  
 	   Collections.sort(clusters, new Comparator<Cluster>(){
 			@Override
@@ -478,7 +478,7 @@ public class ClusteringActivities {
 	   return res;
    }
    
-   public double[][] distFreqAnalysis(double range,List<Cluster<Activity>> clusters) {
+   public double[][] distFreqAnalysis(double range,List<Cluster<ElementActivity>> clusters) {
 		  
 	   if (range == 0 || range> 4000) return null;
 	   int classes = (int) (Math.ceil(4000/range) + 1);
@@ -488,11 +488,11 @@ public class ClusteringActivities {
 		   res[i][0] = j*range - (range-0.9);
 		   res[i][1] = j*range;
 	   }
-	   for(Cluster<Activity> r:clusters) {
+	   for(Cluster<ElementActivity> r:clusters) {
 		   if(r.getComponents().size()>0) {
 			   double avgDist =0;
-			   for(Activity act:r.getComponents()){
-				   avgDist += Math.sqrt( Math.pow((r.getCentroid().getX() - act.getCoord().getX() ),2) + Math.pow((r.getCentroid().getY() - act.getCoord().getY() ),2));
+			   for(ElementActivity act:r.getComponents()){
+				   avgDist += Math.sqrt( Math.pow((r.getCentroid().getX() - act.getActivity().getCoord().getX() ),2) + Math.pow((r.getCentroid().getY() - act.getActivity().getCoord().getY() ),2));
 			   }
 			   avgDist = avgDist/ r.getComponents().size();
 			   int pos = (int) (Math.ceil(avgDist/range));
@@ -509,7 +509,7 @@ public class ClusteringActivities {
 	   return res;
    }
    
-   public double[][] areaFreqAnalysis(double range,List<Cluster<Activity>> clusters) {
+   public double[][] areaFreqAnalysis(double range,List<Cluster<ElementActivity>> clusters) {
 		  
 	   if (range == 0 || range> 1000000) return null;
 	   int classes = (int) (Math.ceil(1000000/range) + 1);
