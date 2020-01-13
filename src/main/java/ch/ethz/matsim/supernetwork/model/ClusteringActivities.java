@@ -51,7 +51,7 @@ public class ClusteringActivities {
 		     for(PlanElement pe: le) {
 		    	 if ( !(pe instanceof Activity) ) continue;
 		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
-		    	 ElementActivity ea = new ElementActivity((Activity)pe,p);
+		    	 ElementActivity ea = new ElementActivity((Activity)pe,p,kdn.getCluster());
 		    	 kdn.getCluster().addComponent(ea);
 		    	 //find the next activity 
 					/*

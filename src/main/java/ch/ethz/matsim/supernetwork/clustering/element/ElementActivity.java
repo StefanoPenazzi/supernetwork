@@ -21,6 +21,13 @@ public class ElementActivity implements Element {
 	public ElementActivity(Activity activity,Person plan) {
 		this.activity = activity;
 		this.person = person;
+		this.cluster = null;
+	}
+	
+	public ElementActivity(Activity activity,Person plan,Cluster<ElementActivity> cluster) {
+		this.activity = activity;
+		this.person = person;
+		this.cluster = cluster;
 	}
 	
 	public Activity getActivity() {

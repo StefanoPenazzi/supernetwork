@@ -67,6 +67,7 @@ public class HierarchicalClusteringActivities {
 	     }
 		 
 	     for(int i =0;i<part.length;++i) {
+	    	 activities.get(i).setCluster(clusters.get(part[i]));
 	    	 clusters.get(part[i]).addComponent(activities.get(i));
 	    
 	     }
