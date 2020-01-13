@@ -92,4 +92,5 @@ public abstract class ClusterActivitiesLocation implements Cluster<ElementActivi
 		}
 		return min;
 	}
+
 }
