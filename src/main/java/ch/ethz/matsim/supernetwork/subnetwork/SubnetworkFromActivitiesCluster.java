@@ -20,10 +20,11 @@ import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
  */
 public class SubnetworkFromActivitiesCluster {
 	
-	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster,float cut) {
+	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster,double cut) {
 		SubnetworkDefaultImpl sn = null;
 		SubnetworkFactory subnetFactory = new SubnetworkFactory();
 		((CALDefaultImpl)cluster).sortActivitiesByCentroidDistNextAct();
+		//((CALDefaultImpl)cluster).printActivitiesAndDist();
 		double radius = 0;
 		double xCentroid = cluster.getCentroid().getX();
 		double yCentroid = cluster.getCentroid().getY();
@@ -39,7 +40,7 @@ public class SubnetworkFromActivitiesCluster {
 			}
 		}
 		if(radius >0) {
-			sn = (SubnetworkDefaultImpl)subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius);
+			sn = (SubnetworkDefaultImpl)subnetFactory.circularSubnetwork(father,cluster.getCentroid(),Math.sqrt(radius));
 		}
 		return sn;
 	}

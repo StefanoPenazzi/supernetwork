@@ -80,7 +80,7 @@ public class ClusteringActivities {
 		
 		List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
 		for(Cluster cdi: clusters) {
-			subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.8f));
+			subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
 		}
 		
 		int numOfNodes = 0;

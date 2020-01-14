@@ -119,14 +119,29 @@ public abstract class ClusterActivitiesLocation implements Cluster<ElementActivi
 				if(dist1 == dist2) {
 					return 0;
 				}
-				else if(dist1 < dist2) {
+				else { 
+					if(dist1 < dist2) {
+				  
 					return -1;
-				}
-				else {
-					return 1;
-				}
+					}
+					else {
+						return 1;
+					}
+			    }
 			}
 		});
+	}
+	
+	public void printActivitiesAndDist() {
+		int i =0;
+		for(ElementActivity ea: activities) {
+			if(ea.getNextActivity() != null) {
+				double dist = Math.pow(ea.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
+						Math.pow(ea.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				System.out.println(i + " - " + dist);
+				++i;
+			}
+		}
 	}
 	
 }
