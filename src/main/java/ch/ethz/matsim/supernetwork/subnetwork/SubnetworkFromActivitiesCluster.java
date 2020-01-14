@@ -26,13 +26,17 @@ public class SubnetworkFromActivitiesCluster {
 		double xCentroid = cluster.getCentroid().getX();
 		double yCentroid = cluster.getCentroid().getY();
 		for(ElementActivity ea: cluster.getComponents()) {
-			double dist = Math.pow(xCentroid - ea.getNextActivity().getCoord().getX(), 2)+
-					Math.pow(yCentroid - ea.getNextActivity().getCoord().getY(), 2);
-			if(radius < dist) {
-				radius = dist;
+			if(ea.getNextActivity() != null) {
+				double dist = Math.pow(xCentroid - ea.getNextActivity().getCoord().getX(), 2)+
+						Math.pow(yCentroid - ea.getNextActivity().getCoord().getY(), 2);
+				if(radius < dist) {
+					radius = dist;
+				}
 			}
 		}
-		sn = (SubnetworkDefaultImpl)subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius);
+		if(radius >0) {
+			sn = (SubnetworkDefaultImpl)subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius);
+		}
 		return sn;
 	}
 	

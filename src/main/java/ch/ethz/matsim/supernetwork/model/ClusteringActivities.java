@@ -91,8 +91,10 @@ public class ClusteringActivities {
 			numOfLinks += snd.getLinks().size();
 		}
 		
+		System.out.println("");
+		
 		//csvStatRegions(outputPath,clusters);
-		csvStat(outputPath,clusters);
+		//csvStat(outputPath,clusters);
 	}
 	
     public void stat(String outputPath,List<Cluster<ElementActivity>> clusters) {
