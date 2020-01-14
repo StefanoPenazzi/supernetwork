@@ -29,5 +29,13 @@ public class SubnetworkDefaultImpl implements Subnetwork {
 		this.nodes = nodes;
 		this.links = links;
 	}
+	
+	public  List<Node> getNodes(){
+		return this.nodes;
+	}
+	
+	public  List<Link> getLinks(){
+		return this.links;
+	}
 
 }
