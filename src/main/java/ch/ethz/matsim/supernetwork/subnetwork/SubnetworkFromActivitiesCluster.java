@@ -19,12 +19,8 @@ import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
  */
 public class SubnetworkFromActivitiesCluster {
 	
-	public SubnetworkFromActivitiesCluster() {
-		
-	}
-	
-	public Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster) {
-		SubnetworkDefaultImpl sn = new SubnetworkDefaultImpl();
+	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster) {
+		SubnetworkDefaultImpl sn = null;
 		SubnetworkFactory subnetFactory = new SubnetworkFactory();
 		double radius = 0;
 		double xCentroid = cluster.getCentroid().getX();
@@ -36,7 +32,7 @@ public class SubnetworkFromActivitiesCluster {
 				radius = dist;
 			}
 		}
-		//sn.setNetwork(subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius));
+		sn = (SubnetworkDefaultImpl)subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius);
 		return sn;
 	}
 	

@@ -25,6 +25,7 @@ import ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.Agglomerative
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDNode;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersContainer;
 import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkDefaultImpl;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFromActivitiesCluster;
 
@@ -76,6 +77,13 @@ public class ClusteringActivities {
 		for(Cluster cdi: clusters) {
 			cdi.computeCentroid();
 		}
+		
+		List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
+		for(Cluster cdi: clusters) {
+			subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi));
+		}
+		
+		
 		
 		//csvStatRegions(outputPath,clusters);
 		csvStat(outputPath,clusters);
