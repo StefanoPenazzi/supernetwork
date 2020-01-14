@@ -26,6 +26,7 @@ import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDNode;
 import ch.ethz.matsim.supernetwork.clustering.clustersContainer.KDTreeClustersContainer;
 import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFromActivitiesCluster;
 
 
 
@@ -562,7 +563,7 @@ public class ClusteringActivities {
    
 	
 	 public double[] subnetworkRadius(List<Cluster<ElementActivity>> clusters) {
-		 SubnetworkFactory sf = new SubnetworkFactory();
+		 SubnetworkFromActivitiesCluster sf = new SubnetworkFromActivitiesCluster();
 		 double[] res = new double[clusters.size()];
 		 int k = 0;
 		 for(Cluster<ElementActivity> r:clusters)
