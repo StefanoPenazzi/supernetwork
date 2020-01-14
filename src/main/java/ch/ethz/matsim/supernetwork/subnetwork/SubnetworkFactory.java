@@ -23,10 +23,9 @@ public class SubnetworkFactory {
 		
 	}
 	
-	public Network circularSubnetwork(Network father, Coord centre, double radius) {
-		Network net = null;
+	public static Network circularSubnetwork(Network father, Coord centre, double radius) {
 		
-		return net;
+		return null;
 	}
 	
 }

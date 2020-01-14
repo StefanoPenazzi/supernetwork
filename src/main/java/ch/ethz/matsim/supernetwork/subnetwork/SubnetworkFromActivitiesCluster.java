@@ -36,7 +36,7 @@ public class SubnetworkFromActivitiesCluster {
 				radius = dist;
 			}
 		}
-		sn.setNetwork(subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius));
+		//sn.setNetwork(subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius));
 		return sn;
 	}
 	
