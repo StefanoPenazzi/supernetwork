@@ -95,8 +95,8 @@ public class ClusteringActivities {
 		
 		System.out.println("");
 		
-		csvStatRegions(outputPath,clusters);
-		csvStat(outputPath,clusters);
+		//csvStatRegions(outputPath,clusters);
+		//csvStat(outputPath,clusters);
 	}
 	
     public void stat(String outputPath,List<Cluster<ElementActivity>> clusters) {

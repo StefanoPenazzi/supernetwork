@@ -101,14 +101,14 @@ public abstract class ClusterActivitiesLocation implements Cluster<ElementActivi
 				double dist1; 
 				double dist2; 
 				
-				if(e1 != null) { 
+				if(e1.getNextActivity() != null) { 
 					dist1 = Math.pow(e1.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
 							Math.pow(e1.getNextActivity().getCoord().getY() - centroid.getY(), 2);
 				}
 				else {
 					dist1 = Double.MAX_VALUE;
 				}
-				if(e2 != null) { 
+				if(e2.getNextActivity() != null) { 
 					dist2 =Math.pow(e2.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
 							Math.pow(e2.getNextActivity().getCoord().getY() - centroid.getY(), 2);
 				}
