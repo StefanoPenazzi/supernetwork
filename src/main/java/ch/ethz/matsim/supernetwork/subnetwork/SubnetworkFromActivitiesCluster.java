@@ -10,6 +10,7 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
 
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
 
@@ -19,13 +20,16 @@ import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
  */
 public class SubnetworkFromActivitiesCluster {
 	
-	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster) {
+	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster,float cut) {
 		SubnetworkDefaultImpl sn = null;
 		SubnetworkFactory subnetFactory = new SubnetworkFactory();
+		((CALDefaultImpl)cluster).sortActivitiesByCentroidDistNextAct();
 		double radius = 0;
 		double xCentroid = cluster.getCentroid().getX();
 		double yCentroid = cluster.getCentroid().getY();
-		for(ElementActivity ea: cluster.getComponents()) {
+		
+		for(int i =0; i< cluster.getComponents().size()*cut; ++i) {
+			ElementActivity ea = cluster.getComponents().get(i);
 			if(ea.getNextActivity() != null) {
 				double dist = Math.pow(xCentroid - ea.getNextActivity().getCoord().getX(), 2)+
 						Math.pow(yCentroid - ea.getNextActivity().getCoord().getY(), 2);

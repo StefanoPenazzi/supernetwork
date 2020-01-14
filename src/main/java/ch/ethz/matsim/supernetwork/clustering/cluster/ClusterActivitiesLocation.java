@@ -98,8 +98,24 @@ public abstract class ClusterActivitiesLocation implements Cluster<ElementActivi
 		Collections.sort(activities, new Comparator<ElementActivity>() {
 			@Override
 			public int compare(ElementActivity e1, ElementActivity e2) {
-				double dist1 = Math.pow(e1.getNextActivity().getCoord().getX() - centroid.getX(), 2)+Math.pow(e1.getNextActivity().getCoord().getY() - centroid.getY(), 2);
-				double dist2 = Math.pow(e2.getNextActivity().getCoord().getX() - centroid.getX(), 2)+Math.pow(e2.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				double dist1; 
+				double dist2; 
+				
+				if(e1 != null) { 
+					dist1 = Math.pow(e1.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
+							Math.pow(e1.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				}
+				else {
+					dist1 = Double.MAX_VALUE;
+				}
+				if(e2 != null) { 
+					dist2 =Math.pow(e2.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
+							Math.pow(e2.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				}
+				else {
+					dist2 = Double.MAX_VALUE;
+				}
+				
 				if(dist1 == dist2) {
 					return 0;
 				}
