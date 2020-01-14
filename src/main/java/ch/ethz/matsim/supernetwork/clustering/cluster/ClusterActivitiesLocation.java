@@ -5,6 +5,7 @@ package ch.ethz.matsim.supernetwork.clustering.cluster;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.matsim.api.core.v01.Coord;
@@ -93,4 +94,23 @@ public abstract class ClusterActivitiesLocation implements Cluster<ElementActivi
 		return min;
 	}
 
+	public void sortActivitiesByCentroidDistNextAct() {
+		Collections.sort(activities, new Comparator<ElementActivity>() {
+			@Override
+			public int compare(ElementActivity e1, ElementActivity e2) {
+				double dist1 = Math.pow(e1.getNextActivity().getCoord().getX() - centroid.getX(), 2)+Math.pow(e1.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				double dist2 = Math.pow(e2.getNextActivity().getCoord().getX() - centroid.getX(), 2)+Math.pow(e2.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				if(dist1 == dist2) {
+					return 0;
+				}
+				else if(dist1 < dist2) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
+			}
+		});
+	}
+	
 }
