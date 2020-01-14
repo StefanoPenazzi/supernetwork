@@ -11,10 +11,17 @@ import org.matsim.api.core.v01.network.Network;
  */
 public class SubnetworkDefaultImpl implements Subnetwork {
 
+	Network network = null;
+	
 	@Override
 	public Network getNetwork() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.network;
+	}
+
+	@Override
+	public void setNetwork(Network network) {
+		this.network = network;
+		
 	}
 
 }

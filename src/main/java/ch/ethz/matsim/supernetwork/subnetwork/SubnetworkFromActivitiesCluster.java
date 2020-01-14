@@ -6,6 +6,8 @@ package ch.ethz.matsim.supernetwork.subnetwork;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
@@ -21,14 +23,20 @@ public class SubnetworkFromActivitiesCluster {
 		
 	}
 	
-	public Subnetwork fromActivitiesLocations(Cluster<ElementActivity> cluster) {
-		Subnetwork sn = null;
-		List<Activity> activitiesInSubNetwork = new ArrayList();
-		
+	public Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster) {
+		SubnetworkDefaultImpl sn = new SubnetworkDefaultImpl();
+		SubnetworkFactory subnetFactory = new SubnetworkFactory();
+		double radius = 0;
+		double xCentroid = cluster.getCentroid().getX();
+		double yCentroid = cluster.getCentroid().getY();
 		for(ElementActivity ea: cluster.getComponents()) {
-			
+			double dist = Math.pow(xCentroid - ea.getNextActivity().getCoord().getX(), 2)+
+					Math.pow(yCentroid - ea.getNextActivity().getCoord().getY(), 2);
+			if(radius < dist) {
+				radius = dist;
+			}
 		}
-		
+		sn.setNetwork(subnetFactory.circularSubnetwork(father,cluster.getCentroid(),radius));
 		return sn;
 	}
 	
