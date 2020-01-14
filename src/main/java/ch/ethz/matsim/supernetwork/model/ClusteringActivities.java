@@ -78,13 +78,6 @@ public class ClusteringActivities {
 			cdi.computeCentroid();
 		}
 		
-		List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
-		for(Cluster cdi: clusters) {
-			subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi));
-		}
-		
-		
-		
 		//csvStatRegions(outputPath,clusters);
 		csvStat(outputPath,clusters);
 	}
