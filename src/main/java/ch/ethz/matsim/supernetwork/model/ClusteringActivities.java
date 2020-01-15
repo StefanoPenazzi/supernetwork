@@ -93,8 +93,6 @@ public class ClusteringActivities {
 			}
 		}
 		
-		System.out.println("");
-		
 		//csvStatRegions(outputPath,clusters);
 		//csvStat(outputPath,clusters);
 	}

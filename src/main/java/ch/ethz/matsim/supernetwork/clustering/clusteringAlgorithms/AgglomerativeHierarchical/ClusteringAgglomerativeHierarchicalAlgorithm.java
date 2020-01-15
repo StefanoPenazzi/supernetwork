@@ -156,7 +156,6 @@ public class ClusteringAgglomerativeHierarchicalAlgorithm implements ClusteringA
             }
         }
         
-        System.out.println(height.length);
         if(h >= height[height.length - 1]) {
         	return new int[merge.length + 1];
         }

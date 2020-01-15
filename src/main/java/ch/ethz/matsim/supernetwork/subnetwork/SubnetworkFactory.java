@@ -19,11 +19,9 @@ import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
  * @author stefanopenazzi
  *
  */
-public class SubnetworkFactory {
+public final class SubnetworkFactory {
 	
-	public SubnetworkFactory() {
-		
-	}
+	private static int idSubNetworkCounter = 0;
 	
 	public static Subnetwork circularSubnetwork(Network father,Coord centre, double radius) {
 		List<Node> nodes = new ArrayList();
@@ -37,7 +35,9 @@ public class SubnetworkFactory {
 				}
 			}
 		}
-		return new SubnetworkDefaultImpl(nodes,links);
+		SubnetworkDefaultImpl res = new SubnetworkDefaultImpl(idSubNetworkCounter,nodes,links);
+		idSubNetworkCounter++;
+		return res;
 	}
 	
 }
