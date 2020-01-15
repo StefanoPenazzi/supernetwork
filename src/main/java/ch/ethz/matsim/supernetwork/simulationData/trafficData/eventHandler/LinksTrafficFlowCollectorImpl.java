@@ -19,6 +19,9 @@ import org.matsim.core.mobsim.jdeqsim.Vehicle;
 
 import com.google.inject.Inject;
 
+import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainer;
+import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainerDefaultImpl;
+
 /**
  * @author stefanopenazzi
  *
@@ -29,28 +32,20 @@ public final class LinksTrafficFlowCollectorImpl implements LinkLeaveEventHandle
 	
     public static final String FILENAME_MODESTATS = "LinksTrafficFlowCollectorImpl";
 
-	private Network network;
-	private Map<Id<Link>,List<Integer>> inputFlows = new TreeMap<>();
-	private Map<Id<Link>,List<Integer>> outputFlows = new TreeMap<>();
-
+    private TrafficDataContainer tData;
+    
 	@Inject
-	LinksTrafficFlowCollectorImpl (Network network){
-		this.network = network;
-		for(Link l: network.getLinks().values()) {
-			inputFlows.put(l.getId(), new ArrayList());
-			outputFlows.put(l.getId(), new ArrayList());
-		}
+	LinksTrafficFlowCollectorImpl (TrafficDataContainer tData){
+		this.tData = tData;
 	}
 
 	@Override
 	public void handleEvent(LinkEnterEvent event) {
-		inputFlows.get(event.getLinkId()).add((int)event.getTime());
-		System.out.println(event.getLinkId().toString() +  " - " + (int)event.getTime());
+		tData.getInputFlows().get(event.getLinkId()).add((int)event.getTime());
 	}
 
 	@Override
 	public void handleEvent(LinkLeaveEvent event) {
-		outputFlows.get(event.getLinkId()).add((int)event.getTime());
-		System.out.println(event.getLinkId().toString() +  " - " + (int)event.getTime());
+		tData.getOutputFlows().get(event.getLinkId()).add((int)event.getTime());
 	}
 }
