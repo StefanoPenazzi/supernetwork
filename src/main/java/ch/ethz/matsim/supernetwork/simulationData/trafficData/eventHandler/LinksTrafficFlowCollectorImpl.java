@@ -36,15 +36,21 @@ public final class LinksTrafficFlowCollectorImpl implements LinkLeaveEventHandle
 	@Inject
 	LinksTrafficFlowCollectorImpl (Network network){
 		this.network = network;
+		for(Link l: network.getLinks().values()) {
+			inputFlows.put(l.getId(), new ArrayList());
+			outputFlows.put(l.getId(), new ArrayList());
+		}
 	}
 
 	@Override
 	public void handleEvent(LinkEnterEvent event) {
 		inputFlows.get(event.getLinkId()).add((int)event.getTime());
+		System.out.println(event.getLinkId().toString() +  " - " + (int)event.getTime());
 	}
 
 	@Override
 	public void handleEvent(LinkLeaveEvent event) {
 		outputFlows.get(event.getLinkId()).add((int)event.getTime());
+		System.out.println(event.getLinkId().toString() +  " - " + (int)event.getTime());
 	}
 }

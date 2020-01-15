@@ -14,6 +14,7 @@ import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 import com.google.inject.Singleton;
 
 import ch.ethz.matsim.supernetwork.model.ClusteringActivities;
+import ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler.LinksTrafficFlowCollectorImpl;
 
 
 public class SupernetworkRunTest {
@@ -35,13 +36,22 @@ public class SupernetworkRunTest {
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
         //SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario,outputPath);
-        ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
+        //ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
         
         // controler
-        //Controler controler = new Controler(scenario);
+        Controler controler = new Controler(scenario);
+        
+        controler.addOverridingModule(new AbstractModule() {
+            @Override
+            public void install() {
+            	bind(LinksTrafficFlowCollectorImpl.class).in(Singleton.class);
+                //this.addControlerListenerBinding().to(TrafficFlowsStability.class);
+                this.addEventHandlerBinding().to(LinksTrafficFlowCollectorImpl.class);
+            }
+        });
         
         //System.setProperty("scenario","sbb");
         
-        //controler.run();
+        controler.run();
 	}
 }
