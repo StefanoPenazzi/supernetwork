@@ -15,11 +15,15 @@ import org.matsim.api.core.v01.network.Link;
  */
 public interface TrafficDataContainer {
 
-	public Map<Id<Link>,List<Integer>> getInputFlows();
+	public Map<Id<Link>,List<InOutTime>> getInputFlows();
 	
-	public Map<Id<Link>,List<Integer>> getOutputFlows();
+	public Map<Id<Link>,List<InOutTime>> getOutputFlows();
 	
 	public Map<Id<Link>, List<TravelTime>> getLinksTravelTime();
 	
 	public void linksTravelTimeComputation();
+	
+	public int getLinkTravelTime(Id<Link> id, int startTime);
+	
+	public void printLinkTravelTime(Id<Link> id);
 }

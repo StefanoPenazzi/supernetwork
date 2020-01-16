@@ -22,8 +22,8 @@ import com.google.inject.Inject;
 public final class TrafficDataContainerDefaultImpl implements TrafficDataContainer {
 
 	private Network network;
-	private static Map<Id<Link>,List<Integer>> inputFlows = new TreeMap<>();
-	private static Map<Id<Link>,List<Integer>> outputFlows = new TreeMap<>();
+	private static Map<Id<Link>,List<InOutTime>> inputFlows = new TreeMap<>();
+	private static Map<Id<Link>,List<InOutTime>> outputFlows = new TreeMap<>();
 	private static Map<Id<Link>,List<TravelTime>> linksTravelTime = new TreeMap<>();
 
 	@Inject
@@ -35,11 +35,11 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		}
 	}
 	
-	public Map<Id<Link>,List<Integer>> getInputFlows(){
+	public Map<Id<Link>,List<InOutTime>> getInputFlows(){
 		return this.inputFlows;
 	}
 	
-	public Map<Id<Link>,List<Integer>> getOutputFlows(){
+	public Map<Id<Link>,List<InOutTime>> getOutputFlows(){
 		return this.outputFlows;
 	}
 	
@@ -48,23 +48,37 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	}
 	
 	public void linksTravelTimeComputation() {
-		List<List<Integer>> in =  new ArrayList<>(inputFlows.values());
-		List<List<Integer>> out = new ArrayList<>(outputFlows.values());
+		List<List<InOutTime>> in =  new ArrayList<>(inputFlows.values());
+		List<List<InOutTime>> out = new ArrayList<>(outputFlows.values());
 		List<List<TravelTime>> res = new ArrayList();
 		
 		for(int i = 0;i< out.size();i++ ) {
 			List<TravelTime> traveltime = new ArrayList();
-			int min = Math.min(in.get(i).size(), out.get(i).size());
-			for(int j = 0;j<min;j++) {
-				traveltime.add(new TravelTime(in.get(i).get(j),out.get(i).get(j) - in.get(i).get(j)));
+			//int min = Math.min(in.get(i).size(), out.get(i).size());
+			int outCounter= 0;
+			for(int inCounter = 0;inCounter<in.get(i).size();inCounter++) {
+				for(int newOutCounter = outCounter;newOutCounter < out.get(i).size();newOutCounter++) {
+					if(in.get(i).get(inCounter).getId().equals(out.get(i).get(newOutCounter).getId())) {
+						if(out.get(i).get(newOutCounter).getType()) {
+							int tt = out.get(i).get(newOutCounter).getTime() - in.get(i).get(inCounter).getTime();
+							if(tt>0) {
+								traveltime.add(new TravelTime(in.get(i).get(inCounter).getTime(),tt));
+								newOutCounter++;
+								outCounter = newOutCounter;
+							}
+						}
+						break;
+					}
+				}
 			}
 			res.add(traveltime);	
 		}
 		int i = 0;
-		for(Link l: network.getLinks().values()) {
-			linksTravelTime.put(l.getId(), res.get(i));
+		for(Id<Link> id: inputFlows.keySet()) {
+			linksTravelTime.put(id, res.get(i));
 			i++;
 		}
+		
 	}
 	
 	public int getLinkTravelTime(Id<Link> id, int startTime) {
@@ -83,6 +97,7 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	
 	public void printLinkTravelTime(Id<Link> id) {
 		List<TravelTime> ttl = linksTravelTime.get(id);
+		System.out.println(id.toString());
 		for(TravelTime t: ttl) {
 			System.out.println(t.getStartTime() + " - "+t.getTravelTime());
 		}
