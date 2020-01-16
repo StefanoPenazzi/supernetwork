@@ -17,6 +17,7 @@ import ch.ethz.matsim.supernetwork.model.ClusteringActivities;
 import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainerDefaultImpl;
 import ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler.LinksTrafficFlowCollectorImpl;
+import ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler.LinksTrafficFlowComputation;
 
 
 public class SupernetworkRunTest {
@@ -47,8 +48,9 @@ public class SupernetworkRunTest {
             @Override
             public void install() {
             	bind(LinksTrafficFlowCollectorImpl.class).in(Singleton.class);
+            	bind(LinksTrafficFlowComputation.class).in(Singleton.class);
             	bind(TrafficDataContainer.class).to(TrafficDataContainerDefaultImpl.class).asEagerSingleton();
-                //this.addControlerListenerBinding().to(TrafficFlowsStability.class);
+                this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
                 this.addEventHandlerBinding().to(LinksTrafficFlowCollectorImpl.class);
             }
         });

@@ -38,11 +38,11 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	}
 	
 	public Map<Id<Link>,List<Integer>> getInputFlows(){
-		return this.getInputFlows();
+		return this.inputFlows;
 	}
 	
 	public Map<Id<Link>,List<Integer>> getOutputFlows(){
-		return this.getOutputFlows();
+		return this.outputFlows;
 	}
 	
 	public Map<Id<Link>,TravelTime[]> getLinksTravelTime(){
@@ -50,13 +50,14 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	}
 	
 	public void linksTravelTimeComputation() {
-		List<List<Integer>> in =  (List<List<Integer>>) inputFlows.values();
-		List<List<Integer>> out = (List<List<Integer>>) outputFlows.values();
+		List<List<Integer>> in =  new ArrayList<>(inputFlows.values());
+		List<List<Integer>> out = new ArrayList<>(outputFlows.values());
 		List<TravelTime[]> res = new ArrayList();
 		
-		for(int i = 0;i<out.size();++i ) {
-			TravelTime[] traveltime = new TravelTime[in.get(i).size()];
-			for(int j =0;j<out.get(i).size();++j) {
+		for(int i = 0;i< out.size();i++ ) {
+			TravelTime[] traveltime = new TravelTime[out.get(i).size()];
+			int min = Math.min(in.get(i).size(), out.get(i).size());
+			for(int j = 0;j<min;j++) {
 				traveltime[j] = new TravelTime(in.get(i).get(j),out.get(i).get(j) - in.get(i).get(j));
 			}
 			res.add(traveltime);	
@@ -66,6 +67,7 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 			linksTravelTime.put(l.getId(), res.get(i));
 			i++;
 		}
+		System.out.println("");
 	}
 	
 	

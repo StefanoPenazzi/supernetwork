@@ -20,4 +20,6 @@ public interface TrafficDataContainer {
 	public Map<Id<Link>,List<Integer>> getOutputFlows();
 	
 	public Map<Id<Link>,TravelTime[]> getLinksTravelTime();
+	
+	public void linksTravelTimeComputation();
 }

@@ -32,20 +32,20 @@ public final class LinksTrafficFlowCollectorImpl implements LinkLeaveEventHandle
 	
     public static final String FILENAME_MODESTATS = "LinksTrafficFlowCollectorImpl";
 
-    private TrafficDataContainer tData;
+    private TrafficDataContainer container;
     
 	@Inject
-	LinksTrafficFlowCollectorImpl (TrafficDataContainer tData){
-		this.tData = tData;
+	LinksTrafficFlowCollectorImpl (TrafficDataContainer container){
+		this.container = container;
 	}
 
 	@Override
 	public void handleEvent(LinkEnterEvent event) {
-		tData.getInputFlows().get(event.getLinkId()).add((int)event.getTime());
+		container.getInputFlows().get(event.getLinkId()).add((int)event.getTime());
 	}
 
 	@Override
 	public void handleEvent(LinkLeaveEvent event) {
-		tData.getOutputFlows().get(event.getLinkId()).add((int)event.getTime());
+		container.getOutputFlows().get(event.getLinkId()).add((int)event.getTime());
 	}
 }
