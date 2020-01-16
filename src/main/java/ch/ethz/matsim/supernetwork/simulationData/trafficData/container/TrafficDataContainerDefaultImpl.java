@@ -4,14 +4,12 @@
 package ch.ethz.matsim.supernetwork.simulationData.trafficData.container;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.events.LinkEnterEvent;
-import org.matsim.api.core.v01.events.LinkLeaveEvent;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 
@@ -26,7 +24,7 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	private Network network;
 	private static Map<Id<Link>,List<Integer>> inputFlows = new TreeMap<>();
 	private static Map<Id<Link>,List<Integer>> outputFlows = new TreeMap<>();
-	private static Map<Id<Link>,TravelTime[]> linksTravelTime = new TreeMap<>();
+	private static Map<Id<Link>,List<TravelTime>> linksTravelTime = new TreeMap<>();
 
 	@Inject
 	TrafficDataContainerDefaultImpl (Network network){
@@ -45,20 +43,20 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		return this.outputFlows;
 	}
 	
-	public Map<Id<Link>,TravelTime[]> getLinksTravelTime(){
+	public Map<Id<Link>,List<TravelTime>> getLinksTravelTime(){
 		return this.linksTravelTime;
 	}
 	
 	public void linksTravelTimeComputation() {
 		List<List<Integer>> in =  new ArrayList<>(inputFlows.values());
 		List<List<Integer>> out = new ArrayList<>(outputFlows.values());
-		List<TravelTime[]> res = new ArrayList();
+		List<List<TravelTime>> res = new ArrayList();
 		
 		for(int i = 0;i< out.size();i++ ) {
-			TravelTime[] traveltime = new TravelTime[out.get(i).size()];
+			List<TravelTime> traveltime = new ArrayList();
 			int min = Math.min(in.get(i).size(), out.get(i).size());
 			for(int j = 0;j<min;j++) {
-				traveltime[j] = new TravelTime(in.get(i).get(j),out.get(i).get(j) - in.get(i).get(j));
+				traveltime.add(new TravelTime(in.get(i).get(j),out.get(i).get(j) - in.get(i).get(j)));
 			}
 			res.add(traveltime);	
 		}
@@ -67,8 +65,19 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 			linksTravelTime.put(l.getId(), res.get(i));
 			i++;
 		}
-		System.out.println("");
 	}
 	
-	
+	public int getLinkTravelTime(Id<Link> id, int startTime) {
+		int travelTime = 0;
+		List<TravelTime> tt = linksTravelTime.get(id);
+		if(tt.size()>0) {
+			TravelTime comp = new TravelTime(startTime,0);
+			travelTime = tt.get(Collections.binarySearch(tt, comp)).getTravelTime();
+		}
+		else {
+			Link l = network.getLinks().get(id);
+			travelTime = (int)(l.getLength()/l.getFreespeed()); //TODO unit of measure?
+		}
+		return travelTime;
+	}
 }

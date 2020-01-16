@@ -7,7 +7,7 @@ package ch.ethz.matsim.supernetwork.simulationData.trafficData.container;
  * @author stefanopenazzi
  *
  */
-public class TravelTime {
+public class TravelTime implements Comparable<TravelTime> {
 	
 	private int startTime;
 	private int travelTime;
@@ -22,6 +22,11 @@ public class TravelTime {
 	}
 	public int getTravelTime() {
 		return this.travelTime;
+	}
+
+	@Override
+	public int compareTo(TravelTime anotherTravelTime) {
+		return this.getStartTime() - anotherTravelTime.getStartTime();
 	}
 
 }
