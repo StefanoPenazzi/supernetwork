@@ -80,4 +80,11 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		}
 		return travelTime;
 	}
+	
+	public void printLinkTravelTime(Id<Link> id) {
+		List<TravelTime> ttl = linksTravelTime.get(id);
+		for(TravelTime t: ttl) {
+			System.out.println(t.getStartTime() + " - "+t.getTravelTime());
+		}
+	}
 }
