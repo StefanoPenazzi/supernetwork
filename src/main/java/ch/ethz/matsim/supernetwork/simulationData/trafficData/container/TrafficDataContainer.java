@@ -25,5 +25,5 @@ public interface TrafficDataContainer {
 	
 	public int getLinkTravelTime(Id<Link> id, int startTime);
 	
-	public void printLinkTravelTime(Id<Link> id);
+	public String printLinkTravelTime(Id<Link> id);
 }

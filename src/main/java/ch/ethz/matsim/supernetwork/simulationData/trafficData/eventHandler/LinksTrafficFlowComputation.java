@@ -29,9 +29,7 @@ public final class LinksTrafficFlowComputation implements IterationEndsListener 
 	public void notifyIterationEnds(IterationEndsEvent event) {
 		this.container.linksTravelTimeComputation();
 		for(Id<Link> id: container.getInputFlows().keySet()) {
-			this.container.printLinkTravelTime(id);
-		}
-		System.out.println();
+			System.out.println(this.container.printLinkTravelTime(id));
+		}	
 	}
-
 }

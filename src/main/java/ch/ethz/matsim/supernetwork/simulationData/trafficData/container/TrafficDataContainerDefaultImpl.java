@@ -97,11 +97,14 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		return travelTime;
 	}
 	
-	public void printLinkTravelTime(Id<Link> id) {
+	public String printLinkTravelTime(Id<Link> id) {
+		String res = "";
+		Link l = network.getLinks().get(id);
+		int freeSpeedTime = (int)(l.getLength()/l.getFreespeed());
 		List<TravelTime> ttl = linksTravelTime.get(id);
-		System.out.println(id.toString());
 		for(TravelTime t: ttl) {
-			System.out.println(t.getStartTime() + " - "+t.getTravelTime());
+			res += id.toString()+";"+t.getStartTime() + ";"+t.getTravelTime() +";"+freeSpeedTime + "\n";
 		}
+		return res;
 	}
 }
