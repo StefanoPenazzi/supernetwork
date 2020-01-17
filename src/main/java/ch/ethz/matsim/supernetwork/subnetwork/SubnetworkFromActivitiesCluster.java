@@ -10,11 +10,9 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
 
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-
-
-
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALDefaultImpl;
+import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
 
 /**
  * @author stefanopenazzi

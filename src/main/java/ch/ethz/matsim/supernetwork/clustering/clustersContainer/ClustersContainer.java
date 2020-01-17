@@ -1,14 +1,12 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container;
+package ch.ethz.matsim.supernetwork.clustering.clustersContainer;
 
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
-
-
+import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
 
 /**
  * @author stefanopenazzi

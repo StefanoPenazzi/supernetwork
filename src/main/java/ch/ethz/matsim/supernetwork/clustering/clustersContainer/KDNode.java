@@ -1,9 +1,10 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.kd_tree;
+package ch.ethz.matsim.supernetwork.clustering.clustersContainer;
 
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+
 
 /**
  * @author stefanopenazzi

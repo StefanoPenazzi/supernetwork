@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.cluster_analysis.cluster;
+package ch.ethz.matsim.supernetwork.clustering.cluster;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.cluster_analysis.models.centroid;
+package ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,9 +21,7 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.utils.objectattributes.AttributeConverter;
 
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
-import ch.ethz.matsim.supernetwork.cluster_analysis.models.ClusteringAlgorithm;
-
+import ch.ethz.matsim.supernetwork.clustering.cluster.CALNetworkRegionImpl;
 
 
 

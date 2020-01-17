@@ -12,6 +12,9 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
 
+import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+
 /**
  * @author stefanopenazzi
  *
