@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.clustering.cluster;
+package ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,9 @@ import java.util.List;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
-import ch.ethz.matsim.supernetwork.clustering.element.ElementActivity;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
+
+
 
 /**
  * @author stefanopenazzi

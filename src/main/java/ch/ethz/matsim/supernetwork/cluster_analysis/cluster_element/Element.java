@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.clustering.element;
+package ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element;
 
 /**
  * @author stefanopenazzi
