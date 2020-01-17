@@ -54,20 +54,22 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		
 		for(int i = 0;i< out.size();i++ ) {
 			List<TravelTime> traveltime = new ArrayList();
-			//int min = Math.min(in.get(i).size(), out.get(i).size());
 			int outCounter= 0;
 			for(int inCounter = 0;inCounter<in.get(i).size();inCounter++) {
 				for(int newOutCounter = outCounter;newOutCounter < out.get(i).size();newOutCounter++) {
 					if(in.get(i).get(inCounter).getId().equals(out.get(i).get(newOutCounter).getId())) {
-						if(out.get(i).get(newOutCounter).getType()) {
-							int tt = out.get(i).get(newOutCounter).getTime() - in.get(i).get(inCounter).getTime();
-							if(tt>0) {
+						int tt = out.get(i).get(newOutCounter).getTime() - in.get(i).get(inCounter).getTime();
+						if(tt>0) {
+							if(out.get(i).get(newOutCounter).getType()) {
 								traveltime.add(new TravelTime(in.get(i).get(inCounter).getTime(),tt));
 								newOutCounter++;
 								outCounter = newOutCounter;
+								break;
+							}
+							else {
+								break;
 							}
 						}
-						break;
 					}
 				}
 			}
