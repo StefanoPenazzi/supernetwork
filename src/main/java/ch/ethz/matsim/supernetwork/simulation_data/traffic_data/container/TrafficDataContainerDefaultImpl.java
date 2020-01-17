@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.simulationData.trafficData.container;
+package ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,8 +22,8 @@ import com.google.inject.Inject;
 public final class TrafficDataContainerDefaultImpl implements TrafficDataContainer {
 
 	private Network network;
-	private static Map<Id<Link>,List<InOutTime>> inputFlows = new TreeMap<>();
-	private static Map<Id<Link>,List<InOutTime>> outputFlows = new TreeMap<>();
+	private static Map<Id<Link>,List<LinkData>> inputFlows = new TreeMap<>();
+	private static Map<Id<Link>,List<LinkData>> outputFlows = new TreeMap<>();
 	private static Map<Id<Link>,List<TravelTime>> linksTravelTime = new TreeMap<>();
 
 	@Inject
@@ -35,11 +35,11 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		}
 	}
 	
-	public Map<Id<Link>,List<InOutTime>> getInputFlows(){
+	public Map<Id<Link>, List<LinkData>> getInputFlows(){
 		return this.inputFlows;
 	}
 	
-	public Map<Id<Link>,List<InOutTime>> getOutputFlows(){
+	public Map<Id<Link>, List<LinkData>> getOutputFlows(){
 		return this.outputFlows;
 	}
 	
@@ -48,8 +48,8 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	}
 	
 	public void linksTravelTimeComputation() {
-		List<List<InOutTime>> in =  new ArrayList<>(inputFlows.values());
-		List<List<InOutTime>> out = new ArrayList<>(outputFlows.values());
+		List<List<LinkData>> in =  new ArrayList<>(inputFlows.values());
+		List<List<LinkData>> out = new ArrayList<>(outputFlows.values());
 		List<List<TravelTime>> res = new ArrayList();
 		
 		for(int i = 0;i< out.size();i++ ) {

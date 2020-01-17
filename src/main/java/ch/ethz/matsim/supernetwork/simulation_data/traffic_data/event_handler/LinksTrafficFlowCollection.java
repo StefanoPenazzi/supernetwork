@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler;
+package ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +23,15 @@ import org.matsim.core.mobsim.jdeqsim.Vehicle;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.InOutTime;
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainer;
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainerDefaultImpl;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkData;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDataTTV;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 
 /**
  * @author stefanopenazzi
  *
  */
-public final class LinksTrafficFlowCollectorImpl implements LinkLeaveEventHandler, LinkEnterEventHandler,VehicleLeavesTrafficEventHandler {
+public final class LinksTrafficFlowCollection implements LinkLeaveEventHandler, LinkEnterEventHandler,VehicleLeavesTrafficEventHandler {
 
 	//the class collect data from the links selected by the query in a single iteration 
 	
@@ -40,22 +40,22 @@ public final class LinksTrafficFlowCollectorImpl implements LinkLeaveEventHandle
     private TrafficDataContainer container;
     
 	@Inject
-	LinksTrafficFlowCollectorImpl (TrafficDataContainer container){
+	LinksTrafficFlowCollection (TrafficDataContainer container){
 		this.container = container;
 	}
 
 	@Override
 	public void handleEvent(LinkEnterEvent event) {
-		container.getInputFlows().get(event.getLinkId()).add(new InOutTime((int)event.getTime(),true,event.getVehicleId()));
+		container.getInputFlows().get(event.getLinkId()).add(new LinkDataTTV((int)event.getTime(),true,event.getVehicleId()));
 	}
 
 	@Override
 	public void handleEvent(LinkLeaveEvent event) {
-		container.getOutputFlows().get(event.getLinkId()).add(new InOutTime((int)event.getTime(),true,event.getVehicleId()));
+		container.getOutputFlows().get(event.getLinkId()).add(new LinkDataTTV ((int)event.getTime(),true,event.getVehicleId()));
 	}
 
 	@Override
 	public void handleEvent(VehicleLeavesTrafficEvent event) {
-		container.getOutputFlows().get(event.getLinkId()).add(new InOutTime((int)event.getTime(),false,event.getVehicleId()));
+		container.getOutputFlows().get(event.getLinkId()).add(new LinkDataTTV ((int)event.getTime(),false,event.getVehicleId()));
 	}
 }

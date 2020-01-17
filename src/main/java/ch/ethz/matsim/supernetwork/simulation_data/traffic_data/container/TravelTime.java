@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.simulationData.trafficData.container;
+package ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container;
 
 /**
  * @author stefanopenazzi

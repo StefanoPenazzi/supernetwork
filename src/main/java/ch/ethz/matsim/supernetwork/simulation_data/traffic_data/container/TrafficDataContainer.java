@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.simulationData.trafficData.container;
+package ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container;
 
 import java.util.List;
 import java.util.Map;
@@ -15,9 +15,9 @@ import org.matsim.api.core.v01.network.Link;
  */
 public interface TrafficDataContainer {
 
-	public Map<Id<Link>,List<InOutTime>> getInputFlows();
+	public Map<Id<Link>,List<LinkData>> getInputFlows();
 	
-	public Map<Id<Link>,List<InOutTime>> getOutputFlows();
+	public Map<Id<Link>,List<LinkData>> getOutputFlows();
 	
 	public Map<Id<Link>, List<TravelTime>> getLinksTravelTime();
 	

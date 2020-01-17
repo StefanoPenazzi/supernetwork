@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler;
+package ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
@@ -10,7 +10,9 @@ import org.matsim.core.controler.listener.IterationEndsListener;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainer;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkData;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDataTTV;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 
 /**
  * @author stefanopenazzi

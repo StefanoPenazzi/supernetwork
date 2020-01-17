@@ -14,10 +14,13 @@ import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 import com.google.inject.Singleton;
 
 import ch.ethz.matsim.supernetwork.model.ClusteringActivities;
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainer;
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.container.TrafficDataContainerDefaultImpl;
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler.LinksTrafficFlowCollectorImpl;
-import ch.ethz.matsim.supernetwork.simulationData.trafficData.eventHandler.LinksTrafficFlowComputation;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkData;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDataTTV;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainerDefaultImpl;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowCollection;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowComputation;
+
 
 
 public class SupernetworkRunTest {
@@ -47,11 +50,12 @@ public class SupernetworkRunTest {
         controler.addOverridingModule(new AbstractModule() {
             @Override
             public void install() {
-            	bind(LinksTrafficFlowCollectorImpl.class).in(Singleton.class);
+            	bind(LinksTrafficFlowCollection.class).in(Singleton.class);
             	bind(LinksTrafficFlowComputation.class).in(Singleton.class);
             	bind(TrafficDataContainer.class).to(TrafficDataContainerDefaultImpl.class).asEagerSingleton();
+            	bind(LinkData.class).to(LinkDataTTV.class);
                 this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
-                this.addEventHandlerBinding().to(LinksTrafficFlowCollectorImpl.class);
+                this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
             }
         });
         
