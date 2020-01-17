@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.clustering.clusteringAlgorithms.AgglomerativeHierarchical;
+package ch.ethz.matsim.supernetwork.cluster_analysis.models.connectivity.AgglomerativeHierarchical;
 
 /**
  * @author stefanopenazzi

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.clustering.element;
+package ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element;
 
 import java.util.List;
 
@@ -9,7 +9,9 @@ import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
 
-import ch.ethz.matsim.supernetwork.clustering.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
+
+
 
 /**
  * @author stefanopenazzi
