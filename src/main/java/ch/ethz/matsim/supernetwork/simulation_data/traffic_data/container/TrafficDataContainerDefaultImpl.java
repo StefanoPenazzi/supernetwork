@@ -24,7 +24,7 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	private Network network;
 	private static Map<Id<Link>,List<LinkData>> inputFlows = new TreeMap<>();
 	private static Map<Id<Link>,List<LinkData>> outputFlows = new TreeMap<>();
-	private static Map<Id<Link>,List<TravelTime>> linksTravelTime = new TreeMap<>();
+	private static Map<Id<Link>,List<TravelData >> linksTravelTime = new TreeMap<>();
 
 	@Inject
 	TrafficDataContainerDefaultImpl (Network network){
@@ -43,17 +43,17 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		return this.outputFlows;
 	}
 	
-	public Map<Id<Link>,List<TravelTime>> getLinksTravelTime(){
+	public Map<Id<Link>,List<TravelData>> getLinksTravelTime(){
 		return this.linksTravelTime;
 	}
 	
 	public void linksTravelTimeComputation() {
 		List<List<LinkData>> in =  new ArrayList<>(inputFlows.values());
 		List<List<LinkData>> out = new ArrayList<>(outputFlows.values());
-		List<List<TravelTime>> res = new ArrayList();
+		List<List<TravelData>> res = new ArrayList();
 		
 		for(int i = 0;i< out.size();i++ ) {
-			List<TravelTime> traveltime = new ArrayList();
+			List<TravelData> traveltime = new ArrayList();
 			int outCounter= 0;
 			for(int inCounter = 0;inCounter<in.get(i).size();inCounter++) {
 				for(int newOutCounter = outCounter;newOutCounter < out.get(i).size();newOutCounter++) {
@@ -85,9 +85,9 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 	
 	public int getLinkTravelTime(Id<Link> id, int startTime) {
 		int travelTime = 0;
-		List<TravelTime> tt = linksTravelTime.get(id);
+		List<TravelData> tt = linksTravelTime.get(id);
 		if(tt.size()>0) {
-			TravelTime comp = new TravelTime(startTime,0);
+			TravelData comp = new TravelTime(startTime,0);
 			travelTime = tt.get(Collections.binarySearch(tt, comp)).getTravelTime();
 		}
 		else {
@@ -101,8 +101,8 @@ public final class TrafficDataContainerDefaultImpl implements TrafficDataContain
 		String res = "";
 		Link l = network.getLinks().get(id);
 		int freeSpeedTime = (int)(l.getLength()/l.getFreespeed());
-		List<TravelTime> ttl = linksTravelTime.get(id);
-		for(TravelTime t: ttl) {
+		List<TravelData> ttl = linksTravelTime.get(id);
+		for(TravelData t: ttl) {
 			res += id.toString()+";"+t.getStartTime() + ";"+t.getTravelTime() +";"+freeSpeedTime + "\n";
 		}
 		return res;

@@ -3,14 +3,19 @@
  */
 package ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container;
 
+import com.google.inject.Inject;
+
 /**
  * @author stefanopenazzi
  *
  */
-public class TravelTime implements Comparable<TravelTime> {
+public class TravelTime implements TravelData {
 	
 	private int startTime;
 	private int travelTime;
+	
+	@Inject
+	public TravelTime() {}
 	
 	public TravelTime(int startTime,int travelTime) {
 		this.startTime = startTime;
@@ -25,7 +30,7 @@ public class TravelTime implements Comparable<TravelTime> {
 	}
 
 	@Override
-	public int compareTo(TravelTime anotherTravelTime) {
+	public int compareTo(TravelData anotherTravelTime) {
 		return this.getStartTime() - anotherTravelTime.getStartTime();
 	}
 

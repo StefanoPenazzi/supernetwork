@@ -18,6 +18,8 @@ import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDa
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDataTTV;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainerDefaultImpl;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TravelData;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TravelTime;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowCollection;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowComputation;
 
@@ -54,6 +56,7 @@ public class SupernetworkRunTest {
             	bind(LinksTrafficFlowComputation.class).in(Singleton.class);
             	bind(TrafficDataContainer.class).to(TrafficDataContainerDefaultImpl.class).asEagerSingleton();
             	bind(LinkData.class).to(LinkDataTTV.class);
+            	bind(TravelData.class).to(TravelTime.class);
                 this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
                 this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
             }
