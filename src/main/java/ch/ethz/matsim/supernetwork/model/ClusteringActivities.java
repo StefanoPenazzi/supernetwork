@@ -79,7 +79,7 @@ public class ClusteringActivities {
 		}
 		
 		//csvStatRegions(outputPath,clusters);
-		csvStat(outputPath,clusters);
+		//csvStat(outputPath,clusters);
 		
 		
 		List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
