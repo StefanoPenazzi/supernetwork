@@ -14,6 +14,15 @@ import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 import com.google.inject.Singleton;
 
 import ch.ethz.matsim.supernetwork.model.ClusteringActivities;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkData;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDataTTV;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainerDefaultImpl;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TravelData;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TravelTime;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowCollection;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowComputation;
+
 
 
 public class SupernetworkRunTest {
@@ -35,13 +44,26 @@ public class SupernetworkRunTest {
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
         //SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario,outputPath);
-        ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
+        //ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
         
         // controler
-        //Controler controler = new Controler(scenario);
+        Controler controler = new Controler(scenario);
+        
+        controler.addOverridingModule(new AbstractModule() {
+            @Override
+            public void install() {
+            	bind(LinksTrafficFlowCollection.class).in(Singleton.class);
+            	bind(LinksTrafficFlowComputation.class).in(Singleton.class);
+            	bind(TrafficDataContainer.class).to(TrafficDataContainerDefaultImpl.class).asEagerSingleton();
+            	bind(LinkData.class).to(LinkDataTTV.class);
+            	bind(TravelData.class).to(TravelTime.class);
+                this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
+                this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
+            }
+        });
         
         //System.setProperty("scenario","sbb");
         
-        //controler.run();
+        controler.run();
 	}
 }
