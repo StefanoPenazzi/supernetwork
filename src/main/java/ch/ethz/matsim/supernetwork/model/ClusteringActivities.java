@@ -79,7 +79,25 @@ public class ClusteringActivities {
 		}
 		
 		//csvStatRegions(outputPath,clusters);
-		//csvStat(outputPath,clusters);
+		csvStat(outputPath,clusters);
+		
+		
+		List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
+		for(Cluster cdi: clusters) {
+			subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
+		}
+		
+		int numOfNodes = 0;
+		int numOfLinks = 0;
+		
+		for(SubnetworkDefaultImpl snd:subnetworks ) {
+			if(snd != null) {
+				numOfNodes += snd.getNodes().size();
+				numOfLinks += snd.getLinks().size();
+			}
+		}
+		
+		System.out.println();
 	}
 	
     public void stat(String outputPath,List<Cluster<ElementActivity>> clusters) {

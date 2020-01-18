@@ -5,6 +5,7 @@ package ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.matsim.api.core.v01.Coord;
@@ -94,6 +95,56 @@ public abstract class ClusterActivitiesLocation implements Cluster<ElementActivi
 			}
 		}
 		return min;
+	}
+	
+	public void sortActivitiesByCentroidDistNextAct() {
+		Collections.sort(activities, new Comparator<ElementActivity>() {
+			@Override
+			public int compare(ElementActivity e1, ElementActivity e2) {
+				double dist1; 
+				double dist2; 
+				
+				if(e1.getNextActivity() != null) { 
+					dist1 = Math.pow(e1.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
+							Math.pow(e1.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				}
+				else {
+					dist1 = Double.MAX_VALUE;
+				}
+				if(e2.getNextActivity() != null) { 
+					dist2 =Math.pow(e2.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
+							Math.pow(e2.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				}
+				else {
+					dist2 = Double.MAX_VALUE;
+				}
+				
+				if(dist1 == dist2) {
+					return 0;
+				}
+				else { 
+					if(dist1 < dist2) {
+				  
+					return -1;
+					}
+					else {
+						return 1;
+					}
+			    }
+			}
+		});
+	}
+	
+	public void printActivitiesAndDist() {
+		int i =0;
+		for(ElementActivity ea: activities) {
+			if(ea.getNextActivity() != null) {
+				double dist = Math.pow(ea.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
+						Math.pow(ea.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				System.out.println(i + " - " + dist);
+				++i;
+			}
+		}
 	}
 
 }

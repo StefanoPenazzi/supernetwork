@@ -21,13 +21,20 @@ import org.matsim.utils.objectattributes.attributable.Attributes;
  */
 public class SubnetworkDefaultImpl implements Subnetwork {
 
+	private int id;
+	
 	private List<Node> nodes = new ArrayList();
 
 	private List<Link> links = new ArrayList();
 	
-	public SubnetworkDefaultImpl(List<Node> nodes,List<Link> links) {
+	SubnetworkDefaultImpl(int id,List<Node> nodes,List<Link> links) {
+		this.id = id;
 		this.nodes = nodes;
 		this.links = links;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 	
 	public  List<Node> getNodes(){

@@ -44,7 +44,7 @@ public class SupernetworkRunTest {
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
         //SupNetDefaultActivitiesAnalysis sn = new SupNetDefaultActivitiesAnalysis(scenario,outputPath);
-        //ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
+        ClusteringActivities ca = new ClusteringActivities(scenario,outputPath,cut);
         
         // controler
         Controler controler = new Controler(scenario);
