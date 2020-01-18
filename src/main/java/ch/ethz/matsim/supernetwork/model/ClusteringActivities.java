@@ -79,7 +79,7 @@ public class ClusteringActivities {
 		}
 		
 		//csvStatRegions(outputPath,clusters);
-		csvStat(outputPath,clusters);
+		//csvStat(outputPath,clusters);
 	}
 	
     public void stat(String outputPath,List<Cluster<ElementActivity>> clusters) {
