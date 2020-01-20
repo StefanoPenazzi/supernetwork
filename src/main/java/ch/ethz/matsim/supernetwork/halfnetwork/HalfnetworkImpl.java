@@ -13,6 +13,8 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.superlink.Superlink;
+import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
 /**
  * @author stefanopenazzi
@@ -23,8 +25,8 @@ public class HalfnetworkImpl implements Halfnetwork {
 	private Cluster cluster;
 	private Subnetwork subnetwork;
 	private TrafficDataContainer trafficDataContainer;
-	private Node node;
-	private List<Link> superLinks;
+	private Supernode node;
+	private List<Superlink> superLinks;
 	
 	public HalfnetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
 		this.trafficDataContainer = trafficDataContainer;
@@ -51,13 +53,13 @@ public class HalfnetworkImpl implements Halfnetwork {
 	}
 
 	@Override
-	public Node getNode() {
+	public Supernode getNode() {
 		// TODO Auto-generated method stub
 		return this.node;
 	}
 
 	@Override
-	public List<Link> getSuperLinks() {
+	public List<Superlink> getSuperLinks() {
 		// TODO Auto-generated method stub
 		return this.superLinks;
 	}
