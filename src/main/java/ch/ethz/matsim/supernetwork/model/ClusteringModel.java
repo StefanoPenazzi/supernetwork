@@ -9,6 +9,7 @@ import org.matsim.core.controler.listener.BeforeMobsimListener;
 
 import com.google.inject.Inject;
 
+import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 
 /**
@@ -28,7 +29,7 @@ public class ClusteringModel implements BeforeMobsimListener {
 	@Override
 	public void notifyBeforeMobsim(BeforeMobsimEvent event) {
 
-		ClusteringActivities ca = new ClusteringActivities(scenario,"home/stefanopenazzi/git/supernetwork/output",1000);
+		ClustersContainer ca = ClusteringActivities.getClustersContainer(scenario,"home/stefanopenazzi/git/supernetwork/output",1000);
 	}
 
 }

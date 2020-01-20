@@ -21,6 +21,7 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
+import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.kd_tree.KDNode;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.kd_tree.KDTreeClustersContainer;
 import ch.ethz.matsim.supernetwork.cluster_analysis.models.centroid.ClusteringNetworkRegionAlgorithm;
@@ -37,7 +38,7 @@ import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFromActivitiesCluster;
  */
 public class ClusteringActivities {
 
-	public ClusteringActivities(Scenario scenario,String outputPath,double cut) {
+	public static ClustersContainer getClustersContainer(Scenario scenario,String outputPath,double cut) {
 		
 		List<CALNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);
@@ -60,7 +61,7 @@ public class ClusteringActivities {
 		   }
 		}
 		
-		List<Cluster<ElementActivity>> clusters = new ArrayList();
+		List<CALDefaultImpl> clusters = new ArrayList();
 		
 		for(CALNetworkRegionImpl cnr: regions) {
 			if(cnr.getComponents().size() > 1) {
@@ -69,35 +70,30 @@ public class ClusteringActivities {
 				HierarchicalClusteringActivities hca = new HierarchicalClusteringActivities(act,cut);
 				//add clusters
 				for(Cluster<ElementActivity> c:hca.getClusters()) {
+					c.computeCentroid();
 					clusters.add((CALDefaultImpl)c);
 				}
 			}
 		}
+		
+		KDTreeClustersContainer container1 = new KDTreeClustersContainer(null,clusters.size());
+		for(CALDefaultImpl c: clusters) {
+			container1.add(c);
+		}
+		
 		//set the centroid for each new cluster in clusters
-		for(Cluster cdi: clusters) {
-			cdi.computeCentroid();
-		}
+		//for(Cluster cdi: clusters) {
+		//	cdi.computeCentroid();
+		//}
 		
-		//csvStatRegions(outputPath,clusters);
-		//csvStat(outputPath,clusters);
-		
-		
-		List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
-		for(Cluster cdi: clusters) {
-			subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
-		}
-		
-		int numOfNodes = 0;
-		int numOfLinks = 0;
-		
-		for(SubnetworkDefaultImpl snd:subnetworks ) {
-			if(snd != null) {
-				numOfNodes += snd.getNodes().size();
-				numOfLinks += snd.getLinks().size();
-			}
-		}
+		//subnetwork generation
+		//List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
+		//for(Cluster cdi: clusters) {
+		//	subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
+		//}
 		
 		System.out.println();
+		return container1;
 	}
 	
     public void stat(String outputPath,List<Cluster<ElementActivity>> clusters) {
