@@ -13,6 +13,7 @@ import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 
 
@@ -258,4 +259,10 @@ public class KDTreeClustersContainer implements ClustersContainer {
 			   if(ext.getRight() != null) waitingNode.push(ext.getRight());
 		   }
 	   }
+
+	@Override
+	public Cluster getCluster(Element element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
