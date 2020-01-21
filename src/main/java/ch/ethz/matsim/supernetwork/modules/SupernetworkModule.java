@@ -47,5 +47,7 @@ public class SupernetworkModule extends AbstractModule {
         this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
         this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
         bind(HalfnetworkFactory.class).to(HalfnetworkFactoryImpl.class);
+        
+        install(new modulesSet());
 	}
 }

@@ -31,7 +31,6 @@ import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGrou
  */
 public class RegionHierarchicalCS {
 
-	
 	public static ClustersContainer generateClustersContainer(Scenario scenario,int cut) {
 		// TODO Auto-generated method stub
 		List<CALNetworkRegionImpl> regions;
@@ -47,7 +46,7 @@ public class RegionHierarchicalCS {
 			if(p.getPlans().size() >= 1) {
 			 List<PlanElement> le = p.getPlans().get(0).getPlanElements();
 		     for(PlanElement pe: le) {
-		    	 if ( !(pe instanceof Activity) ) continue;
+		    	 if (!(pe instanceof Activity)) continue;
 		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
 		    	 ElementActivity ea = new ElementActivity((Activity)pe,p,kdn.getCluster());
 		    	 kdn.getCluster().addComponent(ea);
@@ -88,27 +87,22 @@ public class RegionHierarchicalCS {
 		
 		System.out.println();
 		return container1;
-
 	}
 	
-    static public class Factory implements ClusteringModelFactory {
+	public static class Factory implements ClusteringModelFactory{
+
+		RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup;
+		Scenario scenario;
 		
-    	RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup;
-    	Scenario scenario;
-    	
 		@Inject 
 		public Factory(Scenario scenario,RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup) {
 			this.scenario = scenario;
 			this.regionHierarchicalCSConfigGroup = regionHierarchicalCSConfigGroup;
-			
 		}
+		
 		@Override
 		public ClustersContainer generateClusteringModel() {
-			// TODO Auto-generated method stub
-			return RegionHierarchicalCS.generateClustersContainer(scenario, regionHierarchicalCSConfigGroup.getCut());
+			return generateClustersContainer(scenario,regionHierarchicalCSConfigGroup.getCut());
 		}
-		
-		
 	}
-
 }

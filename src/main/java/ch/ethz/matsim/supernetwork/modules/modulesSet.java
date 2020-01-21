@@ -13,7 +13,7 @@ public class modulesSet extends AbstractModule {
 
 	@Override
 	public void install() {
-		// TODO Auto-generated method stub
+		install(new ClusteringModule());
 		
 	}
 
