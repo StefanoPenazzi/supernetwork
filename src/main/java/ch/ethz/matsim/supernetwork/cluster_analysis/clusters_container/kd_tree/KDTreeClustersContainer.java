@@ -13,7 +13,9 @@ import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 
 
@@ -24,10 +26,10 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersC
  * @author stefanopenazzi
  *
  */
-public class KDTreeClustersContainer implements ClustersContainer {
+public class KDTreeClustersContainer implements ClustersContainer<ClusterActivitiesLocation,ElementActivity>{
 
 	private KDNode root = null;
-    private List<Cluster> clusters = new ArrayList();
+    private List<ClusterActivitiesLocation> clusters = new ArrayList();
     private KDNode checkedNodes[];
     private KDNode nearestNeighbour;
     private int checkedNodesCounter;
@@ -43,8 +45,9 @@ public class KDTreeClustersContainer implements ClustersContainer {
 		this.checkedNodes = new KDNode[cn];
 	}
 
-	public boolean add(Cluster x)
+	public boolean add(ClusterActivitiesLocation x)
     {
+		clusters.add(x);
         if (root == null)
         {
             root = new KDNode(x, false,null);
@@ -219,33 +222,30 @@ public class KDTreeClustersContainer implements ClustersContainer {
             checkedNodes[n].setChecked(false);
     }
     
-    public void addCluster(Cluster c) {
+    public void addCluster(ClusterActivitiesLocation c) {
 		
 	}
-	public void deleteCluster(Cluster c) {
+	public void deleteCluster(ClusterActivitiesLocation c) {
 		
 	}
-	public void merge2Cluster(Cluster c1, Cluster c2) {
+	public void merge2Cluster(ClusterActivitiesLocation c1, ClusterActivitiesLocation c2) {
 		
 	}
-	public Cluster[] splitCluster(Cluster c) {
-		Cluster[] result = new Cluster[2];
+	public ClusterActivitiesLocation[] splitCluster(ClusterActivitiesLocation c) {
+		ClusterActivitiesLocation[] result = new ClusterActivitiesLocation[2];
 		return result;
 	}
-	public Cluster getCluster(Coord c) {
-		Cluster result = null;
+	public ClusterActivitiesLocation getCluster(Coord c) {
+		ClusterActivitiesLocation result = null;
 		return result;
 	}
-	public Cluster getCluster(int id) {
-		Cluster result = null;
+	public ClusterActivitiesLocation getCluster(int id) {
+		ClusterActivitiesLocation result = null;
 		return result;
 	}
-	public Cluster getCluster(Activity act) {
-		Cluster result = null;
-		return result;
-	}
-	public List<Cluster> getClusters(){
-		return Collections.unmodifiableList(clusters);
+	
+	public List<ClusterActivitiesLocation> getClusters(){
+		return this.clusters;
 	}
 	
 	public void print(){
@@ -261,7 +261,7 @@ public class KDTreeClustersContainer implements ClustersContainer {
 	   }
 
 	@Override
-	public Cluster getCluster(Element element) {
+	public ClusterActivitiesLocation getCluster(ElementActivity element) {
 		// TODO Auto-generated method stub
 		return null;
 	}

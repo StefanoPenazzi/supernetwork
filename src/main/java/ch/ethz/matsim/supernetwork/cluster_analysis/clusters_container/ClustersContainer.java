@@ -3,6 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container;
 
+import java.util.List;
+
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
@@ -17,12 +19,13 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
  */
 public interface ClustersContainer<T extends Cluster,S extends Element> {
 
-	void addCluster(T c);
-	void deleteCluster(T c);
-	void merge2Cluster(T c1, T c2);
-	T[] splitCluster(T c);
-	T getCluster(Coord c);
-	T getCluster(int id);
-	T getCluster(S element);
+	public void addCluster(T c);
+	public void deleteCluster(T c);
+	public void merge2Cluster(T c1, T c2);
+	public T[] splitCluster(T c);
+	public T getCluster(Coord c);
+	public T getCluster(int id);
+	public T getCluster(S element);
+	public List<T> getClusters();
 	
 }

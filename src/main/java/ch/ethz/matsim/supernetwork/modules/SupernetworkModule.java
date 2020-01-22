@@ -20,6 +20,7 @@ import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.Travel
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TravelTime;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowCollection;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.event_handler.LinksTrafficFlowComputation;
+import ch.ethz.matsim.supernetwork.supernet.SupernetImpl;
 
 
 /**
@@ -39,15 +40,8 @@ public class SupernetworkModule extends AbstractModule {
 		
 		//insert only supernetwork
 		//install(new modulesSet());
-		bind(LinksTrafficFlowCollection.class).in(Singleton.class);
-    	bind(LinksTrafficFlowComputation.class).in(Singleton.class);
-    	bind(TrafficDataContainer.class).to(TrafficDataContainerDefaultImpl.class).asEagerSingleton();
-    	bind(LinkData.class).to(LinkDataTTV.class);
-    	bind(TravelData.class).to(TravelTime.class);
-        this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
-        this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
-        bind(HalfnetworkFactory.class).to(HalfnetworkFactoryImpl.class);
         
-        install(new modulesSet());
+        
+        install(new ModulesSet());
 	}
 }

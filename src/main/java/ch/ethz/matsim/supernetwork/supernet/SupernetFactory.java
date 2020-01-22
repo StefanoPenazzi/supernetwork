@@ -14,6 +14,6 @@ import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
  *
  */
 public interface SupernetFactory {
-	public Supernet create(List<Halfnetwork> halfnetworks);
+	public void create();
 
 }

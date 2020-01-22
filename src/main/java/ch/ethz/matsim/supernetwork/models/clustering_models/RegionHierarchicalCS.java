@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.kd_tree.KDNode;
@@ -31,7 +32,7 @@ import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGrou
  */
 public class RegionHierarchicalCS {
 
-	public static ClustersContainer generateClustersContainer(Scenario scenario,int cut) {
+	public static ClustersContainer<ClusterActivitiesLocation,ElementActivity> generateClustersContainer(Scenario scenario,int cut) {
 		// TODO Auto-generated method stub
 		List<CALNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);

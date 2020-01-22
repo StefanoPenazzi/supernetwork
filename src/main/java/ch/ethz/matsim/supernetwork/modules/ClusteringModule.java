@@ -40,7 +40,8 @@ public class ClusteringModule extends AbstractSupernetworkExtension {
 		case HIERARCHICAL_CS:
 			return null;
 		default:
-			throw new IllegalStateException("The param modeChainGenerator in the module DiscreteModeChoice is not allowed.");
+			//throw new IllegalStateException("The param modeChainGenerator in the module DiscreteModeChoice is not allowed.");
+			return msc.get(REGION_HIERARCHICAL_CS).generateClusteringModel() ;
 		}
 	}
 }

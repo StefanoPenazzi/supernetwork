@@ -5,6 +5,10 @@ package ch.ethz.matsim.supernetwork.supernet;
 
 import java.util.List;
 
+import com.google.inject.Inject;
+
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.halfnetwork.Halfnetwork;
 
@@ -15,12 +19,12 @@ import ch.ethz.matsim.supernetwork.halfnetwork.Halfnetwork;
 public class SupernetImpl implements Supernet{
 
 	private  List<Halfnetwork> halfnetworks;
-	private ClustersContainer clusterContainer;
+	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer;
 	
 	
-	public SupernetImpl(ClustersContainer clusterContainer, List<Halfnetwork> halfnetworks) {
-		this.clusterContainer = clusterContainer;
-		this.halfnetworks =halfnetworks;
+	@Inject
+	public SupernetImpl() {
+		
 	}
 	
 	@Override
@@ -30,9 +34,21 @@ public class SupernetImpl implements Supernet{
 	}
 
 	@Override
-	public ClustersContainer getClusterContainer() {
-		// TODO Auto-generated method stub
+	public void setActivitiesClustersContainer(ClustersContainer<ClusterActivitiesLocation,ElementActivity> cc) {
+		this.clusterContainer = cc ;
+	}
+
+	@Override
+	public void setHalfnetworks(List<Halfnetwork> hf) {
+		this.halfnetworks = hf;
+	}
+
+	@Override
+	public ClustersContainer<ClusterActivitiesLocation,ElementActivity> getActivitiesClusterContainer() {
+		
 		return this.clusterContainer;
 	}
+
+	
 
 }

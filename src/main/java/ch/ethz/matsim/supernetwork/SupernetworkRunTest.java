@@ -9,6 +9,8 @@ import ch.ethz.matsim.utils.CommandLine;
 import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 
 import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
+import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
+import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 
 
 
@@ -27,7 +29,7 @@ public class SupernetworkRunTest {
 		
 		System.setProperty("matsim.preferLocalDtds", "true");
 		
-        final Config config = ConfigUtils.loadConfig(configFile);
+        final Config config = ConfigUtils.loadConfig(configFile, new SupernetworkConfigGroup(),new RegionHierarchicalCSConfigGroup());
 
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
