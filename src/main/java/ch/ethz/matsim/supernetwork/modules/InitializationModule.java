@@ -21,6 +21,10 @@ public class InitializationModule extends AbstractSupernetworkExtension {
         bind(MiddlenetworkFactory.class).to(MiddlenetworkFactoryImpl.class);
         
         install(new ClusteringModule());
+        install(new SubnetworkModule());
+        install(new MiddlenetworkModule());
+        install(new SupernetModule());
+        install(new SimulationDataModule());
         
         
 		
