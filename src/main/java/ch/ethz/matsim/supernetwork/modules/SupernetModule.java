@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.google.inject.Provides;
 
+import ch.ethz.matsim.supernetwork.models.subnetwork_models.SubnetworkFromActivitiesCluster;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 import ch.ethz.matsim.supernetwork.supernet.Supernet;
 import ch.ethz.matsim.supernetwork.supernet.SupernetFactory;
@@ -21,7 +22,7 @@ public class SupernetModule extends AbstractSupernetworkExtension{
 	
 	@Override
 	protected void installExtension() {
-		// TODO Auto-generated method stub
+		//bindSupernetFactory(DEFAULT).to(SubnetworkFromActivitiesCluster.Factory.class);
 		
 	}
 

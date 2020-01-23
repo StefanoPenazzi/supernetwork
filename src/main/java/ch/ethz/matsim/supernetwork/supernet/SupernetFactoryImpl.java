@@ -17,7 +17,8 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActi
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFromActivitiesCluster;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
+
 
 
 /**
@@ -36,11 +37,14 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	
 	SupernetworkConfigGroup supernetworkConfigGroup;
 	
+	MatsimServices matsimServices;
+	
 	@Inject
-	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
+	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
+		this.matsimServices = matsimServices;
 		
 		//this.supernetworkConfigGroup = supernetworkConfigGroup;
 	}
@@ -52,7 +56,8 @@ public class SupernetFactoryImpl implements SupernetFactory {
 		List<Subnetwork> subnetworks = new ArrayList<Subnetwork>();
 		List<ClusterActivitiesLocation> lc = supernet.getActivitiesClusterContainer().getClusters();
 		for(ClusterActivitiesLocation cdi: lc) {
-			subnetworks.add(SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
+			SubnetworkFactory sf = matsimServices.getInjector().getInstance(SubnetworkFactory.class); 
+			subnetworks.add(sf.generateSubnetworkByCluster(cdi));
 		}
 	}
 }

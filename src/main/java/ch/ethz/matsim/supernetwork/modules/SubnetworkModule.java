@@ -7,10 +7,8 @@ import java.util.Map;
 
 import com.google.inject.Provides;
 
-import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
+import ch.ethz.matsim.supernetwork.models.subnetwork_models.SubnetworkFromActivitiesCluster;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
 
 /**
@@ -23,14 +21,15 @@ public class SubnetworkModule extends AbstractSupernetworkExtension{
 	
 	@Override
 	protected void installExtension() {
-		// TODO Auto-generated method stub
+		bindSubnetworkFactory(DEFAULT).to(SubnetworkFromActivitiesCluster.Factory.class);
+		
 		
 	}
 	@Provides
-	public Subnetwork provideSubnetwork(Map<String,SubnetworkFactory> msc,SupernetworkConfigGroup supernetworkConfigGroup) {
+	public SubnetworkFactory provideSubnetwork(Map<String,SubnetworkFactory> msc,SupernetworkConfigGroup supernetworkConfigGroup) {
 		switch (supernetworkConfigGroup.getSubnetwork()) {
 		case DEFAULT:
-			return null ;
+			return  msc.get(DEFAULT);
 		default:
 			throw new IllegalStateException("The param Subnetwork in the module Supernetwork is not allowed.");
 		}

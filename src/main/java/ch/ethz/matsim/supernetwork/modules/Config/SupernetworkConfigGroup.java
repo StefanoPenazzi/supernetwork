@@ -27,10 +27,10 @@ public class SupernetworkConfigGroup extends ReflectiveConfigGroup  {
 	
 	private String clusteringStrategy = "regionHierarchicalCS"; 
 	
-	private String subnetwork = "default"; 
-	private String middlenetwork = "default"; 
-	private String supernet = "default"; 
-	private String simulationDataCollection = "default"; 
+	private String subnetwork = "Default"; 
+	private String middlenetwork = "Default"; 
+	private String supernet = "Default"; 
+	private String simulationDataCollection = "Default"; 
 	
 	public SupernetworkConfigGroup() {
 		super(GROUP_NAME);
@@ -62,7 +62,7 @@ public class SupernetworkConfigGroup extends ReflectiveConfigGroup  {
 		this.middlenetwork = middlenetwork;
 	}
 
-	@StringGetter(SUBNETWORK)
+	@StringGetter(MIDDLENETWORK)
 	public String getMiddlenetwork() {
 		return middlenetwork;
 	}
