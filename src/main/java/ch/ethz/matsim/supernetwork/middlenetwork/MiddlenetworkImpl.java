@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.halfnetwork;
+package ch.ethz.matsim.supernetwork.middlenetwork;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import ch.ethz.matsim.supernetwork.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public class HalfnetworkImpl implements Halfnetwork {
+public class MiddlenetworkImpl implements Middlenetwork {
 
 	private Cluster cluster;
 	private Subnetwork subnetwork;
@@ -28,7 +28,7 @@ public class HalfnetworkImpl implements Halfnetwork {
 	private Supernode node;
 	private List<Superlink> superLinks;
 	
-	public HalfnetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
+	public MiddlenetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
 		this.trafficDataContainer = trafficDataContainer;
 		this.cluster = cluster;
 		this.subnetwork = subnetwork;

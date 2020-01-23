@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.halfnetwork;
+package ch.ethz.matsim.supernetwork.middlenetwork;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
@@ -10,7 +10,7 @@ import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
  * @author stefanopenazzi
  *
  */
-public interface HalfnetworkFactory {
+public interface MiddlenetworkFactory {
 
-	public Halfnetwork create(Cluster cluster,Subnetwork subnetwork);
+	public Middlenetwork create(Cluster cluster,Subnetwork subnetwork);
 }

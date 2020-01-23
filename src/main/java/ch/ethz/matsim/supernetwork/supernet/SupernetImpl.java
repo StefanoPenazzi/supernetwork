@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.halfnetwork.Halfnetwork;
+import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi
@@ -18,7 +18,7 @@ import ch.ethz.matsim.supernetwork.halfnetwork.Halfnetwork;
  */
 public class SupernetImpl implements Supernet{
 
-	private  List<Halfnetwork> halfnetworks;
+	private  List<Middlenetwork> halfnetworks;
 	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer;
 	
 	
@@ -28,7 +28,7 @@ public class SupernetImpl implements Supernet{
 	}
 	
 	@Override
-	public List<Halfnetwork> getHalfnetworks() {
+	public List<Middlenetwork> getHalfnetworks() {
 		
 		return this.halfnetworks;
 	}
@@ -39,7 +39,7 @@ public class SupernetImpl implements Supernet{
 	}
 
 	@Override
-	public void setHalfnetworks(List<Halfnetwork> hf) {
+	public void setHalfnetworks(List<Middlenetwork> hf) {
 		this.halfnetworks = hf;
 	}
 

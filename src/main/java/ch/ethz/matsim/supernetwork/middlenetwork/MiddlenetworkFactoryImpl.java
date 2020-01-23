@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.halfnetwork;
+package ch.ethz.matsim.supernetwork.middlenetwork;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -14,18 +14,18 @@ import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
  * @author stefanopenazzi
  *
  */
-public class HalfnetworkFactoryImpl implements HalfnetworkFactory {
+public class MiddlenetworkFactoryImpl implements MiddlenetworkFactory {
 	
 	private final Provider<TrafficDataContainer> trafficDataContainerProvider;
 	
 	@Inject
-	public HalfnetworkFactoryImpl(Provider<TrafficDataContainer> trafficDataContainerProvider) {
+	public MiddlenetworkFactoryImpl(Provider<TrafficDataContainer> trafficDataContainerProvider) {
 		this.trafficDataContainerProvider = trafficDataContainerProvider;
 	}
 
 	@Override
-	public Halfnetwork create(Cluster cluster,Subnetwork subnetwork) {
-		return new HalfnetworkImpl(this.trafficDataContainerProvider.get(),cluster,subnetwork);
+	public Middlenetwork create(Cluster cluster,Subnetwork subnetwork) {
+		return new MiddlenetworkImpl(this.trafficDataContainerProvider.get(),cluster,subnetwork);
 	}
 
 }

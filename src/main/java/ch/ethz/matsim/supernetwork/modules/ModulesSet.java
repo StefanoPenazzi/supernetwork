@@ -14,8 +14,7 @@ public class ModulesSet extends AbstractModule {
 	@Override
 	public void install() {
 		install(new InitializationModule());
-		install(new ClusteringModule());
-		
+		install(new UpdateSimulationDataModule());
 	}
 
 }

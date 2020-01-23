@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.halfnetwork;
+package ch.ethz.matsim.supernetwork.middlenetwork;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import ch.ethz.matsim.supernetwork.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public interface Halfnetwork {
+public interface Middlenetwork {
 	
 	public Cluster getCluster();
 	public Subnetwork getSubnetwork();
