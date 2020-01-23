@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.superlink;
+package ch.ethz.matsim.supernetwork.middlelink;
 
 import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
@@ -9,13 +9,13 @@ import ch.ethz.matsim.supernetwork.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public class SuperlinkImpl implements Superlink{
+public class MiddlelinkImpl implements Middlelink{
 
 	private Supernode from;
 	private Supernode to;
 	private double weight;
 	
-	public SuperlinkImpl(Supernode from,Supernode to,double weight) {
+	public MiddlelinkImpl(Supernode from,Supernode to,double weight) {
 		this.from = from;
 		this.to = to;
 		this.weight = weight;

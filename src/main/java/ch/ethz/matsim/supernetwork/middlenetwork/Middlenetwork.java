@@ -10,9 +10,9 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
+import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.superlink.Superlink;
 import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
 /**
@@ -25,6 +25,6 @@ public interface Middlenetwork {
 	public Subnetwork getSubnetwork();
 	public TrafficDataContainer getTrafficDataContainer();
 	public Supernode getNode();
-	public List<Superlink> getSuperLinks();
+	public List<Middlelink> getSuperLinks();
 
 }
