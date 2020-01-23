@@ -29,9 +29,7 @@ public class UpdateSimulationDataModule extends AbstractSupernetworkExtension {
         this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
         this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
         
-        bind(TrafficDataContainer.class).to(TrafficDataContainerDefaultImpl.class).asEagerSingleton();
-    	bind(LinkData.class).to(LinkDataTTV.class);
-    	bind(TravelData.class).to(TravelTime.class);
+        
 	}
 
 }

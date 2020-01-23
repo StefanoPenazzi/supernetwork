@@ -17,14 +17,12 @@ public class InitializationModule extends AbstractSupernetworkExtension {
 	protected void installExtension() {
 		
 		this.addControlerListenerBinding().to(SupernetworkInitializationEvent.class);
-		
-        bind(MiddlenetworkFactory.class).to(MiddlenetworkFactoryImpl.class);
         
         install(new ClusteringModule());
         install(new SubnetworkModule());
-        //install(new MiddlenetworkModule());
+        install(new MiddlenetworkModule());
         //install(new SupernetModule());
-        //install(new SimulationDataModule());
+        install(new SimulationDataModule());
         
         
 		

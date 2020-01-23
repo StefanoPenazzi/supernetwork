@@ -15,7 +15,10 @@ import com.google.inject.Injector;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
+import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
+import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
 
@@ -32,32 +35,39 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	//config files to be initialized. 
 	//TODO what happens if the scenario is null etc
 	ClustersContainer clustersContainer;
-	
+	TrafficDataContainer trafficDataContainer;
 	Scenario scenario;
-	
 	SupernetworkConfigGroup supernetworkConfigGroup;
-	
 	MatsimServices matsimServices;
+	SubnetworkFactory subnetworkFactory; 
+	MiddlenetworkFactory middlenetworkFactory;
 	
 	@Inject
-	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
+	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
+			TrafficDataContainer trafficDataContainer,SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
 		this.matsimServices = matsimServices;
-		
+		this.trafficDataContainer = trafficDataContainer;
+		this.subnetworkFactory = subnetworkFactory;
+		this.middlenetworkFactory = middlenetworkFactory;
+		create();
 		//this.supernetworkConfigGroup = supernetworkConfigGroup;
 	}
 
 	@Override
-	public void create() {
+	public
+	final void create() {
 		
 		supernet.setActivitiesClustersContainer(this.clustersContainer);
-		List<Subnetwork> subnetworks = new ArrayList<Subnetwork>();
+		List<Middlenetwork> middlenetworks = new ArrayList<Middlenetwork>();
 		List<ClusterActivitiesLocation> lc = supernet.getActivitiesClusterContainer().getClusters();
 		for(ClusterActivitiesLocation cdi: lc) {
-			SubnetworkFactory sf = matsimServices.getInjector().getInstance(SubnetworkFactory.class); 
-			subnetworks.add(sf.generateSubnetworkByCluster(cdi));
+			Subnetwork sn = subnetworkFactory.generateSubnetworkByCluster(cdi); 
+			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
+		supernet.setHalfnetworks(middlenetworks);
+		System.out.println();
 	}
 }

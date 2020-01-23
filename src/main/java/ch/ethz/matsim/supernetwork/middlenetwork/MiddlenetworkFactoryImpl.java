@@ -16,16 +16,16 @@ import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
  */
 public class MiddlenetworkFactoryImpl implements MiddlenetworkFactory {
 	
-	private final Provider<TrafficDataContainer> trafficDataContainerProvider;
+	private final TrafficDataContainer trafficDataContainer;
 	
 	@Inject
-	public MiddlenetworkFactoryImpl(Provider<TrafficDataContainer> trafficDataContainerProvider) {
-		this.trafficDataContainerProvider = trafficDataContainerProvider;
+	public MiddlenetworkFactoryImpl(TrafficDataContainer trafficDataContainer) {
+		this.trafficDataContainer = trafficDataContainer;
 	}
 
 	@Override
 	public Middlenetwork create(Cluster cluster,Subnetwork subnetwork) {
-		return new MiddlenetworkImpl(this.trafficDataContainerProvider.get(),cluster,subnetwork);
+		return new MiddlenetworkImpl(this.trafficDataContainer,cluster,subnetwork);
 	}
 
 }

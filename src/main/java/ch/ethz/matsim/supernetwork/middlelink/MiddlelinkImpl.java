@@ -3,6 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.middlelink;
 
+import org.matsim.api.core.v01.network.Node;
+
 import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
 /**
@@ -12,10 +14,10 @@ import ch.ethz.matsim.supernetwork.supernode.Supernode;
 public class MiddlelinkImpl implements Middlelink{
 
 	private Supernode from;
-	private Supernode to;
+	private Node to;
 	private double weight;
 	
-	public MiddlelinkImpl(Supernode from,Supernode to,double weight) {
+	public MiddlelinkImpl(Supernode from,Node to,double weight) {
 		this.from = from;
 		this.to = to;
 		this.weight = weight;
@@ -28,7 +30,7 @@ public class MiddlelinkImpl implements Middlelink{
 	}
 
 	@Override
-	public Supernode getTo() {
+	public Node getTo() {
 		// TODO Auto-generated method stub
 		return null;
 	}

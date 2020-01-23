@@ -9,6 +9,8 @@ import com.google.inject.Provides;
 
 import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactory;
+import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactoryImpl;
+import ch.ethz.matsim.supernetwork.models.subnetwork_models.SubnetworkFromActivitiesCluster;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 
 
@@ -22,15 +24,15 @@ public class MiddlenetworkModule extends AbstractSupernetworkExtension{
 	
 	@Override
 	protected void installExtension() {
-		// TODO Auto-generated method stub
+		bindMiddlenetworkFactory(DEFAULT).to(MiddlenetworkFactoryImpl.class);
 		
 	}
 	
 	@Provides
-	public Middlenetwork provideSubnetwork(Map<String,MiddlenetworkFactory> msc,SupernetworkConfigGroup supernetworkConfigGroup) {
+	public MiddlenetworkFactory provideSubnetwork(Map<String,MiddlenetworkFactory> msc,SupernetworkConfigGroup supernetworkConfigGroup) {
 		switch (supernetworkConfigGroup.getMiddlenetwork()) {
 		case DEFAULT:
-			return null ;
+			return msc.get(DEFAULT) ;
 		default:
 			throw new IllegalStateException("The param Middlenetwork in the module Supernetwork is not allowed.");
 		}
