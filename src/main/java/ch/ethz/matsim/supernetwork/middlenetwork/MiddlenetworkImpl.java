@@ -27,7 +27,7 @@ public class MiddlenetworkImpl implements Middlenetwork {
 	private Subnetwork subnetwork;
 	private TrafficDataContainer trafficDataContainer;
 	private Supernode node;
-	private List<Middlelink> superLinks;
+	private List<Middlelink> middleLinks;
 	
 	public MiddlenetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
 		this.trafficDataContainer = trafficDataContainer;
@@ -54,21 +54,27 @@ public class MiddlenetworkImpl implements Middlenetwork {
 	}
 
 	@Override
-	public Supernode getNode() {
+	public Supernode getSuperNode() {
 		// TODO Auto-generated method stub
 		return this.node;
 	}
+	
+	@Override
+	public void setSuperNode() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public List<Middlelink> getSuperLinks() {
+	public List<Middlelink> getMiddleLinks() {
 		// TODO Auto-generated method stub
-		return this.superLinks;
+		return this.middleLinks;
 	}
 
 	private void setCoord() {
 		this.node = null;
 	}
-	private void setSuperLinks() {
+	public void setMiddleLinks() {
 		
 		for(Node n: ((CALNetworkRegionImpl)cluster).getNodes()){
 			
