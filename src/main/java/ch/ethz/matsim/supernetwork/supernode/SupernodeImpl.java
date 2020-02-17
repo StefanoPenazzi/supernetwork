@@ -2,12 +2,9 @@
  * 
  */
 package ch.ethz.matsim.supernetwork.supernode;
-
 import java.util.List;
-
 import org.matsim.api.core.v01.Coord;
-
-import ch.ethz.matsim.supernetwork.superlink.Superlink;
+import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 
 /**
  * @author stefanopenazzi
@@ -16,8 +13,8 @@ import ch.ethz.matsim.supernetwork.superlink.Superlink;
 public class SupernodeImpl implements Supernode {
 
 	private Coord coord;
-	private List<Superlink> inLinks;
-	private List<Superlink> outLinks;
+	private List<Middlelink> inLinks;
+	private List<Middlelink> outLinks;
 	
 	@Override
 	public Coord getCoord() {
@@ -26,13 +23,13 @@ public class SupernodeImpl implements Supernode {
 	}
 
 	@Override
-	public List<Superlink> getInLinks() {
+	public List<Middlelink> getInLinks() {
 		
 		return this.inLinks;
 	}
 
 	@Override
-	public List<Superlink> getOutLinks() {
+	public List<Middlelink> getOutLinks() {
 		
 		return this.outLinks;
 	}

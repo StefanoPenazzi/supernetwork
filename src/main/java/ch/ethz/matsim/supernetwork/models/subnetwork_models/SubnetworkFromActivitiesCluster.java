@@ -1,18 +1,28 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.subnetwork;
+package ch.ethz.matsim.supernetwork.models.subnetwork_models;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
+
+import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
+import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
+import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
+import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
+import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkDefaultImpl;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkUtils;
 
 
 
@@ -21,8 +31,6 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActiv
  *
  */
 public class SubnetworkFromActivitiesCluster {
-	
-	private static final SubnetworkFactory subnetworkFactory = new SubnetworkFactory();
 	
 	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster,double cut) {
 		SubnetworkDefaultImpl sn = null;
@@ -42,7 +50,7 @@ public class SubnetworkFromActivitiesCluster {
 			}
 		}
 		if(radius >0) {
-			sn = (SubnetworkDefaultImpl)subnetworkFactory.circularSubnetwork(father,cluster.getCentroid(),Math.sqrt(radius));
+			sn = (SubnetworkDefaultImpl)SubnetworkUtils.circularSubnetwork(father,cluster.getCentroid(),Math.sqrt(radius));
 		}
 		return sn;
 	}
@@ -59,6 +67,21 @@ public class SubnetworkFromActivitiesCluster {
 			}
 		}
 		return Math.sqrt(radius);
+	}
+	
+	public static class Factory implements SubnetworkFactory{
+
+		Scenario scenario;
+		
+		@Inject 
+		public Factory(Scenario scenario) {
+			this.scenario = scenario;
+		}
+		
+		public Subnetwork generateSubnetworkByCluster(Cluster<ElementActivity> cluster) {
+			return fromActivitiesLocations(scenario.getNetwork(),cluster,0.9);
+		}
+
 	}
 
 }

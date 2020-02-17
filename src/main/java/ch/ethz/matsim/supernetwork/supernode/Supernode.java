@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.matsim.api.core.v01.Coord;
 
-import ch.ethz.matsim.supernetwork.superlink.Superlink;
+import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 
 /**
  * @author stefanopenazzi
@@ -16,8 +16,8 @@ import ch.ethz.matsim.supernetwork.superlink.Superlink;
 public interface Supernode {
 	
 	public Coord getCoord();
-	public List<Superlink> getInLinks();
-	public List<Superlink> getOutLinks();
+	public List<Middlelink> getInLinks();
+	public List<Middlelink> getOutLinks();
 	
 
 }

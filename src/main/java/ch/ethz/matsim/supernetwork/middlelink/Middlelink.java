@@ -1,7 +1,9 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.superlink;
+package ch.ethz.matsim.supernetwork.middlelink;
+
+import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
@@ -9,10 +11,10 @@ import ch.ethz.matsim.supernetwork.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public interface Superlink {
+public interface Middlelink {
 
 	public Supernode getFrom();
-	public Supernode getTo();
+	public Node getTo();
 	public double getWeight();
 	
 }

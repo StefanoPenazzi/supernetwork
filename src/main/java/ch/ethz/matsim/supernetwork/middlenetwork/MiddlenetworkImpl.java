@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.halfnetwork;
+package ch.ethz.matsim.supernetwork.middlenetwork;
 
 import java.util.List;
 
@@ -11,24 +11,25 @@ import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.superlink.Superlink;
+
 import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class HalfnetworkImpl implements Halfnetwork {
+public class MiddlenetworkImpl implements Middlenetwork {
 
 	private Cluster cluster;
 	private Subnetwork subnetwork;
 	private TrafficDataContainer trafficDataContainer;
 	private Supernode node;
-	private List<Superlink> superLinks;
+	private List<Middlelink> middleLinks;
 	
-	public HalfnetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
+	public MiddlenetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
 		this.trafficDataContainer = trafficDataContainer;
 		this.cluster = cluster;
 		this.subnetwork = subnetwork;
@@ -53,21 +54,27 @@ public class HalfnetworkImpl implements Halfnetwork {
 	}
 
 	@Override
-	public Supernode getNode() {
+	public Supernode getSuperNode() {
 		// TODO Auto-generated method stub
 		return this.node;
 	}
+	
+	@Override
+	public void setSuperNode() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public List<Superlink> getSuperLinks() {
+	public List<Middlelink> getMiddleLinks() {
 		// TODO Auto-generated method stub
-		return this.superLinks;
+		return this.middleLinks;
 	}
 
 	private void setCoord() {
 		this.node = null;
 	}
-	private void setSuperLinks() {
+	public void setMiddleLinks() {
 		
 		for(Node n: ((CALNetworkRegionImpl)cluster).getNodes()){
 			

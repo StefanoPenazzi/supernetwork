@@ -9,11 +9,13 @@ import java.util.List;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.population.Activity;
 
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
+
 /**
  * @author stefanopenazzi
  *
  */
-public interface Cluster<T> {
+public interface Cluster<T extends Element> {
 	
 	List<T> getComponents();
 	int getId();
