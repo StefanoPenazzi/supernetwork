@@ -16,10 +16,10 @@ import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
  */
 public interface Supernet {
 
-	public List<Middlenetwork> getHalfnetworks();
+	public List<Middlenetwork> getMiddlenetworks();
 	public ClustersContainer<ClusterActivitiesLocation,ElementActivity> getActivitiesClusterContainer();
 	
 	public void setActivitiesClustersContainer(ClustersContainer<ClusterActivitiesLocation,ElementActivity> cc);
-	public void setHalfnetworks(List<Middlenetwork> hf);
+	public void setMiddlenetworks(List<Middlenetwork> hf);
 
 }

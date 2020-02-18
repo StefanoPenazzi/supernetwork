@@ -18,7 +18,7 @@ import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
  */
 public class SupernetImpl implements Supernet{
 
-	private  List<Middlenetwork> halfnetworks;
+	private  List<Middlenetwork> middlenetworks;
 	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer;
 	
 	
@@ -28,9 +28,9 @@ public class SupernetImpl implements Supernet{
 	}
 	
 	@Override
-	public List<Middlenetwork> getHalfnetworks() {
+	public List<Middlenetwork> getMiddlenetworks() {
 		
-		return this.halfnetworks;
+		return this.middlenetworks;
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class SupernetImpl implements Supernet{
 	}
 
 	@Override
-	public void setHalfnetworks(List<Middlenetwork> hf) {
-		this.halfnetworks = hf;
+	public void setMiddlenetworks(List<Middlenetwork> hf) {
+		this.middlenetworks = hf;
 	}
 
 	@Override

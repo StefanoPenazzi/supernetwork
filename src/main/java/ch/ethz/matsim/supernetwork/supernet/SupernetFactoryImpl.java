@@ -67,7 +67,7 @@ public class SupernetFactoryImpl implements SupernetFactory {
 			Subnetwork sn = subnetworkFactory.generateSubnetworkByCluster(cdi); 
 			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
-		supernet.setHalfnetworks(middlenetworks);
+		supernet.setMiddlenetworks(middlenetworks);
 		System.out.println();
 	}
 }

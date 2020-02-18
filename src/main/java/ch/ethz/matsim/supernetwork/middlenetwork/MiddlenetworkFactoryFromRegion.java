@@ -44,7 +44,7 @@ public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 		List<Middlelink> middleLinks = new ArrayList<Middlelink>();
 		for(Node n: r.getRegionNodes()) {
 			//TODO insert distance between supernode and the subnetwork node
-			MiddlelinkImpl ml = new MiddlelinkImpl(mni.getSuperNode(),n,0);
+			MiddlelinkImpl ml = new MiddlelinkImpl(sn,n,0);
 			middleLinks.add(ml);
 		}
 		
