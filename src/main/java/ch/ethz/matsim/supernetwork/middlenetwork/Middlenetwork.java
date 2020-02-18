@@ -25,8 +25,8 @@ public interface Middlenetwork {
 	public Subnetwork getSubnetwork();
 	public TrafficDataContainer getTrafficDataContainer();
 	public Supernode getSuperNode();
-	public void setSuperNode();
+	public void setSuperNode(Supernode node);
 	public List<Middlelink> getMiddleLinks();
-	public void setMiddleLinks();
+	public void setMiddleLinks(List<Middlelink> middleLinks);
 
 }

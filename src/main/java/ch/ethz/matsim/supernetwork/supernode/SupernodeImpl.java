@@ -5,6 +5,7 @@ package ch.ethz.matsim.supernetwork.supernode;
 import java.util.List;
 import org.matsim.api.core.v01.Coord;
 import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
+import ch.ethz.matsim.supernetwork.superlink.Superlink;
 
 /**
  * @author stefanopenazzi
@@ -13,8 +14,9 @@ import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 public class SupernodeImpl implements Supernode {
 
 	private Coord coord;
-	private List<Middlelink> inLinks;
-	private List<Middlelink> outLinks;
+	public List<Superlink> inSuperLinks;
+	public List<Superlink> outSuperLinks;
+	public List<Middlelink> outMiddleLinks;
 	
 	@Override
 	public Coord getCoord() {
@@ -23,15 +25,44 @@ public class SupernodeImpl implements Supernode {
 	}
 
 	@Override
-	public List<Middlelink> getInLinks() {
+	public List<Middlelink> getOutMiddleLinks() {
 		
-		return this.inLinks;
+		return this.outMiddleLinks;
 	}
 
 	@Override
-	public List<Middlelink> getOutLinks() {
+	public List<Superlink> getInSuperLinks() {
 		
-		return this.outLinks;
+		return this.inSuperLinks;
+	}
+
+	@Override
+	public List<Superlink> getOutSuperLinks() {
+		return this.outSuperLinks;
+	}
+
+	@Override
+	public void setInSuperLinks(List<Superlink> inSuperLink) {
+		this.inSuperLinks = inSuperLink;
+		
+	}
+
+	@Override
+	public void setOutSuperLinks(List<Superlink> outSuperLink) {
+		this.outSuperLinks =  outSuperLink;
+		
+	}
+
+	@Override
+	public void setOutMiddleLinks(List<Middlelink> outMiddleLink) {
+		this.outMiddleLinks = outMiddleLink;
+		
+	}
+
+	@Override
+	public void setCoord(Coord coord) {
+		this.coord = coord;
+		
 	}
 
 }

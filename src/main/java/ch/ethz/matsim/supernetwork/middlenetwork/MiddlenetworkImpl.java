@@ -60,9 +60,8 @@ public class MiddlenetworkImpl implements Middlenetwork {
 	}
 	
 	@Override
-	public void setSuperNode() {
-		// TODO Auto-generated method stub
-		
+	public void setSuperNode(Supernode node) {
+		this.node = node;
 	}
 
 	@Override
@@ -74,10 +73,7 @@ public class MiddlenetworkImpl implements Middlenetwork {
 	private void setCoord() {
 		this.node = null;
 	}
-	public void setMiddleLinks() {
-		
-		for(Node n: ((CALNetworkRegionImpl)cluster).getNodes()){
-			
-		}
+	public void setMiddleLinks(List<Middlelink> middleLinks) {
+		this.middleLinks = middleLinks;
 	}
 }

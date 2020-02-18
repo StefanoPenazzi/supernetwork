@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALRegion;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
@@ -55,7 +56,7 @@ public class RegionHierarchicalCS {
 		   }
 		}
 		
-		List<CALDefaultImpl> clusters = new ArrayList();
+		List<CALRegion> clusters = new ArrayList();
 		
 		for(CALNetworkRegionImpl cnr: regions) {
 			if(cnr.getComponents().size() > 1) {
@@ -65,13 +66,15 @@ public class RegionHierarchicalCS {
 				//add clusters
 				for(Cluster<ElementActivity> c:hca.getClusters()) {
 					c.computeCentroid();
-					clusters.add((CALDefaultImpl)c);
+					CALRegion cc = (CALRegion)c;
+					cc.setRegionNodes(cnr.getNodes());
+					clusters.add(cc);
 				}
 			}
 		}
 		
 		KDTreeClustersContainer container1 = new KDTreeClustersContainer(null,clusters.size());
-		for(CALDefaultImpl c: clusters) {
+		for(CALRegion c: clusters) {
 			container1.add(c);
 		}
 		

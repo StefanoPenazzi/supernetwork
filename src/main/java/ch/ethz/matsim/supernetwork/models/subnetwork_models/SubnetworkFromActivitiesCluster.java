@@ -14,7 +14,7 @@ import org.matsim.api.core.v01.population.Activity;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
@@ -34,7 +34,7 @@ public class SubnetworkFromActivitiesCluster {
 	
 	public static Subnetwork fromActivitiesLocations(Network father ,Cluster<ElementActivity> cluster,double cut) {
 		SubnetworkDefaultImpl sn = null;
-		((CALDefaultImpl)cluster).sortActivitiesByCentroidDistNextAct();
+		((ClusterActivitiesLocation)cluster).sortActivitiesByCentroidDistNextAct();
 		double radius = 0;
 		double xCentroid = cluster.getCentroid().getX();
 		double yCentroid = cluster.getCentroid().getY();

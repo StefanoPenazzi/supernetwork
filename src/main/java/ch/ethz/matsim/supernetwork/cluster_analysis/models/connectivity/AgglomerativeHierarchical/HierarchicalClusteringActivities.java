@@ -11,6 +11,8 @@ import org.matsim.api.core.v01.population.Activity;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALRegion;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 
 
@@ -65,7 +67,7 @@ public class HierarchicalClusteringActivities {
 	     }
 	     
 	     for(int j=0;j<max+1;++j) {
-	    	 clusters.add(new CALDefaultImpl(0));
+	    	 clusters.add(new CALRegion(0));
 	     }
 		 
 	     for(int i =0;i<part.length;++i) {

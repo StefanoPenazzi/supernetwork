@@ -28,7 +28,7 @@ public class SupernetworkConfigGroup extends ReflectiveConfigGroup  {
 	private String clusteringStrategy = "regionHierarchicalCS"; 
 	
 	private String subnetwork = "Default"; 
-	private String middlenetwork = "Default"; 
+	private String middlenetwork = "FromRegion"; 
 	private String supernet = "Default"; 
 	private String simulationDataCollection = "Default"; 
 	

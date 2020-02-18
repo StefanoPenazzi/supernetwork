@@ -20,7 +20,7 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActiv
  * @author stefanopenazzi
  *
  */
-public abstract class ClusterActivitiesLocation implements Cluster<ElementActivity>{
+public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 	
 	private final int id;
 	private List<ElementActivity> activities  = new ArrayList();
