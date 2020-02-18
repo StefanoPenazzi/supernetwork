@@ -16,6 +16,7 @@ import ch.ethz.matsim.supernetwork.middlelink.MiddlelinkImpl;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.supernode.SupernodeImpl;
+import ch.ethz.matsim.supernetwork.utilities.graph.LinkWeight;
 
 
 /**
@@ -43,8 +44,7 @@ public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 		
 		List<Middlelink> middleLinks = new ArrayList<Middlelink>();
 		for(Node n: r.getRegionNodes()) {
-			//TODO insert distance between supernode and the subnetwork node
-			MiddlelinkImpl ml = new MiddlelinkImpl(sn,n,0);
+			MiddlelinkImpl ml = new MiddlelinkImpl(sn,n, LinkWeight.lineDistance(sn,n));
 			middleLinks.add(ml);
 		}
 		
