@@ -6,6 +6,8 @@ package ch.ethz.matsim.supernetwork.supernode;
 import java.util.List;
 
 import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 import ch.ethz.matsim.supernetwork.superlink.Superlink;
@@ -25,6 +27,8 @@ public interface Supernode {
 	public void setInSuperLinks(List<Superlink> inSuperLink);
 	public void setOutSuperLinks(List<Superlink> outSuperLink);
 	public void setOutMiddleLinks(List<Middlelink> outMiddleLink);
+	
+	public Node getNode();
 	
 
 }

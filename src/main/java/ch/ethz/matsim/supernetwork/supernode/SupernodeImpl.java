@@ -4,6 +4,11 @@
 package ch.ethz.matsim.supernetwork.supernode;
 import java.util.List;
 import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.network.NetworkUtils;
+
 import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 import ch.ethz.matsim.supernetwork.superlink.Superlink;
 
@@ -17,6 +22,13 @@ public class SupernodeImpl implements Supernode {
 	public List<Superlink> inSuperLinks;
 	public List<Superlink> outSuperLinks;
 	public List<Middlelink> outMiddleLinks;
+	private static int id = 0;
+	public Node node;
+	
+	public SupernodeImpl() {
+		node = NetworkUtils.createNode(Id.create("supernode"+ Integer.toString(id) , Node.class));
+		id++;
+	}
 	
 	@Override
 	public Coord getCoord() {
@@ -56,6 +68,9 @@ public class SupernodeImpl implements Supernode {
 	@Override
 	public void setOutMiddleLinks(List<Middlelink> outMiddleLink) {
 		this.outMiddleLinks = outMiddleLink;
+		for(Middlelink ml : outMiddleLink) {
+			node.addOutLink(ml.getLink());
+		}
 		
 	}
 
@@ -63,6 +78,12 @@ public class SupernodeImpl implements Supernode {
 	public void setCoord(Coord coord) {
 		this.coord = coord;
 		
+	}
+
+	@Override
+	public Node getNode() {
+			
+		return node;
 	}
 
 }

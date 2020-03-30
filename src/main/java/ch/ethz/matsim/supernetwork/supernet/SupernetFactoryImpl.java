@@ -8,10 +8,12 @@ import java.util.List;
 
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.MatsimServices;
+import org.matsim.core.router.util.ArrayRoutingNetwork;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.ArrayRoutingMiddleNetworkFactory;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
@@ -68,6 +70,13 @@ public class SupernetFactoryImpl implements SupernetFactory {
 			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
 		supernet.setMiddlenetworks(middlenetworks);
+		
+		for(Middlenetwork mn :supernet.getMiddlenetworks()) {
+			ArrayRoutingMiddleNetworkFactory ar = new ArrayRoutingMiddleNetworkFactory();
+			ArrayRoutingNetwork arn = ar.createRoutingMiddleNetwork(mn);
+			System.out.println();
+		}
+		
 		System.out.println();
 	}
 }

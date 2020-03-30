@@ -21,6 +21,8 @@ import org.matsim.core.router.util.ArrayRoutingNetworkNode;
 import org.matsim.core.router.util.RoutingNetworkLink;
 import org.matsim.core.router.util.RoutingNetworkNode;
 
+import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
+
 /**
  * @author stefanopenazzi
  *
@@ -37,13 +39,13 @@ public class ArrayRoutingMiddleNetworkFactory extends AbstractRoutingNetworkFact
 		return routingNetwork;
 	}
 	
-	public synchronized ArrayRoutingNetwork createRoutingMiddleNetwork(final List<Node> subNetworkNodes, final List<Link> subNetworkLinks, final Node root, final List<Link> middleNetworkLinks) {
+	public synchronized ArrayRoutingNetwork createRoutingMiddleNetwork(final Middlenetwork middlenetwork) {
 		this.nodeArrayIndexCounter = 0;
 		this.linkArrayIndexCounter = 0;
-		List<Node> networkNodes = subNetworkNodes;
-		networkNodes.add(root);
-		List<Link> networkLinks = subNetworkLinks;
-		networkLinks.addAll(middleNetworkLinks);
+		List<Node> networkNodes = middlenetwork.getSubnetwork().getNodes();
+		networkNodes.add(middlenetwork.getSuperNode().getNode());
+		List<Link> networkLinks = middlenetwork.getSubnetwork().getLinks();
+		networkLinks.addAll(middlenetwork.getSuperNode().getNode().getOutLinks().values());
 		
 		ArrayRoutingNetwork routingNetwork = new ArrayRoutingNetwork(null);
 		
