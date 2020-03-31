@@ -27,6 +27,7 @@ public class MiddlelinkImpl implements Middlelink{
 		this.to = to;
 		this.weight = weight;
 		link = NetworkUtils.createLink(Id.create("middlelink"+ Integer.toString(id) , Link.class),from.getNode(),to,null,0,0,0,0);
+		id++;
 		
 	}
 	
