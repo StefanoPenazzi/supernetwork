@@ -16,6 +16,7 @@ import com.google.inject.Injector;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.ArrayRoutingMiddleNetworkFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.FastDijkstraShortestTreeFactory;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
@@ -45,12 +46,13 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	MatsimServices matsimServices;
 	SubnetworkFactory subnetworkFactory; 
 	MiddlenetworkFactory middlenetworkFactory;
-	
-	FastDijkstraShortestTreeFactory fdf;
+	SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory;
+
 	
 	@Inject
 	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
-			TrafficDataContainer trafficDataContainer,SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
+			TrafficDataContainer trafficDataContainer,SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
+			SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
@@ -58,6 +60,7 @@ public class SupernetFactoryImpl implements SupernetFactory {
 		this.trafficDataContainer = trafficDataContainer;
 		this.subnetworkFactory = subnetworkFactory;
 		this.middlenetworkFactory = middlenetworkFactory;
+		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
 		create();
 		//this.supernetworkConfigGroup = supernetworkConfigGroup;
 	}
@@ -74,13 +77,7 @@ public class SupernetFactoryImpl implements SupernetFactory {
 			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
 		supernet.setMiddlenetworks(middlenetworks);
-		
-		for(Middlenetwork mn :supernet.getMiddlenetworks()) {
-			ArrayRoutingMiddleNetworkFactory ar = new ArrayRoutingMiddleNetworkFactory();
-			ArrayRoutingNetwork arn = ar.createRoutingMiddleNetwork(mn);
-			System.out.println();
-		}
-		
+		supernet.setSupernetworkRoutingModule(supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car"));		
 		System.out.println();
 	}
 }

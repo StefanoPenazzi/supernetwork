@@ -23,6 +23,7 @@ public class InitializationModule extends AbstractSupernetworkExtension {
         install(new MiddlenetworkModule());
         //install(new SupernetModule());
         install(new SimulationDataModule());
+        install(new SupernetworkTripRouterModule());
         
         
 		

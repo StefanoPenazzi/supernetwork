@@ -3,44 +3,40 @@
  */
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.router.util.LeastCostPathCalculator;
-import org.matsim.core.router.util.LeastCostPathCalculatorFactory;
 import org.matsim.core.router.util.RoutingNetwork;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 
 import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
 
+
 /**
  * @author stefanopenazzi
  *
  */
-public class FastDijkstraShortestTreeFactory implements LeastCostPathCalculatorFactory {
-	
+public class FastDijkstraShortestTreeFactory implements  SupernetworkLeastCostTreeCalculatorFactory {
 	private final ArrayRoutingMiddleNetworkFactory routingNetworkFactory;
 	private RoutingNetwork routingNetwork;
 
-	@Inject
 	public FastDijkstraShortestTreeFactory() {
 		this.routingNetworkFactory = new ArrayRoutingMiddleNetworkFactory();
 	}
 
-	public synchronized LeastCostPathCalculator createPathCalculator(final Middlenetwork middlenetwork,
-			final TravelDisutility travelCosts, final TravelTime travelTimes) {
+	@Override
+	public synchronized LeastCostTreeCalculator createTreeCalculator(final Network network, final List<Middlenetwork> middlenetworks,
+			final TravelDisutility travelCosts, final TravelTime travelTimes, final Person person) {
 
-		routingNetwork = this.routingNetworkFactory.createRoutingMiddleNetwork(middlenetwork);
+		//considering preprocessing?
+		routingNetwork = this.routingNetworkFactory.createRoutingMiddleNetwork(network,middlenetworks);
 		FastRouterDelegateFactory fastRouterFactory = new ArrayFastRouterDelegateFactory();
 
-		return new FastDijkstra(routingNetwork, travelCosts, travelTimes, null, fastRouterFactory);
+		return new SupernetworkFastDijkstra(routingNetwork, travelCosts, travelTimes, null, fastRouterFactory,person);
 	}
-
-	@Override
-	public LeastCostPathCalculator createPathCalculator(Network network, TravelDisutility travelCosts,
-			TravelTime travelTimes) {
-		return null;
-	}
-
 }

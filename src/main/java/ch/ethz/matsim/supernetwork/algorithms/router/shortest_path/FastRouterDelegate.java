@@ -45,4 +45,7 @@ import org.matsim.core.utils.collections.RouterPriorityQueue;
 	 * The DeadEndData is taken from the RoutingNetworkNode and not from a map.
 	 */
 	/*package*/ PreProcessDijkstra.DeadEndData getPreProcessData(final Node n);
+	
+	NodeData[] getNodeDataArray();
+	
 }

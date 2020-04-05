@@ -3,6 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,34 +35,57 @@ public class ArrayRoutingMiddleNetworkFactory extends AbstractRoutingNetworkFact
 	private int linkArrayIndexCounter;
 
 	@Override
-	public synchronized ArrayRoutingNetwork createRoutingNetwork(final Network network) {
+	public synchronized ArrayRoutingNetwork createRoutingNetwork(final Network network ) {
 		ArrayRoutingNetwork routingNetwork = new ArrayRoutingNetwork(network);
 		return routingNetwork;
 	}
 	
-	public synchronized ArrayRoutingNetwork createRoutingMiddleNetwork(final Middlenetwork middlenetwork) {
+	public synchronized ArrayRoutingNetwork createRoutingMiddleNetwork(final Network network, final List<Middlenetwork> middlenetworks) {
 		this.nodeArrayIndexCounter = 0;
 		this.linkArrayIndexCounter = 0;
-		List<Node> networkNodes = middlenetwork.getSubnetwork().getNodes();
-		networkNodes.add(middlenetwork.getSuperNode().getNode());
-		List<Link> networkLinks = middlenetwork.getSubnetwork().getLinks();
-		networkLinks.addAll(middlenetwork.getSuperNode().getNode().getOutLinks().values());
 		
 		ArrayRoutingNetwork routingNetwork = new ArrayRoutingNetwork(null);
 		
-		for (Node node : networkNodes) {
+		for (Node node : network.getNodes().values()) {
+			RoutingNetworkNode routingNode = createRoutingNetworkNode(node, node.getOutLinks().size());
+			routingNetwork.addNode(routingNode);
+		}
+		for(Middlenetwork mn : middlenetworks) {
+			Node node = mn.getSuperNode().getNode();
 			RoutingNetworkNode routingNode = createRoutingNetworkNode(node, node.getOutLinks().size());
 			routingNetwork.addNode(routingNode);
 		}
 		Map<Id<Link>, RoutingNetworkLink> routingLinks = new HashMap<Id<Link>, RoutingNetworkLink>();
-		for (Link link : networkLinks) {
+		for (Link link : network.getLinks().values()) {
 			RoutingNetworkNode fromNode = routingNetwork.getNodes().get(link.getFromNode().getId());
 			RoutingNetworkNode toNode = routingNetwork.getNodes().get(link.getToNode().getId());
 			RoutingNetworkLink dijkstraLink = createRoutingNetworkLink(link, fromNode, toNode);
 			routingLinks.put(dijkstraLink.getId(), dijkstraLink);
 		}
+		for (Middlenetwork mn : middlenetworks) {
+			for(Link link: mn.getSuperNode().getNode().getOutLinks().values()) {
+				RoutingNetworkNode fromNode = routingNetwork.getNodes().get(link.getFromNode().getId());
+				RoutingNetworkNode toNode = routingNetwork.getNodes().get(link.getToNode().getId());
+				RoutingNetworkLink dijkstraLink = createRoutingNetworkLink(link, fromNode, toNode);
+				routingLinks.put(dijkstraLink.getId(), dijkstraLink);
+			}
+		}
 		
-		for (Node node : networkNodes) {
+		for (Node node : network.getNodes().values()) {
+			RoutingNetworkLink[] outLinks = new RoutingNetworkLink[node.getOutLinks().size()];
+			
+			int i = 0;
+			for (Link outLink : node.getOutLinks().values()) {
+				outLinks[i] = routingLinks.remove(outLink.getId());
+				i++;
+			}
+			
+			RoutingNetworkNode dijkstraNode = routingNetwork.getNodes().get(node.getId());
+			dijkstraNode.setOutLinksArray(outLinks);
+		}
+		
+		for (Middlenetwork mn : middlenetworks) {
+			Node node = mn.getSuperNode().getNode();
 			RoutingNetworkLink[] outLinks = new RoutingNetworkLink[node.getOutLinks().size()];
 			
 			int i = 0;

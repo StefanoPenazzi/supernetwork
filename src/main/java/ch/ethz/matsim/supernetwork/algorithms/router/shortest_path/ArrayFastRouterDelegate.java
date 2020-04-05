@@ -47,4 +47,8 @@ class ArrayFastRouterDelegate extends AbstractFastRouterDelegate {
 		ArrayRoutingNetworkNode routingNetworkNode = (ArrayRoutingNetworkNode) n;
 		return this.nodeData[routingNetworkNode.getArrayIndex()];
 	}
+	
+	public NodeData[] getNodeDataArray() {
+		return this.nodeData;
+	}
 }

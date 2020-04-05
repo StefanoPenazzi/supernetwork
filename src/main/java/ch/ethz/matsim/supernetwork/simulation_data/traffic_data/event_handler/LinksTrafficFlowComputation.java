@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkData;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.LinkDataTTV;
 import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
+import ch.ethz.matsim.supernetwork.supernet.Supernet;
 
 /**
  * @author stefanopenazzi
@@ -20,18 +21,15 @@ import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.Traffi
  */
 public final class LinksTrafficFlowComputation implements IterationEndsListener {
 
-	private TrafficDataContainer container;
+	private Supernet supernet;
 	
 	@Inject
-	public LinksTrafficFlowComputation (TrafficDataContainer container) {
-		this.container = container;
+	public LinksTrafficFlowComputation (Supernet supernet) {
+		this.supernet = supernet;
 	}
 	
 	@Override
 	public void notifyIterationEnds(IterationEndsEvent event) {
-		this.container.linksTravelTimeComputation();
-		for(Id<Link> id: container.getInputFlows().keySet()) {
-			System.out.println(this.container.printLinkTravelTime(id));
-		}	
+		supernet.treesCalculation();
 	}
 }
