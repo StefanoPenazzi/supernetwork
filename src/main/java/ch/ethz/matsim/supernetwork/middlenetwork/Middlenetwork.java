@@ -28,6 +28,8 @@ public interface Middlenetwork {
 	public void setSuperNode(Supernode node);
 	public List<Middlelink> getMiddleLinks();
 	public void setMiddleLinks(List<Middlelink> middleLinks);
+	public void setToNodes(List<Node> toNodes);
+	public List<Node> getToNodes();
 	
 
 }

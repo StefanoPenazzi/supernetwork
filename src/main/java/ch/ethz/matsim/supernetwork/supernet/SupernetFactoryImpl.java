@@ -6,6 +6,7 @@ package ch.ethz.matsim.supernetwork.supernet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.MatsimServices;
 import org.matsim.core.router.FastDijkstraFactory;
@@ -35,6 +36,8 @@ import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
  */
 public class SupernetFactoryImpl implements SupernetFactory {
 	
+	private final static Logger log = Logger.getLogger(SupernetFactoryImpl.class);
+	
 	Supernet supernet;
 	//clusterContainer is injected this means that is going to use the injected scenario and 
 	//config files to be initialized. 
@@ -47,12 +50,13 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	SubnetworkFactory subnetworkFactory; 
 	MiddlenetworkFactory middlenetworkFactory;
 	SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory;
+	SupernetPrint supernetPrint;
 
 	
 	@Inject
 	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			TrafficDataContainer trafficDataContainer,SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
-			SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
+			SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,SupernetPrint supernetPrint) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
@@ -61,6 +65,7 @@ public class SupernetFactoryImpl implements SupernetFactory {
 		this.subnetworkFactory = subnetworkFactory;
 		this.middlenetworkFactory = middlenetworkFactory;
 		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
+		this.supernetPrint = supernetPrint;
 		create();
 		//this.supernetworkConfigGroup = supernetworkConfigGroup;
 	}
@@ -68,6 +73,7 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	@Override
 	public
 	final void create() {
+		
 		
 		supernet.setActivitiesClustersContainer(this.clustersContainer);
 		List<Middlenetwork> middlenetworks = new ArrayList<Middlenetwork>();
@@ -77,7 +83,10 @@ public class SupernetFactoryImpl implements SupernetFactory {
 			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
 		supernet.setMiddlenetworks(middlenetworks);
-		supernet.setSupernetworkRoutingModule(supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car"));		
+		supernet.setSupernetworkRoutingModule(supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car"));
+		
+		this.supernetPrint.print();
+		
 		System.out.println();
 	}
 }

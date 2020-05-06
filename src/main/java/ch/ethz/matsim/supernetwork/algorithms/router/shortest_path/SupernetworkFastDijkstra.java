@@ -3,6 +3,11 @@
  */
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
@@ -31,58 +36,103 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 	private BinaryMinHeap<ArrayRoutingNetworkNode> heap = null;
 	private int maxSize = -1;
 	private Person person;
-	
-	
-	SupernetworkFastDijkstra(final RoutingNetwork routingNetwork, final TravelDisutility costFunction, final TravelTime timeFunction,
-			final PreProcessDijkstra preProcessData, final FastRouterDelegateFactory fastRouterFactory, final Person person ) {
+	private List<Id<Node>> targets;
+	private int targetsCounter = 0;
+    
+
+	SupernetworkFastDijkstra(final RoutingNetwork routingNetwork, final TravelDisutility costFunction,
+			final TravelTime timeFunction, final PreProcessDijkstra preProcessData,
+			final FastRouterDelegateFactory fastRouterFactory, final Person person) {
 		super(routingNetwork, costFunction, timeFunction, preProcessData);
-		
+
 		this.routingNetwork = routingNetwork;
-		this.fastRouter = fastRouterFactory.createFastRouterDelegate(this, new DijkstraNodeDataFactory(), routingNetwork);
+		this.fastRouter = fastRouterFactory.createFastRouterDelegate(this, new DijkstraNodeDataFactory(),
+				routingNetwork);
 		this.nodeData.clear();
 		this.person = person;
+
 	}
-	
+
 	@Override
-	public NodeData[] calcLeastCostTree(final Node fromNode, final double startTime) {
-		// computation of the disutility is indipendent from the person (RandomizingTimeDistanceTravelDisutility.class) but the object is still necessary
-		
-		
+	public NodeData[] calcLeastCostTree(final Node fromNode, final List<Node> toNodes, final double startTime) {
+		// computation of the disutility is indipendent from the person
+		// (RandomizingTimeDistanceTravelDisutility.class) but the object is still
+		// necessary
+	    this.targets = new ArrayList<Id<Node>>();
+		for (Node n : toNodes) {
+			this.targets.add(this.routingNetwork.getNodes().get(n.getId()).getId());
+		}
+		Collections.sort(this.targets);
+		targetsCounter = this.targets.size();
 		calcLeastCostPath(fromNode, null, startTime, this.person, null);
+
 		return fastRouter.getNodeDataArray();
 	}
-		
+
 	/*
 	 * Replace the references to the from and to nodes with their corresponding
 	 * nodes in the routing network.
 	 */
 	@Override
-	public Path calcLeastCostPath(final Node fromNode, final Node toNode, final double startTime, final Person person, final Vehicle vehicle) {
-		
+	public Path calcLeastCostPath(final Node fromNode, final Node toNode, final double startTime, final Person person,
+			final Vehicle vehicle) {
+
 		this.fastRouter.initialize();
 		this.routingNetwork.initialize();
-		
-		RoutingNetworkNode routingNetworkFromNode = this.routingNetwork.getNodes().get(fromNode.getId());		
-		
+
+		RoutingNetworkNode routingNetworkFromNode = this.routingNetwork.getNodes().get(fromNode.getId());
+
 		augmentIterationId(); // this call makes the class not thread-safe
 		this.person = person;
 		this.vehicle = vehicle;
 
-		//if (this.pruneDeadEnds) {
-		//	super.deadEndEntryNode = getPreProcessData(toNode).getDeadEndEntryNode();
-		//}
+		// if (this.pruneDeadEnds) {
+		// super.deadEndEntryNode = getPreProcessData(toNode).getDeadEndEntryNode();
+		// }
 
 		RouterPriorityQueue<Node> pendingNodes = (RouterPriorityQueue<Node>) createRouterPriorityQueue();
-		initFromNode(routingNetworkFromNode, toNode, startTime, pendingNodes);
+
+		// long startTimeT = System.nanoTime();
+        initFromNode(routingNetworkFromNode, toNode, startTime, pendingNodes);
 		searchLogic(routingNetworkFromNode, toNode, pendingNodes);
+		
+//		if(printing > 100) {
+//			//System.out.println(" average  time: " + Double.toString((totTime/1000000000)/100) + " -- " +printingCounter);
+//			printing = 0;
+//			totTime = 0;
+//			printingCounter++;
+//		}
+//		else {
+//			printing++;
+//			printingCounter++;
+//		}
+		
+		
+		
+		
+		
+
+		// long endTimeT = System.nanoTime();
+		// totTime += (double)(endTimeT - startTimeT);
+		// if(printing > 10) {
+		// System.out.println(" time: " + Double.toString(totTime/1000000000) + " -- "
+		// +printingCounter);
+		// printing = 0;
+		// }
+		// else {
+		// printing++;
+		// printingCounter++;
+		// }
+
 		return null;
 	}
-	
+
 	@Override
-	/*package*/ RouterPriorityQueue<? extends Node> createRouterPriorityQueue() {
+	/* package */ RouterPriorityQueue<? extends Node> createRouterPriorityQueue() {
 		/*
-		 * Re-use existing BinaryMinHeap instead of creating a new one. For large networks (> 10^6 nodes and links) this reduced
-		 * the computation time by 40%! cdobler, oct'15
+		 * Re-use existing BinaryMinHeap instead of creating a new one. For large
+		 * networks (> 10^6 nodes and links) this reduced the computation time by 40%!
+		 * cdobler, oct'15
 		 */
 		if (this.routingNetwork instanceof ArrayRoutingNetwork) {
 			int size = this.routingNetwork.getNodes().size();
@@ -100,7 +150,7 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 			return super.createRouterPriorityQueue();
 		}
 	}
-	
+
 	/*
 	 * Constructs the path and replaces the nodes and links from the routing network
 	 * with their corresponding nodes and links from the network.
@@ -109,17 +159,17 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 	protected Path constructPath(Node fromNode, Node toNode, double startTime, double arrivalTime) {
 		return this.fastRouter.constructPath(fromNode, toNode, startTime, arrivalTime);
 	}
-	
+
 	/*
-	 * For performance reasons the outgoing links of a node are stored in
-	 * the routing network in an array instead of a map. Therefore we have
-	 * to iterate over an array instead of over a map. 
+	 * For performance reasons the outgoing links of a node are stored in the
+	 * routing network in an array instead of a map. Therefore we have to iterate
+	 * over an array instead of over a map.
 	 */
 	@Override
 	protected void relaxNode(final Node outNode, final Node toNode, final RouterPriorityQueue<Node> pendingNodes) {
 		this.fastRouter.relaxNode(outNode, toNode, pendingNodes);
 	}
-	
+
 	/*
 	 * The DijkstraNodeData is taken from the RoutingNetworkNode and not from a map.
 	 */
@@ -135,33 +185,48 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 	protected PreProcessDijkstra.DeadEndData getPreProcessData(final Node n) {
 		return this.fastRouter.getPreProcessData(n);
 	}
-	
+
 	@Override
-    Node searchLogic(final Node fromNode, final Node toNode, final RouterPriorityQueue<Node> pendingNodes) {
-		
+	Node searchLogic(final Node fromNode, final Node toNode, final RouterPriorityQueue<Node> pendingNodes) {
+
 		boolean stillSearching = true;
-		
+
 		while (stillSearching) {
 			Node outNode = pendingNodes.poll();
-			if (outNode == null) {
+
+//			if(outNode != null ) {				
+//				int pos = Collections.binarySearch(this.targets,outNode.getId());
+//				if (pos>0) {
+//					targetsCounter--;
+//				}
+//			}
+
+			if (outNode == null || targetsCounter <= 0) {
 				stillSearching = false;
 			} else {
+//				if(this.targets.contains(outNode.getId())) {
+//					targetsCounter--;
+//				}
+				if (Collections.binarySearch(this.targets,outNode.getId())>=0) {
+					targetsCounter--;
+				}
 				relaxNode(outNode, toNode, pendingNodes);
 			}
 		}
 		return toNode;
 	}
-	
+
 	@Override
 	void initFromNode(final Node fromNode, final Node toNode, final double startTime,
 			final RouterPriorityQueue<Node> pendingNodes) {
 		RoutingNetworkNode routingNetworkNode = (RoutingNetworkNode) fromNode;
-		DijkstraNodeData data = (DijkstraNodeData)getData(routingNetworkNode);
-		//visitNode(fromNode, data, pendingNodes, startTime, 0, null);
-		for(Link l : routingNetworkNode.getOutLinksArray()) {
+		DijkstraNodeData data = (DijkstraNodeData) getData(routingNetworkNode);
+		// visitNode(fromNode, data, pendingNodes, startTime, 0, null);
+		for (Link l : routingNetworkNode.getOutLinksArray()) {
 			Node firstNode = l.getToNode();
 			DijkstraNodeData dataFirstNode = getData(firstNode);
 			visitNode(firstNode, dataFirstNode, pendingNodes, startTime, 0, l);
 		}
 	}
+
 }

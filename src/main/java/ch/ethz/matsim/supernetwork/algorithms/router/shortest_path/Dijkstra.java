@@ -217,10 +217,10 @@ import java.util.Set;
 		if (this.pruneDeadEnds) {
 			this.deadEndEntryNode = getPreProcessData(toNode).getDeadEndEntryNode();
 		}
-
+		
 		RouterPriorityQueue<Node> pendingNodes = (RouterPriorityQueue<Node>) createRouterPriorityQueue();
+		
 		initFromNode(fromNode, toNode, startTime, pendingNodes);
-
 		Node foundToNode = searchLogic(fromNode, toNode, pendingNodes);
 		
 		if (foundToNode == null) return null;

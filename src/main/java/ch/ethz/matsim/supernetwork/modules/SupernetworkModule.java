@@ -7,6 +7,8 @@ import ch.ethz.matsim.supernetwork.supernet.Supernet;
 import ch.ethz.matsim.supernetwork.supernet.SupernetFactory;
 import ch.ethz.matsim.supernetwork.supernet.SupernetFactoryImpl;
 import ch.ethz.matsim.supernetwork.supernet.SupernetImpl;
+import ch.ethz.matsim.supernetwork.supernet.SupernetPrint;
+import ch.ethz.matsim.supernetwork.supernet.SupernetPrintImpl;
 
 
 /**
@@ -27,6 +29,7 @@ public class SupernetworkModule extends AbstractModule {
 		
 		bind(Supernet.class).to(SupernetImpl.class).asEagerSingleton();
 		bind(SupernetFactory.class).to(SupernetFactoryImpl.class);
+		bind(SupernetPrint.class).to(SupernetPrintImpl.class);
 		
         install(new ModulesSet());
 	}

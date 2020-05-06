@@ -52,14 +52,8 @@ public class SupernetworkRoutingModuleImpl implements SupernetworkRoutingModule 
 		 this.populationFactory = populationFactory;
 	}
 	
-	public void calcTree(final Node root, final double departureTime) {		
+	public void calcTree(final Node root, List<Node> toNodes ,final double departureTime) {		
 		
-		long startTime = System.nanoTime();
-		NodeData[] nodeData = treeAlgo.calcLeastCostTree(root, departureTime);
-		long endTime = System.nanoTime();
-
-		double duration = (double)((endTime - startTime)/1000000);
-		
-		System.out.printf("time:  %f",duration);
+		NodeData[] nodeData = treeAlgo.calcLeastCostTree(root, toNodes ,departureTime);
 	}
 }

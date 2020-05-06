@@ -3,6 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
+import java.util.List;
+
 import org.matsim.api.core.v01.network.Node;
 
 /**
@@ -11,6 +13,6 @@ import org.matsim.api.core.v01.network.Node;
  */
 public interface SupernetworkRoutingModule {
 
-	public void calcTree(final Node root, final double departureTime);
+	public void calcTree(final Node root,List<Node> toNodes ,final double departureTime);
 
 }

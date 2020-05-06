@@ -29,7 +29,10 @@ public class SupernetworkRunTest {
 		
 		System.setProperty("matsim.preferLocalDtds", "true");
 		
-        final Config config = ConfigUtils.loadConfig(configFile, new SupernetworkConfigGroup(),new RegionHierarchicalCSConfigGroup());
+		RegionHierarchicalCSConfigGroup rh = new RegionHierarchicalCSConfigGroup();
+		rh.setCut((int)cut);
+		
+        final Config config = ConfigUtils.loadConfig(configFile, new SupernetworkConfigGroup(),rh);
 
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
