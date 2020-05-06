@@ -31,11 +31,13 @@ public class SupernetImpl implements Supernet{
 	private  List<Middlenetwork> middlenetworks;
 	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer;
 	private  SupernetworkRoutingModule supernetworkRoutingModule;
+	private  SupernetRoutesContainer supernetRoutesContainer;
+	 
 	
 	
 	@Inject
-	public SupernetImpl() {
-		
+	public SupernetImpl(SupernetRoutesContainer supernetRoutesContainer) {
+		this.supernetRoutesContainer = supernetRoutesContainer;
 	}
 	
 	@Override
