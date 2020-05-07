@@ -26,7 +26,7 @@ public class SupernodeImpl implements Supernode {
 	public Node node;
 	
 	public SupernodeImpl() {
-		node = NetworkUtils.createNode(Id.create("supernode"+ Integer.toString(id) , Node.class));
+		node = NetworkUtils.createNode(Id.create("sn_"+ Integer.toString(id) , Node.class));
 		id++;
 	}
 	

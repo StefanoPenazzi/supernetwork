@@ -78,7 +78,7 @@ public class SupernetImpl implements Supernet{
 		 
 		  for (Middlenetwork mn: this.middlenetworks) {
         	  if( mn.getToNodes().size() > 0) {
-				  this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10);
+        		  supernetRoutesContainer.add(mn.getSuperNode().getNode().getId(), 10, this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10));
         	  }
 		  }
 		  
