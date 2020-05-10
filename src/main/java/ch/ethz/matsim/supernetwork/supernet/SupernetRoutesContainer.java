@@ -3,9 +3,15 @@
  */
 package ch.ethz.matsim.supernetwork.supernet;
 
+import java.util.List;
+
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.core.router.util.NodeData;
+
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
+import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
 /**
  * @author stefanopenazzi
@@ -13,7 +19,7 @@ import org.matsim.core.router.util.NodeData;
  */
 public interface SupernetRoutesContainer {
 	
-	public void add(Id<Node> nodeId, int time,NodeData[] nd);
-	public NodeData[] get(Id<Node> nodeId, int time);
+	public void add(Supernode supernode, int time,Path[] ln);
+	public Path[] getNodesTree(Supernode supernode, int time);
 
 }

@@ -10,10 +10,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.Dijkstra;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
@@ -78,10 +80,15 @@ public class SupernetImpl implements Supernet{
 		 
 		  for (Middlenetwork mn: this.middlenetworks) {
         	  if( mn.getToNodes().size() > 0) {
-        		  supernetRoutesContainer.add(mn.getSuperNode().getNode().getId(), 10, this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10));
+        		  supernetRoutesContainer.add(mn.getSuperNode(), 10, this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10));
         	  }
 		  }
-		  
+//		  PredecessorNode[] pn = supernetRoutesContainer.getNodesTree(this.middlenetworks.get(0).getSuperNode(), 10);
+//		  Path pp = this.supernetworkRoutingModule.calcPathFromTree(pn[2500].getLink().getToNode(),10,pn);
+//		  for(Node n: pp.nodes) {
+//			  System.out.println(String.valueOf(n.getCoord().getX())+","+String.valueOf(n.getCoord().getY()));
+//		  }
+//		  
 		  long endTimeT = System.nanoTime();
 		  log.warn("fine middlenetwork computation"); 
 		  totTime = (double)(endTimeT - startTimeT);

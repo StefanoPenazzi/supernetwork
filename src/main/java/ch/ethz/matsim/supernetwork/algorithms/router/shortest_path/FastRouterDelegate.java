@@ -3,6 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
+import java.util.List;
+
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.util.NodeData;
 import org.matsim.core.router.util.PreProcessDijkstra;
@@ -34,6 +36,11 @@ import org.matsim.core.utils.collections.RouterPriorityQueue;
 	 * the routing network in an array instead of a map. Therefore we have
 	 * to iterate over an array instead of over a map. 
 	 */
+	
+	PredecessorNode[] constructNodesTree();
+	
+	Path constructPathFromNodesTree(Node toNode, double startTime ,PredecessorNode[] pn);	
+	
 	/*package*/ void relaxNode(final Node outNode, final Node toNode, final RouterPriorityQueue<Node> pendingNodes);	
 
 	/*

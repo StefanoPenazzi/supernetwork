@@ -17,6 +17,6 @@ import org.matsim.vehicles.Vehicle;
  */
 public interface LeastCostTreeCalculator extends LeastCostPathCalculator {
 	
-	public NodeData[] calcLeastCostTree(final Node fromNode, final List<Node> toNodes ,final double startTime);
-
+	public Path[] calcLeastCostTree(final Node fromNode, final List<Node> toNodes ,final double startTime);
+	public Path calcLeastCostPathFromPredecessorNode(final Node toNode, double startTime ,PredecessorNode[] pn);
 }

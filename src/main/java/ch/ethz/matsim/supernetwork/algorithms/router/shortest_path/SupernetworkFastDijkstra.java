@@ -52,9 +52,14 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 		this.person = person;
 
 	}
+	
+	@Override
+	public Path calcLeastCostPathFromPredecessorNode(Node toNode, double startTime, PredecessorNode[] pn) {
+		return this.fastRouter.constructPathFromNodesTree(toNode, startTime, pn);
+	}
 
 	@Override
-	public NodeData[] calcLeastCostTree(final Node fromNode, final List<Node> toNodes, final double startTime) {
+	public Path[] calcLeastCostTree(final Node fromNode, final List<Node> toNodes, final double startTime) {
 		// computation of the disutility is indipendent from the person
 		// (RandomizingTimeDistanceTravelDisutility.class) but the object is still
 		// necessary
@@ -66,7 +71,13 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 		targetsCounter = this.targets.size();
 		calcLeastCostPath(fromNode, null, startTime, this.person, null);
 
-		return fastRouter.getNodeDataArray();
+		Path[] paths = new Path[toNodes.size()];
+		for(int i=0;i<toNodes.size();i++) {
+			//TODO which is the arrivaltime???
+			paths[i] = this.fastRouter.constructPath(this.routingNetwork.getNodes().get(fromNode.getId()), this.routingNetwork.getNodes().get(toNodes.get(i).getId()), startTime, 1000000);
+		}
+		
+		return paths;
 	}
 
 	/*

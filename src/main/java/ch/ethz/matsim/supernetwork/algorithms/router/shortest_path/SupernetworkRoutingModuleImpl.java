@@ -52,9 +52,15 @@ public class SupernetworkRoutingModuleImpl implements SupernetworkRoutingModule 
 		 this.populationFactory = populationFactory;
 	}
 	
-	public NodeData[] calcTree(final Node root, List<Node> toNodes ,final double departureTime) {		
+	public Path[] calcTree(final Node root, List<Node> toNodes ,final double departureTime) {		
 		
-		NodeData[] nodeData = treeAlgo.calcLeastCostTree(root, toNodes ,departureTime);
-		return nodeData;
+		Path[] paths = treeAlgo.calcLeastCostTree(root, toNodes ,departureTime);
+		return paths;
 	}
+
+//	@Override
+//	public Path calcPathFromTree(Node toNode, double startTime, PredecessorNode[] pn) {
+//		
+//		return treeAlgo.calcLeastCostPathFromPredecessorNode(toNode, startTime, pn);
+//	}
 }

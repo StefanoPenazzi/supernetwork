@@ -3,11 +3,18 @@
  */
 package ch.ethz.matsim.supernetwork.supernet;
 
+import java.util.List;
 import java.util.TreeMap;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.core.router.util.NodeData;
+
+import com.google.inject.Inject;
+
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
+import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
 /**
  * @author stefanopenazzi
@@ -15,38 +22,38 @@ import org.matsim.core.router.util.NodeData;
  */
 public class SupernetRoutesContainerImpl implements SupernetRoutesContainer{
 
-	private TreeMap<Domain,NodeData[]> container = new TreeMap<>();
+	private TreeMap<Domain,Path[]> container = new TreeMap<>();
 	
 	@Override
-	public void add(Id<Node> nodeId, int time,NodeData[] nd) {
-		container.put(new Domain(nodeId,time), nd);
+	public void add(Supernode supernode, int time,Path[] ln) {
+		container.put(new Domain(supernode,time), ln);
 	}
 
 	@Override
-	public NodeData[] get(Id<Node> nodeId, int time) {
-		Domain d = new Domain(nodeId,time);
+	public Path[] getNodesTree(Supernode supernode, int time) {
+		Domain d = new Domain(supernode,time);
 		return container.get(d);
 	}
 	
 	class Domain  implements Comparable<Domain>
 	{  
-		private Id<Node> nodeId;
+		private Supernode supernode;
 		private int time;
 	    // Constructor  
-	    public Domain(Id<Node> nodeId, int time)  
+	    public Domain(Supernode supernode, int time)  
 	    {  
-	        this.nodeId = nodeId;  
+	        this.supernode = supernode;  
 	        this.time = time;  
 	    } 
-	    public Id<Node> getNodeId(){
-	    	return this.nodeId;
+	    public Supernode getSupernode(){
+	    	return this.supernode;
 	    }
 	    public int getTime() {
 	    	return time;
 	    }
 	    @Override
 		public int compareTo(Domain domain) {
-	    	int comp = this.nodeId.compareTo(domain.getNodeId());
+	    	int comp = this.supernode.getNode().getId().compareTo(domain.getSupernode().getNode().getId());
 			if(comp > 0) {
 				return 1;
 			}
@@ -67,7 +74,7 @@ public class SupernetRoutesContainerImpl implements SupernetRoutesContainer{
 		}
 		@Override
 		public String toString(){
-			return nodeId.toString() + String.valueOf(time);
+			return supernode.getNode().getId().toString() + String.valueOf(time);
 		}
 	}  
 }
