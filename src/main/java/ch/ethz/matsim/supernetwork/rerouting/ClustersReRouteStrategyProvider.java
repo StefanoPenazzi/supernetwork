@@ -24,14 +24,11 @@ public class ClustersReRouteStrategyProvider implements Provider<PlanStrategy> {
 
 	private final GlobalConfigGroup globalConfigGroup;
 	private final Provider<ClustersReRouteModel> clusterReRouteModelProvider;
-	private final Supernet supernet;
 	
 	@Inject
-	ClustersReRouteStrategyProvider(GlobalConfigGroup globalConfigGroup,Provider<ClustersReRouteModel> clusterReRouteModelProvider,
-			Supernet supernet){
+	ClustersReRouteStrategyProvider(GlobalConfigGroup globalConfigGroup,Provider<ClustersReRouteModel> clusterReRouteModelProvider){
 		this.globalConfigGroup = globalConfigGroup;
 		this.clusterReRouteModelProvider = clusterReRouteModelProvider;
-		this.supernet = supernet;
 	}
 	
 	@Override
