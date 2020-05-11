@@ -30,11 +30,10 @@ public class SupernetImpl implements Supernet{
 
 	private final static Logger log = Logger.getLogger(SupernetImpl.class);
 	
-	private  List<Middlenetwork> middlenetworks;
-	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer;
-	private  SupernetworkRoutingModule supernetworkRoutingModule;
+	private  List<Middlenetwork> middlenetworks = null;
+	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer = null;
+	private  SupernetworkRoutingModule supernetworkRoutingModule = null;
 	private  SupernetRoutesContainer supernetRoutesContainer;
-	 
 	
 	
 	@Inject
@@ -73,27 +72,26 @@ public class SupernetImpl implements Supernet{
 	@Override
 	public void treesCalculation() {
 	
-	      double totTime = 0;
+		  if(this.middlenetworks != null && this.clusterContainer !=  null &&  this.supernetworkRoutingModule != null) {
 		
-	      log.warn("inizio middlenetwork computation"); 
-		  long startTimeT =  System.nanoTime();
-		 
-		  for (Middlenetwork mn: this.middlenetworks) {
-        	  if( mn.getToNodes().size() > 0) {
-        		  supernetRoutesContainer.add(mn.getSuperNode(), 10, this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10));
-        	  }
+		      double totTime = 0;
+			
+		      log.warn("inizio middlenetwork computation"); 
+			  long startTimeT =  System.nanoTime();
+			 
+			  //here should be use something to understand which are the best new times and for which superodes and also which of the old do not need anymore
+			  
+			  for (Middlenetwork mn: this.middlenetworks) {
+	        	  if( mn.getToNodes().size() > 0) {
+	        		  supernetRoutesContainer.add(mn.getSuperNode(), 10, this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10));
+	        	  }
+			  }
+			  long endTimeT = System.nanoTime();
+			  log.warn("fine middlenetwork computation"); 
+			  totTime = (double)(endTimeT - startTimeT);
+			  
+			  log.warn("time middlenetwork shortest tree: " + Double.toString(totTime/1000000000)); 
 		  }
-//		  PredecessorNode[] pn = supernetRoutesContainer.getNodesTree(this.middlenetworks.get(0).getSuperNode(), 10);
-//		  Path pp = this.supernetworkRoutingModule.calcPathFromTree(pn[2500].getLink().getToNode(),10,pn);
-//		  for(Node n: pp.nodes) {
-//			  System.out.println(String.valueOf(n.getCoord().getX())+","+String.valueOf(n.getCoord().getY()));
-//		  }
-//		  
-		  long endTimeT = System.nanoTime();
-		  log.warn("fine middlenetwork computation"); 
-		  totTime = (double)(endTimeT - startTimeT);
-		  
-		  log.warn("time middlenetwork shortest tree: " + Double.toString(totTime/1000000000)); 
         
 	}
 }

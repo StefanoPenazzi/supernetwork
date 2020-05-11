@@ -25,7 +25,6 @@ public class SupernetModule extends AbstractSupernetworkExtension{
 	@Override
 	protected void installExtension() {
 		bind(SupernetRoutesContainer.class).to(SupernetRoutesContainerImpl.class).asEagerSingleton();
-		
 		install(new SupernetworkTripRouterModule());
 		
 	}

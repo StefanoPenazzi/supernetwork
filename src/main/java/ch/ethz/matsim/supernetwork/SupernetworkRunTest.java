@@ -11,6 +11,7 @@ import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
 import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
+import ch.ethz.matsim.supernetwork.rerouting.ClustersReRouteModule;
 
 
 
@@ -43,6 +44,7 @@ public class SupernetworkRunTest {
         Controler controler = new Controler(scenario);
         
         controler.addOverridingModule(new SupernetworkModule());
+        controler.addOverridingModule(new ClustersReRouteModule());
         
         //System.setProperty("scenario","sbb");
         
