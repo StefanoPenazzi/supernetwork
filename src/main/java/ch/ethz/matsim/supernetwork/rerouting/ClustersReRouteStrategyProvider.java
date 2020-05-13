@@ -24,18 +24,23 @@ public class ClustersReRouteStrategyProvider implements Provider<PlanStrategy> {
 
 	private final GlobalConfigGroup globalConfigGroup;
 	private final Provider<ClustersReRouteModel> clusterReRouteModelProvider;
+	private final ActivityFacilities facilities;
+	private final TripRouter tripRouter;
 	
 	@Inject
-	ClustersReRouteStrategyProvider(GlobalConfigGroup globalConfigGroup,Provider<ClustersReRouteModel> clusterReRouteModelProvider){
+	ClustersReRouteStrategyProvider(GlobalConfigGroup globalConfigGroup,Provider<ClustersReRouteModel> clusterReRouteModelProvider,
+			ActivityFacilities facilities,TripRouter tripRouter){
 		this.globalConfigGroup = globalConfigGroup;
 		this.clusterReRouteModelProvider = clusterReRouteModelProvider;
+		this.facilities = facilities;
+		this.tripRouter = tripRouter;
 	}
 	
 	@Override
 	public PlanStrategy get() {
 		
 		PlanStrategyImpl.Builder builder = new PlanStrategyImpl.Builder(new RandomPlanSelector<>());
-		builder.addStrategyModule(new ClustersReRouteReplanningModule(globalConfigGroup,clusterReRouteModelProvider));
+		builder.addStrategyModule(new ClustersReRouteReplanningModule(globalConfigGroup,clusterReRouteModelProvider,facilities,tripRouter));
 		return builder.build();
 	}
 

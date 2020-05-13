@@ -19,7 +19,7 @@ import ch.ethz.matsim.supernetwork.supernode.Supernode;
  */
 public interface SupernetRoutesContainer {
 	
-	public void add(Supernode supernode, int time,Path[] ln);
-	public Path[] getNodesTree(Supernode supernode, int time);
+	public void add(Supernode supernode,  Node toNode ,int time,Path ln);
+	public Path getPath(Supernode supernode, Node toNode ,int time);
 
 }

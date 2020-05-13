@@ -55,6 +55,11 @@ public class SupernetworkRoutingModuleImpl implements SupernetworkRoutingModule 
 	public Path[] calcTree(final Node root, List<Node> toNodes ,final double departureTime) {		
 		
 		Path[] paths = treeAlgo.calcLeastCostTree(root, toNodes ,departureTime);
+		//first link and node are the middlelink and supernode this are not considered  in path
+		for(Path p: paths) {
+			p.links.remove(0);
+			p.nodes.remove(0);
+		}
 		return paths;
 	}
 
