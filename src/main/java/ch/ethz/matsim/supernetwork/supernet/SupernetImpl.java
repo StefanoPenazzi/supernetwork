@@ -5,11 +5,16 @@ package ch.ethz.matsim.supernetwork.supernet;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+import org.matsim.facilities.ActivityFacility;
+
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
@@ -31,7 +36,8 @@ public class SupernetImpl implements Supernet{
 	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer = null;
 	private  SupernetworkRoutingModule supernetworkRoutingModule = null;
 	private  SupernetRoutesContainer supernetRoutesContainer;
-	private  HashMap<Activity, Supernode> activitySupernodeMap = new HashMap<Activity, Supernode>();
+	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
+	private int timeCounter = 1;
 	
 	
 	@Inject
@@ -56,7 +62,8 @@ public class SupernetImpl implements Supernet{
 		for(Middlenetwork mn: this.middlenetworks) {
 			List<ElementActivity> activities = mn.getCluster().getComponents();
 			for(ElementActivity ea : activities) {
-				activitySupernodeMap.put(ea.getActivity(),mn.getSuperNode());
+				Coordin c = new Coordin(ea.getActivity().getCoord());
+				activitySupernodeMap.put(c,mn.getSuperNode());
 			}
 		}
 	}
@@ -87,12 +94,13 @@ public class SupernetImpl implements Supernet{
 			  
 			  for (Middlenetwork mn: this.middlenetworks) {
 	        	  if( mn.getToNodes().size() > 0) {
-	        		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,10);
+	        		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,timeCounter * 1000);
 	        		  for(Path p: paths) {
-	        			  supernetRoutesContainer.add(mn.getSuperNode(),Iterables.getLast(p.nodes),10,p );
+	        			  supernetRoutesContainer.add(mn.getSuperNode(),Iterables.getLast(p.nodes),timeCounter * 1000,p );
 	        		  }
 	        	  }
 			  }
+			  timeCounter++;
 			  long endTimeT = System.nanoTime();
 			  log.warn("fine middlenetwork computation"); 
 			  totTime = (double)(endTimeT - startTimeT);
@@ -104,12 +112,59 @@ public class SupernetImpl implements Supernet{
 
 	@Override
 	public Supernode getSupernodeFromActivity(Activity act) {
-		return this.activitySupernodeMap.get(act);
+		Coordin c = new Coordin(act.getCoord());
+		return this.activitySupernodeMap.get(c);
 	}
 
 	@Override
 	public Path getPathFromRoutesContainer(Activity act, Node toNode ,int time) {
+		Supernode sn = getSupernodeFromActivity(act);
+		if(sn != null) {
+			return this.supernetRoutesContainer.getPath(sn,toNode ,time);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	class Coordin implements Comparable<Coordin>{
+
+		private final double x;
+		private final double y;
 		
-		return this.supernetRoutesContainer.getPath(getSupernodeFromActivity(act),toNode ,time);
+		public Coordin(Coord coord) {
+			this.x =coord.getX();
+			this.y=coord.getY();
+		}
+		
+		public double getX() {
+			return this.x;
+		}
+		
+		public double getY() {
+			return this.y;
+		}
+		
+		@Override
+		public int compareTo(Coordin coordinates) {
+			if(coordinates.getX() > this.x) {
+				return -1;
+			}
+			else if (coordinates.getX() < this.x){
+				return 1;
+			}
+			else {
+				if(coordinates.getY() > this.y) {
+					return -1;
+				}
+				else if (coordinates.getY() < this.y){
+					return 1;
+				}
+				else {
+					return 0;
+				}
+			}
+		}
+		
 	}
 }

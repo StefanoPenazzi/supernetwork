@@ -39,19 +39,25 @@ public class ClustersReRouteModelAlgorithm implements PlanAlgorithm {
 		final List<Trip> trips = TripStructureUtils.getTrips( plan , tripRouter.getStageActivityTypes() );
 
 		for (Trip oldTrip : trips) {
-			final List<? extends PlanElement> newTrip =
-					clusterReRouteModel.calcRoute( oldTrip.getOriginActivity(),
-							 FacilitiesUtils.toFacility( oldTrip.getDestinationActivity(), facilities ),
-							calcEndOfActivity( oldTrip.getOriginActivity() , plan, tripRouter.getConfig() ),
-							plan.getPerson() );
-			//putVehicleFromOldTripIntoNewTripIfMeaningful(oldTrip, newTrip);
-			TripRouter.insertTrip(
-					plan, 
-					oldTrip.getOriginActivity(),
-					newTrip,
-					oldTrip.getDestinationActivity());
+			
+			if(tripRouter.getMainModeIdentifier().identifyMainMode( oldTrip.getTripElements() ) == "car") {
+			
+				final List<? extends PlanElement> newTrip =
+						clusterReRouteModel.calcRoute( oldTrip.getOriginActivity(),
+								 FacilitiesUtils.toFacility( oldTrip.getDestinationActivity(), facilities ),
+								calcEndOfActivity( oldTrip.getOriginActivity() , plan, tripRouter.getConfig() ),
+								plan.getPerson() );
+				//putVehicleFromOldTripIntoNewTripIfMeaningful(oldTrip, newTrip);
+				if(newTrip != null) {
+					TripRouter.insertTrip(
+							plan, 
+							oldTrip.getOriginActivity(),
+							newTrip,
+							oldTrip.getDestinationActivity());
+					}
+			}
 		}
-		
+		System.out.println("");
 	}
 	
 	public static double calcEndOfActivity(

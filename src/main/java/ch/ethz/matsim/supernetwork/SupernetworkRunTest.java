@@ -7,7 +7,7 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 import ch.ethz.matsim.utils.CommandLine;
 import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
-
+import ch.ethz.matsim.supernetwork.mobsim.SupernetworkMobsimModule;
 import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
 import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
@@ -45,6 +45,7 @@ public class SupernetworkRunTest {
         
         controler.addOverridingModule(new SupernetworkModule());
         controler.addOverridingModule(new ClustersReRouteModule());
+        controler.addOverridingQSimModule(new SupernetworkMobsimModule());
         
         //System.setProperty("scenario","sbb");
         

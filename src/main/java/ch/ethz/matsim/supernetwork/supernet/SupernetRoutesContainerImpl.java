@@ -34,7 +34,7 @@ public class SupernetRoutesContainerImpl implements SupernetRoutesContainer{
 		Domain d = new Domain(supernode,time,toNode);
 		Path p = container.floorEntry(d).getValue();
 		
-		return null;
+		return p;
 	}  
 	
 	class Domain  implements Comparable<Domain>

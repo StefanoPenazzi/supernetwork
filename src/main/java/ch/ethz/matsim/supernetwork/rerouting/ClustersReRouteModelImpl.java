@@ -47,7 +47,7 @@ public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 	public List<? extends PlanElement> calcRoute(Activity fromActivity, Facility toFacility, double departureTime,
 			Person person) {
 		
-		Leg newLeg = this.populationFactory.createLeg( "Car" );
+		Leg newLeg = this.populationFactory.createLeg( "car" );
 		Gbl.assertNotNull(toFacility);
 		Link toLink = this.network.getLinks().get(toFacility.getLinkId());
 		if ( toLink==null ) {
@@ -58,8 +58,18 @@ public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 		
 		Node endNode = toLink.getFromNode();
 		Path path = this.supernet.getPathFromRoutesContainer(fromActivity, endNode, (int)departureTime);
-		if (path == null)
-			throw new RuntimeException("No route found from activity " + fromActivity.getLinkId() + " to node " + endNode.getId() + " by mode car.");
+		
+//		String s = "";
+//		for(Node n: path.nodes) {
+//			s+= n.getCoord().getX() + ","+n.getCoord().getY()+";";
+//		
+//		}
+//		System.out.println(s);
+		
+		if (path == null || path.nodes.size()<2) {
+			//throw new RuntimeException("No route found from activity " + fromActivity.getLinkId() + " to node " + endNode.getId() + " by mode car.");
+			return null;
+		}
 		Link fromLink = path.links.get(0);
 		NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, fromLink.getId(), toLink.getId());
 		route.setLinkIds(fromLink.getId(), NetworkUtils.getLinkIds(path.links), toLink.getId());
