@@ -21,7 +21,6 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
 import ch.ethz.matsim.supernetwork.middlelink.MiddlelinkImpl;
-import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.supernode.SupernodeImpl;
 import ch.ethz.matsim.supernetwork.utilities.graph.LinkWeight;
@@ -33,13 +32,11 @@ import ch.ethz.matsim.supernetwork.utilities.graph.LinkWeight;
  */
 public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 
-    private final TrafficDataContainer trafficDataContainer;
     private final Network network;
     private final ActivityFacilities facilities;
 	
 	@Inject
-	public MiddlenetworkFactoryFromRegion(TrafficDataContainer trafficDataContainer, Network network,ActivityFacilities facilities) {
-		this.trafficDataContainer = trafficDataContainer;
+	public MiddlenetworkFactoryFromRegion( Network network,ActivityFacilities facilities) {
 		this.network = network;
 		this.facilities = facilities;
 	}
@@ -47,7 +44,7 @@ public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 	@Override
 	public Middlenetwork create(Cluster cluster, Subnetwork subnetwork) {
 		
-		MiddlenetworkImpl mni = new MiddlenetworkImpl(this.trafficDataContainer,cluster,subnetwork);
+		MiddlenetworkImpl mni = new MiddlenetworkImpl(cluster,subnetwork);
 		
 		CALRegion r = (CALRegion)cluster;
 		

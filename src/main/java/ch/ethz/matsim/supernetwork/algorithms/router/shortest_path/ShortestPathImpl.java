@@ -4,7 +4,6 @@
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
 import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 
 /**
  * @author stefanopenazzi
@@ -15,11 +14,9 @@ import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.Traffi
  */
 public class ShortestPathImpl implements ShortestPath {
 	
-	private final TrafficDataContainer trafficDataContainer;
 	private final Middlenetwork middleNetwork;
 
-	public ShortestPathImpl(TrafficDataContainer trafficDataContainer,Middlenetwork middleNetwork) {
-		this.trafficDataContainer = trafficDataContainer;
+	public ShortestPathImpl(Middlenetwork middleNetwork) {
 		this.middleNetwork =  middleNetwork;
 	}
 

@@ -9,7 +9,6 @@ import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.middlelink.Middlelink;
-import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.supernode.Supernode;
 
@@ -21,13 +20,11 @@ public class MiddlenetworkImpl implements Middlenetwork {
 
 		private Cluster cluster;
 		private Subnetwork subnetwork;
-		private TrafficDataContainer trafficDataContainer;
 		private Supernode node;
 		private List<Middlelink> middleLinks;
 		private List<Node> toNodes;
 		
-		public MiddlenetworkImpl(TrafficDataContainer trafficDataContainer,Cluster cluster,Subnetwork subnetwork) {
-			this.trafficDataContainer = trafficDataContainer;
+		public MiddlenetworkImpl(Cluster cluster,Subnetwork subnetwork) {
 			this.cluster = cluster;
 			this.subnetwork = subnetwork;
 		}
@@ -40,11 +37,6 @@ public class MiddlenetworkImpl implements Middlenetwork {
 		@Override
 		public Subnetwork getSubnetwork() {
 			return this.subnetwork;
-		}
-
-		@Override
-		public TrafficDataContainer getTrafficDataContainer() {
-			return this.trafficDataContainer;
 		}
 
 		@Override

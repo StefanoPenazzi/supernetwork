@@ -10,7 +10,6 @@ import com.google.inject.multibindings.MapBinder;
 
 import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
-import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.supernet.SupernetFactory;
 
@@ -25,7 +24,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected MapBinder<String,SubnetworkFactory> subnetworkFactoryBinder;
 	protected MapBinder<String,MiddlenetworkFactory> middlenetworkFactoryBinder;
 	protected MapBinder<String,SupernetFactory> supernetFactoryBinder;
-	protected MapBinder<String,TrafficDataContainer> trafficDataContainerBinder;
+	
 	
 	@Override
 	public void install() {
@@ -34,7 +33,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 		subnetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SubnetworkFactory.class);
 		middlenetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,MiddlenetworkFactory.class);
 		supernetFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SupernetFactory.class);
-		trafficDataContainerBinder = MapBinder.newMapBinder(binder(), String.class,TrafficDataContainer.class);
+		
 		installExtension();
 	}
 	
@@ -49,9 +48,6 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	}
 	protected final LinkedBindingBuilder<SupernetFactory> bindSupernetFactory(String name) {
 		return supernetFactoryBinder.addBinding(name);
-	}
-	protected final LinkedBindingBuilder<TrafficDataContainer> bindTrafficDataContainer(String name) {
-		return trafficDataContainerBinder.addBinding(name);
 	}
 
 	abstract protected void installExtension();

@@ -5,26 +5,16 @@ package ch.ethz.matsim.supernetwork.supernet;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.MatsimServices;
-import org.matsim.core.router.FastDijkstraFactory;
-import org.matsim.core.router.util.ArrayRoutingNetwork;
-
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.ArrayRoutingMiddleNetworkFactory;
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.FastDijkstraShortestTreeFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.simulation_data.traffic_data.container.TrafficDataContainer;
 import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
 
@@ -43,7 +33,6 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	//config files to be initialized. 
 	//TODO what happens if the scenario is null etc
 	ClustersContainer clustersContainer;
-	TrafficDataContainer trafficDataContainer;
 	Scenario scenario;
 	SupernetworkConfigGroup supernetworkConfigGroup;
 	MatsimServices matsimServices;
@@ -55,13 +44,12 @@ public class SupernetFactoryImpl implements SupernetFactory {
 	
 	@Inject
 	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
-			TrafficDataContainer trafficDataContainer,SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
+			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
 			SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,SupernetPrint supernetPrint) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
 		this.matsimServices = matsimServices;
-		this.trafficDataContainer = trafficDataContainer;
 		this.subnetworkFactory = subnetworkFactory;
 		this.middlenetworkFactory = middlenetworkFactory;
 		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
