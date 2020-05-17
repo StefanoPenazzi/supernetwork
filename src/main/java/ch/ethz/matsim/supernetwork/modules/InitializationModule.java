@@ -3,7 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
-import ch.ethz.matsim.supernetwork.models.supernetwork_model.SupernetworkInitializationEvent;
+import ch.ethz.matsim.supernetwork.networkmodels.supernetwork_model.SupernetworkInitializationEvent;
 
 /**
  * @author stefanopenazzi

@@ -4,14 +4,10 @@
 package ch.ethz.matsim.supernetwork.modules;
 
 import java.util.Map;
-
-import org.matsim.core.controler.AbstractModule;
-
 import com.google.inject.Provides;
-
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
-import ch.ethz.matsim.supernetwork.models.clustering_models.RegionHierarchicalCS;
+import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
+import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.RegionHierarchicalCS;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 
 /**

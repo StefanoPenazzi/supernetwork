@@ -1,21 +1,16 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.models.clustering_models;
+package ch.ethz.matsim.supernetwork.networkmodels.clustering_models;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
-
 import com.google.inject.Inject;
-
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALDefaultImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALRegion;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;

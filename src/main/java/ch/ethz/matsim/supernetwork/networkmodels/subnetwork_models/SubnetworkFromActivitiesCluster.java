@@ -1,24 +1,14 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.models.subnetwork_models;
+package ch.ethz.matsim.supernetwork.networkmodels.subnetwork_models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.population.Activity;
-
 import com.google.inject.Inject;
-
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
-import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkDefaultImpl;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;

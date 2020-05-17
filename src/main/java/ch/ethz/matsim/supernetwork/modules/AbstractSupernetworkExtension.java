@@ -4,10 +4,9 @@
 package ch.ethz.matsim.supernetwork.modules;
 
 import org.matsim.core.controler.AbstractModule;
-
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
-import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
+import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.supernet.SupernetFactory;

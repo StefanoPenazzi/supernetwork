@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.models.supernetwork_model;
+package ch.ethz.matsim.supernetwork.networkmodels.supernetwork_model;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
