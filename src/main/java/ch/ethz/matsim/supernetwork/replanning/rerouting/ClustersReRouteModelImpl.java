@@ -23,7 +23,7 @@ import org.matsim.facilities.Facility;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.network.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernetwork;
 
 /**
  * @author stefanopenazzi
@@ -32,11 +32,11 @@ import ch.ethz.matsim.supernetwork.network.Supernet;
 public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 
 	private final Network network;
-	private final Supernet supernet;
+	private final Supernetwork supernet;
 	private final PopulationFactory populationFactory;
 	
 	@Inject
-	public ClustersReRouteModelImpl(Network network,Supernet supernet,final PopulationFactory populationFactory) {
+	public ClustersReRouteModelImpl(Network network,Supernetwork supernet,final PopulationFactory populationFactory) {
 		Gbl.assertNotNull(network);
 		this.network = network;
 		this.supernet = supernet;

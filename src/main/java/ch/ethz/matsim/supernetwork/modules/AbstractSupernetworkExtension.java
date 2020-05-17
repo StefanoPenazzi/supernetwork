@@ -9,7 +9,7 @@ import com.google.inject.multibindings.MapBinder;
 import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
-import ch.ethz.matsim.supernetwork.network.SupernetFactory;
+import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
 
 
 /**
@@ -21,7 +21,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected MapBinder<String,ClusteringModelFactory> clusteringModelFactoryBinder;
 	protected MapBinder<String,SubnetworkFactory> subnetworkFactoryBinder;
 	protected MapBinder<String,MiddlenetworkFactory> middlenetworkFactoryBinder;
-	protected MapBinder<String,SupernetFactory> supernetFactoryBinder;
+	protected MapBinder<String,SupernetworkFactory> supernetworkFactoryBinder;
 	
 	
 	@Override
@@ -30,7 +30,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 		clusteringModelFactoryBinder = MapBinder.newMapBinder(binder(), String.class,ClusteringModelFactory.class);
 		subnetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SubnetworkFactory.class);
 		middlenetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,MiddlenetworkFactory.class);
-		supernetFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SupernetFactory.class);
+		supernetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SupernetworkFactory.class);
 		
 		installExtension();
 	}
@@ -44,8 +44,8 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected final LinkedBindingBuilder<MiddlenetworkFactory> bindMiddlenetworkFactory(String name) {
 		return middlenetworkFactoryBinder.addBinding(name);
 	}
-	protected final LinkedBindingBuilder<SupernetFactory> bindSupernetFactory(String name) {
-		return supernetFactoryBinder.addBinding(name);
+	protected final LinkedBindingBuilder<SupernetworkFactory> bindSupernetworkFactory(String name) {
+		return supernetworkFactoryBinder.addBinding(name);
 	}
 
 	abstract protected void installExtension();

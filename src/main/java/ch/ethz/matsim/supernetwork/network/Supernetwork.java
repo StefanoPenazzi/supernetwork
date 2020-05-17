@@ -21,7 +21,7 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public interface Supernet {
+public interface Supernetwork {
 
 	public List<Middlenetwork> getMiddlenetworks();
 	public ClustersContainer<ClusterActivitiesLocation,ElementActivity> getActivitiesClusterContainer();

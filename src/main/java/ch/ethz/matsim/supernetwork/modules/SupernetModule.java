@@ -3,8 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetRoutesContainer;
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetRoutesContainerImpl;
+import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainerImpl;
 
 /**
  * @author stefanopenazzi
@@ -16,7 +16,7 @@ public class SupernetModule extends AbstractSupernetworkExtension{
 	
 	@Override
 	protected void installExtension() {
-		bind(SupernetRoutesContainer.class).to(SupernetRoutesContainerImpl.class).asEagerSingleton();
+		bind(SupernetworkRoutesContainer.class).to(SupernetworkRoutesContainerImpl.class).asEagerSingleton();
 		install(new SupernetworkTripRouterModule());
 		
 	}

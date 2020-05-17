@@ -18,7 +18,7 @@ import org.matsim.core.utils.io.UncheckedIOException;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.network.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernetwork;
 
 /**
  * @author stefanopenazzi
@@ -28,7 +28,7 @@ public class SupernetPrintImpl implements SupernetPrint {
 
 	public static final String FILENAME_SUPERNET = "supernetwork";
 	
-	private final Supernet supernet;
+	private final Supernetwork supernet;
 	final private BufferedWriter supernetOut ;
 	private final ControlerConfigGroup controlerConfigGroup;
 	final private String supernetFileName; 
@@ -40,7 +40,7 @@ public class SupernetPrintImpl implements SupernetPrint {
 	private int[] clustersActivitiesAverageDistCentroidFreqAnalysis;
 	
 	@Inject
-	SupernetPrintImpl(Supernet supernet,ControlerConfigGroup controlerConfigGroup,OutputDirectoryHierarchy controlerIO){
+	SupernetPrintImpl(Supernetwork supernet,ControlerConfigGroup controlerConfigGroup,OutputDirectoryHierarchy controlerIO){
 		this.supernet = supernet;
 		this.controlerConfigGroup = controlerConfigGroup;
 		this.supernetFileName = controlerIO.getOutputFilename( FILENAME_SUPERNET ) ;

@@ -5,7 +5,7 @@ package ch.ethz.matsim.supernetwork.modules;
 
 import com.google.inject.Singleton;
 
-import ch.ethz.matsim.supernetwork.network.events.SupernetContainerFilling;
+import ch.ethz.matsim.supernetwork.network.events.SupernetworkContainerFilling;
 
 /**
  * @author stefanopenazzi
@@ -22,8 +22,8 @@ public class UpdateSimulationDataModule extends AbstractSupernetworkExtension {
         //this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
         //this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
 		
-		bind(SupernetContainerFilling.class).in(Singleton.class);
-		this.addControlerListenerBinding().to(SupernetContainerFilling.class);
+		bind(SupernetworkContainerFilling.class).in(Singleton.class);
+		this.addControlerListenerBinding().to(SupernetworkContainerFilling.class);
         
 	}
 

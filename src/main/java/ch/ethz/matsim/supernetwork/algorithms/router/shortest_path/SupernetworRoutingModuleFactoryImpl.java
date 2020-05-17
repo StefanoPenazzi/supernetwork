@@ -18,7 +18,7 @@ import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.TravelTime;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.LeastCostTreeCalculator;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
-import ch.ethz.matsim.supernetwork.network.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernetwork;
 
 /**
  * @author stefanopenazzi
@@ -35,7 +35,7 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 	PopulationFactory populationFactory;
 	SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
 	Scenario scenario ;
-	Supernet supernet;
+	Supernetwork supernet;
 	
 	@Inject
 	public SupernetworRoutingModuleFactoryImpl(Map<String, TravelTime> travelTimes,
@@ -45,7 +45,7 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 	 PopulationFactory populationFactory,
 	 SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory,
 	 Scenario scenario,
-	 Supernet supernet) {
+	 Supernetwork supernet) {
 		
 		this.travelTimes = travelTimes;
 		this.travelDisutilityFactories =travelDisutilityFactories;

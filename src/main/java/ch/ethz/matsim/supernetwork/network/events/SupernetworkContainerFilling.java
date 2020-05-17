@@ -3,25 +3,23 @@
  */
 package ch.ethz.matsim.supernetwork.network.events;
 
-import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
-import org.matsim.core.controler.listener.IterationEndsListener;
 import org.matsim.core.controler.listener.IterationStartsListener;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.network.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernetwork;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetContainerFilling implements IterationStartsListener{
+public class SupernetworkContainerFilling implements IterationStartsListener{
 	
-    private Supernet supernet;
+    private Supernetwork supernet;
 	
 	@Inject
-	public SupernetContainerFilling (Supernet supernet) {
+	public SupernetworkContainerFilling (Supernetwork supernet) {
 		this.supernet = supernet;
 	}
 	

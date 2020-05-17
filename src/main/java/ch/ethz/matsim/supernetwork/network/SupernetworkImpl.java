@@ -3,25 +3,20 @@
  */
 package ch.ethz.matsim.supernetwork.network;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
-import org.matsim.facilities.ActivityFacility;
-
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
@@ -30,21 +25,21 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public class SupernetImpl implements Supernet{
+public class SupernetworkImpl implements Supernetwork{
 
-	private final static Logger log = Logger.getLogger(SupernetImpl.class);
+	private final static Logger log = Logger.getLogger(SupernetworkImpl.class);
 	
 	private  List<Middlenetwork> middlenetworks = null;
 	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer = null;
 	private  SupernetworkRoutingModule supernetworkRoutingModule = null;
-	private  SupernetRoutesContainer supernetRoutesContainer;
+	private  SupernetworkRoutesContainer supernetworkRoutesContainer;
 	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
 	private int timeCounter = 1;
 	
 	
 	@Inject
-	public SupernetImpl(SupernetRoutesContainer supernetRoutesContainer) {
-		this.supernetRoutesContainer = supernetRoutesContainer;
+	public SupernetworkImpl(SupernetworkRoutesContainer supernetworkRoutesContainer) {
+		this.supernetworkRoutesContainer = supernetworkRoutesContainer;
 	}
 	
 	@Override
@@ -98,7 +93,7 @@ public class SupernetImpl implements Supernet{
 	        	  if( mn.getToNodes().size() > 0) {
 	        		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,timeCounter * 1000);
 	        		  for(Path p: paths) {
-	        			  supernetRoutesContainer.add(mn.getSuperNode(),Iterables.getLast(p.nodes),timeCounter * 1000,p );
+	        			  supernetworkRoutesContainer.add(mn.getSuperNode(),Iterables.getLast(p.nodes),timeCounter * 1000,p );
 	        		  }
 	        	  }
 			  }
@@ -122,7 +117,7 @@ public class SupernetImpl implements Supernet{
 	public Path getPathFromRoutesContainer(Activity act, Node toNode ,int time) {
 		Supernode sn = getSupernodeFromActivity(act);
 		if(sn != null) {
-			return this.supernetRoutesContainer.getPath(sn,toNode ,time);
+			return this.supernetworkRoutesContainer.getPath(sn,toNode ,time);
 		}
 		else {
 			return null;

@@ -20,7 +20,7 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public class SupernetRoutesContainerImpl implements SupernetRoutesContainer{
+public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContainer{
 
 	private TreeMap<Domain,Path> container = new TreeMap<>();
 	

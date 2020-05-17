@@ -26,11 +26,11 @@ import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
  * @author stefanopenazzi
  *
  */
-public class SupernetFactoryImpl implements SupernetFactory {
+public class SupernetworkFactoryImpl implements SupernetworkFactory {
 	
-	private final static Logger log = Logger.getLogger(SupernetFactoryImpl.class);
+	private final static Logger log = Logger.getLogger(SupernetworkFactoryImpl.class);
 	
-	Supernet supernet;
+	Supernetwork supernet;
 	//clusterContainer is injected this means that is going to use the injected scenario and 
 	//config files to be initialized. 
 	//TODO what happens if the scenario is null etc
@@ -45,7 +45,7 @@ public class SupernetFactoryImpl implements SupernetFactory {
 
 	
 	@Inject
-	public SupernetFactoryImpl(Supernet supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
+	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
 			SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,SupernetPrint supernetPrint) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
