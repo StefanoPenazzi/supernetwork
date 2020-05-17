@@ -5,7 +5,7 @@ package ch.ethz.matsim.supernetwork.modules;
 
 import com.google.inject.Singleton;
 
-import ch.ethz.matsim.supernetwork.supernet.events.SupernetContainerFilling;
+import ch.ethz.matsim.supernetwork.network.events.SupernetContainerFilling;
 
 /**
  * @author stefanopenazzi

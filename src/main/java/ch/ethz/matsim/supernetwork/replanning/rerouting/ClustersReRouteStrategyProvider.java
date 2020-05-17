@@ -14,7 +14,7 @@ import org.matsim.facilities.ActivityFacilities;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import ch.ethz.matsim.supernetwork.supernet.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernet;
 
 /**
  * @author stefanopenazzi

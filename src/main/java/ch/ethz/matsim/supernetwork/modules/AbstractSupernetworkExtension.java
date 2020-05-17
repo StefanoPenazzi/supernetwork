@@ -9,7 +9,7 @@ import com.google.inject.multibindings.MapBinder;
 import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
-import ch.ethz.matsim.supernetwork.supernet.SupernetFactory;
+import ch.ethz.matsim.supernetwork.network.SupernetFactory;
 
 
 /**

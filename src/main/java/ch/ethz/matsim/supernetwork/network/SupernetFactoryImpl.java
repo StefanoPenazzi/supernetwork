@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.supernet;
+package ch.ethz.matsim.supernetwork.network;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkR
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
+import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;

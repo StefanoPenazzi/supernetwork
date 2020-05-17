@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.supernet.events;
+package ch.ethz.matsim.supernetwork.network.events;
 
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.events.IterationStartsEvent;
@@ -10,7 +10,7 @@ import org.matsim.core.controler.listener.IterationStartsListener;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.supernet.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernet;
 
 /**
  * @author stefanopenazzi

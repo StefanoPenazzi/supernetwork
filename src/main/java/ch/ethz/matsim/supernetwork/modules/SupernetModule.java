@@ -3,8 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
-import ch.ethz.matsim.supernetwork.supernet.SupernetRoutesContainer;
-import ch.ethz.matsim.supernetwork.supernet.SupernetRoutesContainerImpl;
+import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetRoutesContainerImpl;
 
 /**
  * @author stefanopenazzi

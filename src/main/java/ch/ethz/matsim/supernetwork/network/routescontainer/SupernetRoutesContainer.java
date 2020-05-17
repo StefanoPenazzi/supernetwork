@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.supernet;
+package ch.ethz.matsim.supernetwork.network.routescontainer;
 
 import java.util.List;
 

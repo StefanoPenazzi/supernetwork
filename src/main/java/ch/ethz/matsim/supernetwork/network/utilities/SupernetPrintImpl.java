@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.supernet;
+package ch.ethz.matsim.supernetwork.network.utilities;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import org.matsim.core.utils.io.UncheckedIOException;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
+import ch.ethz.matsim.supernetwork.network.Supernet;
 
 /**
  * @author stefanopenazzi

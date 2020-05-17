@@ -23,7 +23,7 @@ import org.matsim.facilities.Facility;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.supernet.Supernet;
+import ch.ethz.matsim.supernetwork.network.Supernet;
 
 /**
  * @author stefanopenazzi
