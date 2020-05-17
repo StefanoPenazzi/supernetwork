@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.rerouting;
+package ch.ethz.matsim.supernetwork.replanning.rerouting;
 
 import java.util.List;
 

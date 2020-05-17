@@ -11,7 +11,7 @@ import ch.ethz.matsim.supernetwork.mobsim.SupernetworkMobsimModule;
 import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
 import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.rerouting.ClustersReRouteModule;
+import ch.ethz.matsim.supernetwork.replanning.rerouting.ClustersReRouteModule;
 
 
 
