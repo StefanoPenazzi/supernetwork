@@ -12,11 +12,12 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
+
 
 
 

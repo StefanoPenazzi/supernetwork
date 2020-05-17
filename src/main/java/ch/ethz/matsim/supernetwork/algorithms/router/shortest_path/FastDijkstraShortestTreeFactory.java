@@ -14,7 +14,7 @@ import org.matsim.core.router.util.RoutingNetwork;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 
-import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 
 /**
@@ -30,13 +30,13 @@ public class FastDijkstraShortestTreeFactory implements  SupernetworkLeastCostTr
 	}
 
 	@Override
-	public synchronized LeastCostTreeCalculator createTreeCalculator(final Network network, final List<Middlenetwork> middlenetworks,
-			final TravelDisutility travelCosts, final TravelTime travelTimes, final Person person) {
-
+	public LeastCostTreeCalculator createTreeCalculator(Network network, List<Middlenetwork> middlenetworks,
+			TravelDisutility travelCosts, TravelTime travelTimes, Person person) {
 		//considering preprocessing?
-		routingNetwork = this.routingNetworkFactory.createRoutingMiddleNetwork(network,middlenetworks);
-		FastRouterDelegateFactory fastRouterFactory = new ArrayFastRouterDelegateFactory();
+				routingNetwork = this.routingNetworkFactory.createRoutingMiddleNetwork(network,middlenetworks);
+				FastRouterDelegateFactory fastRouterFactory = new ArrayFastRouterDelegateFactory();
 
-		return new SupernetworkFastDijkstra(routingNetwork, travelCosts, travelTimes, null, fastRouterFactory,person);
+				return new SupernetworkFastDijkstra(routingNetwork, travelCosts, travelTimes, null, fastRouterFactory,person);
+		
 	}
 }

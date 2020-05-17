@@ -9,7 +9,7 @@ import com.google.inject.Provides;
 
 import ch.ethz.matsim.supernetwork.models.subnetwork_models.SubnetworkFromActivitiesCluster;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
 
 /**
  * @author stefanopenazzi

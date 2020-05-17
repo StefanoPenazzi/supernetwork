@@ -3,8 +3,6 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
-import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactory;
-import ch.ethz.matsim.supernetwork.middlenetwork.MiddlenetworkFactoryImpl;
 import ch.ethz.matsim.supernetwork.models.supernetwork_model.SupernetworkInitializationEvent;
 
 /**

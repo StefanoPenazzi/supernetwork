@@ -3,7 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
-import ch.ethz.matsim.supernetwork.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi

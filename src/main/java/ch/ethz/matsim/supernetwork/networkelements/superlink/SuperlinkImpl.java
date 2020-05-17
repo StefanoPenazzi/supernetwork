@@ -1,11 +1,11 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.superlink;
+package ch.ethz.matsim.supernetwork.networkelements.superlink;
 
 import org.matsim.api.core.v01.network.Node;
 
-import ch.ethz.matsim.supernetwork.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 /**
  * @author stefanopenazzi

@@ -19,12 +19,10 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActiv
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.models.clustering_models.ClusteringModelFactory;
 import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
-import ch.ethz.matsim.supernetwork.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkDefaultImpl;
-import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkFactory;
-import ch.ethz.matsim.supernetwork.subnetwork.SubnetworkUtils;
-
-
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkDefaultImpl;
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkUtils;
 
 /**
  * @author stefanopenazzi

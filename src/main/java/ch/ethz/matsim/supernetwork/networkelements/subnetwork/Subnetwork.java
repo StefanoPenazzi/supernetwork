@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.subnetwork;
+package ch.ethz.matsim.supernetwork.networkelements.subnetwork;
 
 import java.util.List;
 

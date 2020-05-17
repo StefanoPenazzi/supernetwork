@@ -11,7 +11,7 @@ import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.core.router.util.NodeData;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
-import ch.ethz.matsim.supernetwork.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 /**
  * @author stefanopenazzi

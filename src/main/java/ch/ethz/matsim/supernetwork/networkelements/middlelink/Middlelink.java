@@ -1,12 +1,12 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.middlelink;
+package ch.ethz.matsim.supernetwork.networkelements.middlelink;
 
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 
-import ch.ethz.matsim.supernetwork.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 /**
  * @author stefanopenazzi
