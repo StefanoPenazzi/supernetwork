@@ -14,6 +14,8 @@ import org.matsim.core.router.util.NodeData;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 /**
@@ -23,6 +25,12 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContainer{
 
 	private TreeMap<Domain,Path> container = new TreeMap<>();
+	private final ContainerManager containerManager;
+	
+	@Inject
+	public SupernetworkRoutesContainerImpl(ContainerManager containerManager) {
+		this.containerManager = containerManager;
+	}
 	
 	@Override
 	public void add(Supernode supernode, Node toNode, int time,Path ln) {
@@ -33,11 +41,10 @@ public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContai
 	public Path getPath(Supernode supernode, Node toNode, int time) {
 		Domain d = new Domain(supernode,time,toNode);
 		Path p = container.floorEntry(d).getValue();
-		
 		return p;
 	}  
 	
-	class Domain  implements Comparable<Domain>
+	public class Domain  implements Comparable<Domain>
 	{  
 		private Supernode supernode;
 		private int time;
@@ -92,6 +99,12 @@ public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContai
 		public String toString(){
 			return supernode.getNode().getId().toString() + String.valueOf(time);
 		}
+	}
+
+	@Override
+	public void update() {
+		
+		
 	}
 
 	

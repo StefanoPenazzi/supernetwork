@@ -78,7 +78,7 @@ public class SupernetworkImpl implements Supernetwork{
 	}
 
 	@Override
-	public void treesCalculation() {
+	public void containerUpdate() {
 	
 		  if(this.middlenetworks != null && this.clusterContainer !=  null &&  this.supernetworkRoutingModule != null) {
 		

@@ -25,7 +25,7 @@ public class SupernetworkContainerFilling implements IterationStartsListener{
 	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
-		supernet.treesCalculation();
+		supernet.containerUpdate();
 	}
 
 }

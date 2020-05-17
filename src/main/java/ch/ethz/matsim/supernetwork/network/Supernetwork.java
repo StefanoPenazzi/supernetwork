@@ -30,7 +30,7 @@ public interface Supernetwork {
 	public void setMiddlenetworks(List<Middlenetwork> hf);
 	public void setSupernetworkRoutingModule(SupernetworkRoutingModule supernetworkRoutingModule);
 	
-	public void treesCalculation();
+	public void containerUpdate();
 	
 	public Supernode getSupernodeFromActivity(Activity act);
 	public Path getPathFromRoutesContainer(Activity act,Node toNode,int time);

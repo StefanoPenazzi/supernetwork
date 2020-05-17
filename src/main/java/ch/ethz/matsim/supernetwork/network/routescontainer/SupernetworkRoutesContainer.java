@@ -21,5 +21,6 @@ public interface SupernetworkRoutesContainer {
 	
 	public void add(Supernode supernode,  Node toNode ,int time,Path ln);
 	public Path getPath(Supernode supernode, Node toNode ,int time);
+	public void update();
 
 }
