@@ -95,7 +95,7 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 		LeastCostTreeCalculator routeAlgo =
 				supernetworkLeastCostTreeCalculatorFactory.createTreeCalculator(
 						filteredNetwork,
-						supernet.getMiddlenetworks(),
+						supernet.getContainerManager().getMiddlenetworks(),
 						travelDisutilityFactory.createTravelDisutility(travelTime),
 						travelTime,
 						person);

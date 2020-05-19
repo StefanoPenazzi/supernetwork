@@ -65,20 +65,13 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 	public
 	final void create() {
 		
-		
-		supernet.setActivitiesClustersContainer(this.clustersContainer);
-		
 		List<Middlenetwork> middlenetworks = new ArrayList<Middlenetwork>();
-		List<ClusterActivitiesLocation> lc = supernet.getActivitiesClusterContainer().getClusters();
+		List<ClusterActivitiesLocation> lc = this.clustersContainer.getClusters();
 		for(ClusterActivitiesLocation cdi: lc) {
 			Subnetwork sn = subnetworkFactory.generateSubnetworkByCluster(cdi); 
 			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
-		supernet.setMiddlenetworks(middlenetworks);
-		supernet.setContainerManager(containerManagerFactory.createContainerManager());
-		
-		this.supernetPrint.print();
-		
-		System.out.println();
+		supernet.setContainerManager(containerManagerFactory.createContainerManager(middlenetworks));
+		//this.supernetPrint.print();
 	}
 }

@@ -3,6 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.inject.Inject;
@@ -10,6 +11,7 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi
@@ -31,11 +33,11 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 	}
 	
 	@Override
-	public ContainerManager createContainerManager() {
+	public ContainerManager createContainerManager(List<Middlenetwork> middlenetworks) {
 		
 		//check if the maps have the same keys
 		
-		return new ContainerManagerImpl(this.supernetworkRoutingModule,this.updateAlgorithmsMap,this.containersMap);
+		return new ContainerManagerImpl(this.supernetworkRoutingModule,this.updateAlgorithmsMap,this.containersMap,middlenetworks);
 	}
 
 }

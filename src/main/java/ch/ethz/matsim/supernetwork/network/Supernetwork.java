@@ -3,19 +3,10 @@
  */
 package ch.ethz.matsim.supernetwork.network;
 
-import java.util.List;
-
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
-
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 
 /**
@@ -24,13 +15,9 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  */
 public interface Supernetwork {
 
-	public List<Middlenetwork> getMiddlenetworks();
-	public ClustersContainer<ClusterActivitiesLocation,ElementActivity> getActivitiesClusterContainer();
-	public void setActivitiesClustersContainer(ClustersContainer<ClusterActivitiesLocation,ElementActivity> cc);
-	public void setMiddlenetworks(List<Middlenetwork> hf);
 	public void setContainerManager(ContainerManager containerManager);
+	public ContainerManager getContainerManager();
 	public void containerUpdate();
-	public Supernode getSupernodeFromActivity(Activity act);
 	public Path getPath(Activity act,Node toNode,int time,String mode);
 
 

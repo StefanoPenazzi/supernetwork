@@ -75,13 +75,13 @@ public class SupernetPrintImpl implements SupernetPrint {
 	}
 	
 	public void numOfClusters_() {
-		this.numOfClusters = supernet.getActivitiesClusterContainer().getClusters().size();	
+		//this.numOfClusters = supernet.getActivitiesClusterContainer().getClusters().size();	
 	}
 	
 	public void numOfActivities_() {
-		for(Cluster c: supernet.getActivitiesClusterContainer().getClusters()) {
-			this.numOfActivities += c.getComponents().size();
-		}
+//		for(Cluster c: supernet.getActivitiesClusterContainer().getClusters()) {
+//			this.numOfActivities += c.getComponents().size();
+//		}
 	}
 
 	public void clustersActivitiesRate_() {
@@ -89,30 +89,30 @@ public class SupernetPrintImpl implements SupernetPrint {
 	}
 	
 	public void clustersActivitiesFreqAnalysis_(int range) {
-		clustersActivitiesFreqAnalysis = new int[this.numOfActivities/range];
-		for(Cluster c: supernet.getActivitiesClusterContainer().getClusters()) {
-			clustersActivitiesFreqAnalysis[(int)Math.floor(c.getComponents().size()/range)] += 1 ;
-		}
+//		clustersActivitiesFreqAnalysis = new int[this.numOfActivities/range];
+//		for(Cluster c: supernet.getActivitiesClusterContainer().getClusters()) {
+//			clustersActivitiesFreqAnalysis[(int)Math.floor(c.getComponents().size()/range)] += 1 ;
+//		}
 	}
 	
 	public void clustersActivitiesAverageDistCentroidFreqAnalysis_(int range) {
-		clustersActivitiesAverageDistCentroidFreqAnalysis = new int[10000/range];
-		for(Cluster<? extends Element> c: supernet.getActivitiesClusterContainer().getClusters()) {
-			double avgDist = 0;
-			double XC = c.getCentroid().getX();
-			double YC = c.getCentroid().getY();
-			Iterator<? extends Element> iter = c.getComponents().iterator();
-		    while (iter.hasNext()) {
-		    	ElementActivity EA = (ElementActivity)iter.next();
-		    	double XEA = EA.getActivity().getCoord().getX();
-				double YEA = EA.getActivity().getCoord().getY();
-				avgDist += Math.sqrt(Math.pow(XC - XEA,2) + 
-						Math.pow(YC - YEA ,2));
-		    	
-		    }
-		    avgDist = avgDist/c.getComponents().size();
-			clustersActivitiesAverageDistCentroidFreqAnalysis[(int)Math.floor(avgDist/range)] += 1 ;
-		}
+//		clustersActivitiesAverageDistCentroidFreqAnalysis = new int[10000/range];
+//		for(Cluster<? extends Element> c: supernet.getActivitiesClusterContainer().getClusters()) {
+//			double avgDist = 0;
+//			double XC = c.getCentroid().getX();
+//			double YC = c.getCentroid().getY();
+//			Iterator<? extends Element> iter = c.getComponents().iterator();
+//		    while (iter.hasNext()) {
+//		    	ElementActivity EA = (ElementActivity)iter.next();
+//		    	double XEA = EA.getActivity().getCoord().getX();
+//				double YEA = EA.getActivity().getCoord().getY();
+//				avgDist += Math.sqrt(Math.pow(XC - XEA,2) + 
+//						Math.pow(YC - YEA ,2));
+//		    	
+//		    }
+//		    avgDist = avgDist/c.getComponents().size();
+//			clustersActivitiesAverageDistCentroidFreqAnalysis[(int)Math.floor(avgDist/range)] += 1 ;
+//		}
 	}
 	
 	public String numOfActivitiesToString() {
