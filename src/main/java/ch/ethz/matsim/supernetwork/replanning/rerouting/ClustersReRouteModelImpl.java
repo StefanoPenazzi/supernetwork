@@ -57,7 +57,7 @@ public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 		Gbl.assertNotNull(toLink);
 		
 		Node endNode = toLink.getFromNode();
-		Path path = this.supernet.getPathFromRoutesContainer(fromActivity, endNode, (int)departureTime);
+		Path path = this.supernet.getPath(fromActivity, endNode, (int)departureTime,"car");
 		
 //		String s = "";
 //		for(Node n: path.nodes) {

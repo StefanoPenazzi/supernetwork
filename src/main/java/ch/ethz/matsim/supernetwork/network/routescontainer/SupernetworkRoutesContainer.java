@@ -11,6 +11,7 @@ import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.core.router.util.NodeData;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 /**
@@ -19,8 +20,7 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  */
 public interface SupernetworkRoutesContainer {
 	
-	public void add(Supernode supernode,  Node toNode ,int time,Path ln);
-	public Path getPath(Supernode supernode, Node toNode ,int time);
-	public void update();
-
+	public void add(Supernode supernode,  Node toNode ,double time,Path ln);
+	public Path getPath(Supernode supernode, Node toNode ,double time);
+	public boolean empty();
 }

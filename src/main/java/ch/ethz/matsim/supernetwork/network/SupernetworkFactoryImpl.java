@@ -13,6 +13,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkR
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactory;
 import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
@@ -40,22 +41,22 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 	MatsimServices matsimServices;
 	SubnetworkFactory subnetworkFactory; 
 	MiddlenetworkFactory middlenetworkFactory;
-	SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory;
 	SupernetPrint supernetPrint;
+	ContainerManagerFactory containerManagerFactory; 
 
 	
 	@Inject
 	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
-			SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,SupernetPrint supernetPrint) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
+			SupernetPrint supernetPrint,ContainerManagerFactory containerManagerFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
 		this.matsimServices = matsimServices;
 		this.subnetworkFactory = subnetworkFactory;
 		this.middlenetworkFactory = middlenetworkFactory;
-		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
 		this.supernetPrint = supernetPrint;
+		this.containerManagerFactory = containerManagerFactory;
 		create();
 		//this.supernetworkConfigGroup = supernetworkConfigGroup;
 	}
@@ -66,6 +67,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 		
 		
 		supernet.setActivitiesClustersContainer(this.clustersContainer);
+		
 		List<Middlenetwork> middlenetworks = new ArrayList<Middlenetwork>();
 		List<ClusterActivitiesLocation> lc = supernet.getActivitiesClusterContainer().getClusters();
 		for(ClusterActivitiesLocation cdi: lc) {
@@ -73,7 +75,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
 		}
 		supernet.setMiddlenetworks(middlenetworks);
-		supernet.setSupernetworkRoutingModule(supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car"));
+		supernet.setContainerManager(containerManagerFactory.createContainerManager());
 		
 		this.supernetPrint.print();
 		

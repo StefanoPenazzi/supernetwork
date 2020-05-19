@@ -24,9 +24,6 @@ public class SupernetworkModule extends AbstractModule {
 	
 	@Override
 	public void install() {
-		// remove all the other replanning strategies
-		//supernetwork requires a step size phase 
-		
 		bind(Supernetwork.class).to(SupernetworkImpl.class).asEagerSingleton();
 		bind(SupernetworkFactory.class).to(SupernetworkFactoryImpl.class);
 		bind(SupernetPrint.class).to(SupernetPrintImpl.class);

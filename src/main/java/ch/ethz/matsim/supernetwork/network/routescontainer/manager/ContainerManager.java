@@ -3,11 +3,9 @@
  */
 package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
 
-import java.util.TreeMap;
-
+import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
-
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainerImpl.Domain;
+import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 
 /**
@@ -16,5 +14,6 @@ import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesCon
  */
 public interface ContainerManager {
 
-	public TreeMap<Domain,Path> updateContainer(TreeMap<Domain,Path> oldContainer);
+	public void updateContainer(String mode);
+	public Path getPath(Supernode supernode, Node toNode ,double time,String mode);
 }

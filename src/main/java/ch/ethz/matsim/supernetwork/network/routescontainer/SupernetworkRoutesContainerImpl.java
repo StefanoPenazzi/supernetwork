@@ -11,11 +11,16 @@ import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.core.router.util.NodeData;
 
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNode;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
 /**
@@ -25,32 +30,39 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContainer{
 
 	private TreeMap<Domain,Path> container = new TreeMap<>();
-	private final ContainerManager containerManager;
 	
 	@Inject
-	public SupernetworkRoutesContainerImpl(ContainerManager containerManager) {
-		this.containerManager = containerManager;
+	public SupernetworkRoutesContainerImpl() {
+		
 	}
 	
 	@Override
-	public void add(Supernode supernode, Node toNode, int time,Path ln) {
+	public void add(Supernode supernode, Node toNode, double time,Path ln) {
 		container.put(new Domain(supernode,time,toNode), ln);
 	}
 	
 	@Override
-	public Path getPath(Supernode supernode, Node toNode, int time) {
+	public Path getPath(Supernode supernode, Node toNode, double time) {
 		Domain d = new Domain(supernode,time,toNode);
 		Path p = container.floorEntry(d).getValue();
 		return p;
 	}  
 	
+	@Override
+	public boolean empty() {
+		if (container.size() == 0)
+			return true;
+		else 
+			return false;
+	}
+	
 	public class Domain  implements Comparable<Domain>
 	{  
 		private Supernode supernode;
-		private int time;
+		private double time;
 		private Node toNode;
 	    // Constructor  
-	    public Domain(Supernode supernode, int time,Node toNode)  
+	    public Domain(Supernode supernode, double time,Node toNode)  
 	    {  
 	        this.supernode = supernode;  
 	        this.time = time;  
@@ -59,7 +71,7 @@ public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContai
 	    public Supernode getSupernode(){
 	    	return this.supernode;
 	    }
-	    public int getTime() {
+	    public double getTime() {
 	    	return time;
 	    }
 	    public Node getToNode() {
@@ -99,12 +111,6 @@ public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContai
 		public String toString(){
 			return supernode.getNode().getId().toString() + String.valueOf(time);
 		}
-	}
-
-	@Override
-	public void update() {
-		
-		
 	}
 
 	

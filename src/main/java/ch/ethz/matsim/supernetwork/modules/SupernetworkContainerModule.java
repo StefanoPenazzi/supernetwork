@@ -3,26 +3,30 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
-import org.matsim.core.controler.AbstractModule;
-
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.FastDijkstraShortestTreeFactory;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworRoutingModuleFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainerImpl;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerImpl;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmImpl;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetworkContainerModule extends AbstractModule {
+public class SupernetworkContainerModule extends AbstractSupernetworkExtension {
 
 	@Override
-	public void install() {
-		bind(SupernetworkRoutesContainer.class).to(SupernetworkRoutesContainerImpl.class);
-		bind(UpdateAlgorithm.class).to(UpdateAlgorithmImpl.class);
-		bind(ContainerManager.class).to(ContainerManagerImpl.class);
+	public void installExtension() {
+		
+		bindContainerManagerFactory().to(ContainerManagerFactoryImpl.class );
+		
+		bindSupernetworkRoutesContainer("car").to(SupernetworkRoutesContainerImpl.class);
+		bindUpdateAlgorithm("car").to(UpdateAlgorithmImpl.class);
+		
+		bindSupernetworkRoutingModuleFactory().to(SupernetworRoutingModuleFactoryImpl.class);
+		bindSupernetworkLeastCostTreeCalculatorFactory().to(FastDijkstraShortestTreeFactory.class);
+		
+		//install(new SupernetworkTripRouterModule());
 	}
 
 	

@@ -17,6 +17,8 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActi
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
@@ -31,15 +33,13 @@ public class SupernetworkImpl implements Supernetwork{
 	
 	private  List<Middlenetwork> middlenetworks = null;
 	private  ClustersContainer<ClusterActivitiesLocation,ElementActivity> clusterContainer = null;
-	private  SupernetworkRoutingModule supernetworkRoutingModule = null;
-	private  SupernetworkRoutesContainer supernetworkRoutesContainer;
+	private  ContainerManager containerManager;
 	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
-	private int timeCounter = 1;
 	
 	
 	@Inject
-	public SupernetworkImpl(SupernetworkRoutesContainer supernetworkRoutesContainer) {
-		this.supernetworkRoutesContainer = supernetworkRoutesContainer;
+	public SupernetworkImpl() { //tenere solo container managare routesContainer e injectato dentro a container manager
+		
 	}
 	
 	@Override
@@ -72,39 +72,10 @@ public class SupernetworkImpl implements Supernetwork{
 	}
 
 	@Override
-	public void setSupernetworkRoutingModule(SupernetworkRoutingModule supernetworkRoutingModule) {
-		this.supernetworkRoutingModule = supernetworkRoutingModule;
-		
-	}
-
-	@Override
 	public void containerUpdate() {
-	
-		  if(this.middlenetworks != null && this.clusterContainer !=  null &&  this.supernetworkRoutingModule != null) {
-		
-		      double totTime = 0;
-			
-		      log.warn("inizio middlenetwork computation"); 
-			  long startTimeT =  System.nanoTime();
-			 
-			  //here should be use something to understand which are the best new times and for which superodes and also which of the old do not need anymore
-			  
-			  for (Middlenetwork mn: this.middlenetworks) {
-	        	  if( mn.getToNodes().size() > 0) {
-	        		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSuperNode().getNode(), mn.getToNodes() ,timeCounter * 1000);
-	        		  for(Path p: paths) {
-	        			  supernetworkRoutesContainer.add(mn.getSuperNode(),Iterables.getLast(p.nodes),timeCounter * 1000,p );
-	        		  }
-	        	  }
-			  }
-			  timeCounter++;
-			  long endTimeT = System.nanoTime();
-			  log.warn("fine middlenetwork computation"); 
-			  totTime = (double)(endTimeT - startTimeT);
-			  
-			  log.warn("time middlenetwork shortest tree: " + Double.toString(totTime/1000000000)); 
+		  if(this.middlenetworks != null && this.clusterContainer !=  null) {
+			  containerManager.updateContainer("Car");
 		  }
-        
 	}
 
 	@Override
@@ -114,14 +85,20 @@ public class SupernetworkImpl implements Supernetwork{
 	}
 
 	@Override
-	public Path getPathFromRoutesContainer(Activity act, Node toNode ,int time) {
+	public Path getPath(Activity act, Node toNode ,int time,String mode) {
 		Supernode sn = getSupernodeFromActivity(act);
 		if(sn != null) {
-			return this.supernetworkRoutesContainer.getPath(sn,toNode ,time);
+			return this.containerManager.getPath(sn,toNode ,time,mode);
 		}
 		else {
 			return null;
 		}
+	}
+	
+	@Override
+	public void setContainerManager(ContainerManager containerManager) {
+		this.containerManager = containerManager;
+		
 	}
 	
 	class Coordin implements Comparable<Coordin>{
@@ -164,4 +141,6 @@ public class SupernetworkImpl implements Supernetwork{
 		}
 		
 	}
+
+	
 }

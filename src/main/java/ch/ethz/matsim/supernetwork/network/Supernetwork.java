@@ -13,6 +13,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkR
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 
@@ -25,15 +26,12 @@ public interface Supernetwork {
 
 	public List<Middlenetwork> getMiddlenetworks();
 	public ClustersContainer<ClusterActivitiesLocation,ElementActivity> getActivitiesClusterContainer();
-	
 	public void setActivitiesClustersContainer(ClustersContainer<ClusterActivitiesLocation,ElementActivity> cc);
 	public void setMiddlenetworks(List<Middlenetwork> hf);
-	public void setSupernetworkRoutingModule(SupernetworkRoutingModule supernetworkRoutingModule);
-	
+	public void setContainerManager(ContainerManager containerManager);
 	public void containerUpdate();
-	
 	public Supernode getSupernodeFromActivity(Activity act);
-	public Path getPathFromRoutesContainer(Activity act,Node toNode,int time);
+	public Path getPath(Activity act,Node toNode,int time,String mode);
 
 
 }
