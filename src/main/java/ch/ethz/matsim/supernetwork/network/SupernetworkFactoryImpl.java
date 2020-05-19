@@ -11,6 +11,7 @@ import org.matsim.core.controler.MatsimServices;
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactory;
@@ -32,10 +33,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 	private final static Logger log = Logger.getLogger(SupernetworkFactoryImpl.class);
 	
 	Supernetwork supernet;
-	//clusterContainer is injected this means that is going to use the injected scenario and 
-	//config files to be initialized. 
-	//TODO what happens if the scenario is null etc
-	ClustersContainer clustersContainer;
+	ClustersContainer<ClusterActivitiesLocation,ElementActivity> clustersContainer;
 	Scenario scenario;
 	SupernetworkConfigGroup supernetworkConfigGroup;
 	MatsimServices matsimServices;
@@ -46,7 +44,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 
 	
 	@Inject
-	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
+	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer<ClusterActivitiesLocation,ElementActivity> clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
 			SupernetPrint supernetPrint,ContainerManagerFactory containerManagerFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;

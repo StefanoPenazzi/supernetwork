@@ -6,6 +6,7 @@ package ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgori
 import java.util.List;
 
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi
@@ -13,6 +14,6 @@ import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesCon
  */
 public interface UpdateAlgorithm {
 	
-	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer);
+	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks);
 
 }

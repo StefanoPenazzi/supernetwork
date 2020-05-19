@@ -48,7 +48,7 @@ public class ContainerManagerImpl implements ContainerManager {
 	public void updateContainer(String mode) { 
 	  SupernetworkRoutesContainer src = containersMap.get(mode);
 	  UpdateAlgorithm ua  = updateAlgorithmsMap.get(mode);
-	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src);
+	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,middlenetworks);
 	  for (UpdateAlgorithmOutput mn: inputs) {
 		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSupernode().getNode(), mn.getToNodes(),mn.getTime());
 		  for(Path p: paths) {

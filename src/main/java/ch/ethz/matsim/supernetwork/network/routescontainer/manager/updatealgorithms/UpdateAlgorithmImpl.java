@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi
@@ -15,25 +16,35 @@ import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesCon
 public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 
 	@Override
-	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer) {
+	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks) {
 		
 		if(supernetworkRoutesContainer.empty()) {
-			return initialUpdate();
+			return initialUpdate(middlenetworks);
 		}
-		return runningUpdate(supernetworkRoutesContainer);
+		return runningUpdate(supernetworkRoutesContainer,middlenetworks);
 	}
 	
-	private List<UpdateAlgorithmOutput> initialUpdate(){
+	private List<UpdateAlgorithmOutput> initialUpdate(List<Middlenetwork> middlenetworks){
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
-		
-		
+		for (Middlenetwork mn: middlenetworks) {
+			double time = 3600;
+			for (int i =1;i<20;++i) {
+				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
+				output.add(uao);
+			}	
+		}
 		return output;
 	}
 	
-	private List<UpdateAlgorithmOutput> runningUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer){
+	private List<UpdateAlgorithmOutput> runningUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks){
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
-		
-		
+		for (Middlenetwork mn: middlenetworks) {
+			double time = 3600;
+			for (int i =1;i<20;++i) {
+				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
+				output.add(uao);
+			}	
+		}
 		return output;
 	}
 
