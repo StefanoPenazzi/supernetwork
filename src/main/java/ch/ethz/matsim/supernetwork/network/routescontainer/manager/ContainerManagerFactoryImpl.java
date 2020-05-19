@@ -9,6 +9,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
@@ -21,13 +22,13 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, SupernetworkRoutesContainer> containersMap;
-	private final SupernetworkRoutingModule supernetworkRoutingModule; 
+	private final SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory; 
 	
 	@Inject
-	public ContainerManagerFactoryImpl(SupernetworkRoutingModule supernetworkRoutingModule,
+	public ContainerManagerFactoryImpl(SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
 			SupernetworkRoutesContainer> containersMap) {
-		this.supernetworkRoutingModule = supernetworkRoutingModule;
+		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
 	}
@@ -37,7 +38,7 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 		
 		//check if the maps have the same keys
 		
-		return new ContainerManagerImpl(this.supernetworkRoutingModule,this.updateAlgorithmsMap,this.containersMap,middlenetworks);
+		return new ContainerManagerImpl(this.supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car",middlenetworks),this.updateAlgorithmsMap,this.containersMap,middlenetworks);
 	}
 
 }

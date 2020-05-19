@@ -4,6 +4,7 @@
 package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
@@ -18,7 +19,7 @@ import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.TravelTime;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.LeastCostTreeCalculator;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
-import ch.ethz.matsim.supernetwork.network.Supernetwork;
+import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi
@@ -35,7 +36,6 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 	PopulationFactory populationFactory;
 	SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
 	Scenario scenario ;
-	Supernetwork supernet;
 	
 	@Inject
 	public SupernetworRoutingModuleFactoryImpl(Map<String, TravelTime> travelTimes,
@@ -44,8 +44,7 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 	 Network network,
 	 PopulationFactory populationFactory,
 	 SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory,
-	 Scenario scenario,
-	 Supernetwork supernet) {
+	 Scenario scenario) {
 		
 		this.travelTimes = travelTimes;
 		this.travelDisutilityFactories =travelDisutilityFactories;
@@ -54,13 +53,12 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 		this.populationFactory=populationFactory;
 		this.supernetworkLeastCostTreeCalculatorFactory=supernetworkLeastCostTreeCalculatorFactory;
 		this.scenario= scenario;
-		this.supernet=supernet;
 		this.routingMode = null;
 		
 	}
 
 	@Override
-	public SupernetworkRoutingModule getSupernetworkRoutingModule(String mode) {
+	public SupernetworkRoutingModule getSupernetworkRoutingModule(String mode,List<Middlenetwork> middlenetworks) {
 		this.routingMode = mode ;
 		
 		// the network refers to the (transport)mode:
@@ -95,7 +93,7 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 		LeastCostTreeCalculator routeAlgo =
 				supernetworkLeastCostTreeCalculatorFactory.createTreeCalculator(
 						filteredNetwork,
-						supernet.getContainerManager().getMiddlenetworks(),
+						middlenetworks,
 						travelDisutilityFactory.createTravelDisutility(travelTime),
 						travelTime,
 						person);

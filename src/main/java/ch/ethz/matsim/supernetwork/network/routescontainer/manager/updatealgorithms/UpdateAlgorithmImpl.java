@@ -28,7 +28,7 @@ public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
 		for (Middlenetwork mn: middlenetworks) {
 			double time = 3600;
-			for (int i =1;i<20;++i) {
+			for (int i =1;i<3;++i) {
 				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
 				output.add(uao);
 			}	
@@ -40,7 +40,7 @@ public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
 		for (Middlenetwork mn: middlenetworks) {
 			double time = 3600;
-			for (int i =1;i<20;++i) {
+			for (int i =1;i<3;++i) {
 				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
 				output.add(uao);
 			}	

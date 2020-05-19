@@ -29,9 +29,9 @@ public class UpdateAlgorithmOutput {
 		return this.supernode;
 	}
 	public List<Node> getToNodes(){
-		return this.getToNodes();
+		return this.toNodes;
 	}
 	public double getTime() {
-		return this.getTime();
+		return this.time;
 	}
 }

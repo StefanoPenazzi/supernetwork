@@ -57,7 +57,6 @@ public class ClustersReRouteModelAlgorithm implements PlanAlgorithm {
 					}
 			}
 		}
-		System.out.println("");
 	}
 	
 	public static double calcEndOfActivity(

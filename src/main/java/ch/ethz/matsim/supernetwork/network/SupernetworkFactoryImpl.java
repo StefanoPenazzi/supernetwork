@@ -33,7 +33,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 	private final static Logger log = Logger.getLogger(SupernetworkFactoryImpl.class);
 	
 	Supernetwork supernet;
-	ClustersContainer<ClusterActivitiesLocation,ElementActivity> clustersContainer;
+	ClustersContainer clustersContainer;
 	Scenario scenario;
 	SupernetworkConfigGroup supernetworkConfigGroup;
 	MatsimServices matsimServices;
@@ -44,7 +44,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 
 	
 	@Inject
-	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer<ClusterActivitiesLocation,ElementActivity> clustersContainer, Scenario scenario,MatsimServices matsimServices,
+	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
 			SupernetPrint supernetPrint,ContainerManagerFactory containerManagerFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;

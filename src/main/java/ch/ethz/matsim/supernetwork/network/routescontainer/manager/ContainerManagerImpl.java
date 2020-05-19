@@ -55,6 +55,7 @@ public class ContainerManagerImpl implements ContainerManager {
 			  src.add(mn.getSupernode(),Iterables.getLast(p.nodes),mn.getTime(),p);
 		  }
 	  }	
+	  System.out.println("---");
 	}
 	
 	@Override
@@ -65,9 +66,11 @@ public class ContainerManagerImpl implements ContainerManager {
 	@Override
 	public Path getPath(Activity activity, Node toNode ,double time,String mode) {
 		Coordin c = new Coordin(activity.getCoord());
+		Supernode sn = this.activitySupernodeMap.get(c);
+		if(sn == null) {
+			return null;
+		}
 		return getPath(this.activitySupernodeMap.get(c),toNode,time,mode);
-		
-		
 	}
 	
 	@Override 
