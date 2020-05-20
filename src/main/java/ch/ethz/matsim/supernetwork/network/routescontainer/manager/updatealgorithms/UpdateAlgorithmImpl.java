@@ -5,6 +5,9 @@ package ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgori
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.matsim.core.router.util.TravelTime;
 
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
@@ -16,7 +19,8 @@ import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 
 	@Override
-	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks) {
+	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks,
+			TravelTime travelTimes) {
 		
 		if(supernetworkRoutesContainer.empty()) {
 			return initialUpdate(middlenetworks);

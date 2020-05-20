@@ -6,6 +6,8 @@ package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
 import java.util.List;
 import java.util.Map;
 
+import org.matsim.core.router.util.TravelTime;
+
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
@@ -23,14 +25,16 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, SupernetworkRoutesContainer> containersMap;
 	private final SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory; 
+	private final Map<String, TravelTime> travelTimes;
 	
 	@Inject
 	public ContainerManagerFactoryImpl(SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
-			SupernetworkRoutesContainer> containersMap) {
+			SupernetworkRoutesContainer> containersMap,Map<String, TravelTime> travelTimes) {
 		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
+		this.travelTimes = travelTimes;
 	}
 	
 	@Override
@@ -38,7 +42,8 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 		
 		//check if the maps have the same keys
 		
-		return new ContainerManagerImpl(this.supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car",middlenetworks),this.updateAlgorithmsMap,this.containersMap,middlenetworks);
+		return new ContainerManagerImpl(this.supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car",middlenetworks),
+				this.updateAlgorithmsMap,this.containersMap,middlenetworks,travelTimes);
 	}
 
 }

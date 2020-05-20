@@ -6,6 +6,9 @@ package ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgori
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import org.matsim.core.router.util.TravelTime;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
@@ -21,7 +24,8 @@ public class UpdateAlgorithmStaticFreqAnalysis implements UpdateAlgorithm {
 	double range = 3600;
 	
 	@Override
-	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks) {
+	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks,
+			TravelTime travelTimes) {
 		
 		if(supernetworkRoutesContainer.empty()) {
 			return initialUpdate(middlenetworks);

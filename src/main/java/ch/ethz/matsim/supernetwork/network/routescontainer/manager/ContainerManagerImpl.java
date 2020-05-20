@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
+import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
@@ -30,17 +31,20 @@ public class ContainerManagerImpl implements ContainerManager {
 	
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, SupernetworkRoutesContainer> containersMap;
+	private final Map<String, TravelTime> travelTimes;
 	private final SupernetworkRoutingModule supernetworkRoutingModule; 
 	private List<Middlenetwork> middlenetworks;
 	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
 	
 	public ContainerManagerImpl(SupernetworkRoutingModule supernetworkRoutingModule,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
-			SupernetworkRoutesContainer> containersMap,List<Middlenetwork> middlenetworks) {
+			SupernetworkRoutesContainer> containersMap,List<Middlenetwork> middlenetworks,
+			Map<String, TravelTime> travelTimes) {
 		this.supernetworkRoutingModule = supernetworkRoutingModule;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
 		this.middlenetworks = middlenetworks;
+		this.travelTimes = travelTimes;
 		initialize();
 	}
 
@@ -48,7 +52,8 @@ public class ContainerManagerImpl implements ContainerManager {
 	public void updateContainer(String mode) { 
 	  SupernetworkRoutesContainer src = containersMap.get(mode);
 	  UpdateAlgorithm ua  = updateAlgorithmsMap.get(mode);
-	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,middlenetworks);
+	  TravelTime tt = this.travelTimes.get(mode);
+	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,middlenetworks,tt);
 	  for (UpdateAlgorithmOutput mn: inputs) {
 		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSupernode().getNode(), mn.getToNodes(),mn.getTime());
 		  for(Path p: paths) {
