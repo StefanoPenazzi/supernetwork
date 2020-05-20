@@ -27,8 +27,8 @@ public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 	private List<UpdateAlgorithmOutput> initialUpdate(List<Middlenetwork> middlenetworks){
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
 		for (Middlenetwork mn: middlenetworks) {
-			double time = 3600;
-			for (int i =1;i<3;++i) {
+			double time = 7200;
+			for (int i =1;i<10;++i) {
 				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
 				output.add(uao);
 			}	
@@ -39,8 +39,8 @@ public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 	private List<UpdateAlgorithmOutput> runningUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks){
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
 		for (Middlenetwork mn: middlenetworks) {
-			double time = 3600;
-			for (int i =1;i<3;++i) {
+			double time = 7200;
+			for (int i =1;i<10;++i) {
 				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
 				output.add(uao);
 			}	

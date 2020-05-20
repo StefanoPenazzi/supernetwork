@@ -8,6 +8,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworRo
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainerImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmImpl;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmStaticFreqAnalysis;
 
 /**
  * @author stefanopenazzi
@@ -21,7 +22,7 @@ public class SupernetworkContainerModule extends AbstractSupernetworkExtension {
 		bindContainerManagerFactory().to(ContainerManagerFactoryImpl.class );
 		
 		bindSupernetworkRoutesContainer("car").to(SupernetworkRoutesContainerImpl.class);
-		bindUpdateAlgorithm("car").to(UpdateAlgorithmImpl.class);
+		bindUpdateAlgorithm("car").to(UpdateAlgorithmStaticFreqAnalysis.class);
 		
 		bindSupernetworkRoutingModuleFactory().to(SupernetworRoutingModuleFactoryImpl.class);
 		bindSupernetworkLeastCostTreeCalculatorFactory().to(FastDijkstraShortestTreeFactory.class);

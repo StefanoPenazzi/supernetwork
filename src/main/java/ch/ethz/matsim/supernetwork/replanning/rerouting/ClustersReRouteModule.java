@@ -5,6 +5,7 @@ package ch.ethz.matsim.supernetwork.replanning.rerouting;
 
 import org.matsim.core.controler.AbstractModule;
 import ch.ethz.matsim.supernetwork.mobsim.SupernetworkMobsimModule;
+import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
 
 /**
  * @author stefanopenazzi
@@ -21,7 +22,6 @@ public class ClustersReRouteModule extends AbstractModule{
 		addPlanStrategyBinding(STRATEGY_NAME).toProvider(ClustersReRouteStrategyProvider.class);
 		bind(ClustersReRouteModel.class).to(ClustersReRouteModelImpl.class);
 		
-		//Just as a LeastCostPathCalculator
-		//bind(LeastCostPathCalculatorFactory.class).to(ClustersReRoutePathCalculatorFactory.class);
+		install(new SupernetworkModule());
 	}
 }

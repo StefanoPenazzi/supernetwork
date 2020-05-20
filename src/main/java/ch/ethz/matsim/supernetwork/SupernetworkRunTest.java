@@ -43,7 +43,6 @@ public class SupernetworkRunTest {
         // controler
         Controler controler = new Controler(scenario);
         
-        controler.addOverridingModule(new SupernetworkModule());
         controler.addOverridingModule(new ClustersReRouteModule());
         controler.addOverridingQSimModule(new SupernetworkMobsimModule());
         

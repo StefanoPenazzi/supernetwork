@@ -5,6 +5,8 @@ package ch.ethz.matsim.supernetwork.modules;
 
 import org.matsim.core.controler.AbstractModule;
 
+import ch.ethz.matsim.supernetwork.mobsim.SupernetworkMobsimModule;
+
 /**
  * @author stefanopenazzi
  *
