@@ -3,11 +3,9 @@
  */
 package ch.ethz.matsim.supernetwork.network.database.manager;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.javatuples.Pair;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Node;
@@ -15,10 +13,8 @@ import org.matsim.api.core.v01.population.Activity;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmOutput;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
@@ -31,7 +27,7 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 public class ContainerManagerImpl implements ContainerManager {
 	
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
-	private final Map<String, SupernetworkRoutesContainer> containersMap;
+	private final Map<String, RoutesContainer> containersMap;
 	private final Map<String, TravelTime> travelTimes;
 	private final RoutingManager routingManager; 
 	private List<Middlenetwork> middlenetworks;
@@ -39,7 +35,7 @@ public class ContainerManagerImpl implements ContainerManager {
 	
 	public ContainerManagerImpl(RoutingManager routingManager,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
-			SupernetworkRoutesContainer> containersMap,List<Middlenetwork> middlenetworks,
+			RoutesContainer> containersMap,List<Middlenetwork> middlenetworks,
 			Map<String, TravelTime> travelTimes) {
 		this.routingManager = routingManager;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
@@ -51,7 +47,7 @@ public class ContainerManagerImpl implements ContainerManager {
 
 	@Override
 	public void updateContainer(String mode) { 
-	  SupernetworkRoutesContainer src = containersMap.get(mode);
+	  RoutesContainer src = containersMap.get(mode);
 	  UpdateAlgorithm ua  = updateAlgorithmsMap.get(mode);
 	  TravelTime tt = this.travelTimes.get(mode);
 	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,middlenetworks,tt);

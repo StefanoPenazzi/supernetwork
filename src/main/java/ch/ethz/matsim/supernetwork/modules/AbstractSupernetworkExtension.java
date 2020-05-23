@@ -12,7 +12,7 @@ import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
-import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactory;
 import ch.ethz.matsim.supernetwork.network.database.manager.RoutingManagerFactory;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
@@ -30,7 +30,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected MapBinder<String,SupernetworkFactory> supernetworkFactoryBinder;
 	
 	protected MapBinder<String, UpdateAlgorithm> updateAlgorithmBinder;
-	protected MapBinder<String, SupernetworkRoutesContainer> containerBinder;
+	protected MapBinder<String, RoutesContainer> containerBinder;
 	
 	
 	@Override
@@ -42,7 +42,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 		supernetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SupernetworkFactory.class);
 		
 		updateAlgorithmBinder = MapBinder.newMapBinder(binder(), String.class,UpdateAlgorithm.class);
-		containerBinder = MapBinder.newMapBinder(binder(), String.class,SupernetworkRoutesContainer.class);
+		containerBinder = MapBinder.newMapBinder(binder(), String.class,RoutesContainer.class);
 		
 		installExtension();
 	}
@@ -63,7 +63,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected final LinkedBindingBuilder<UpdateAlgorithm> bindUpdateAlgorithm(String mode) {
 		return updateAlgorithmBinder.addBinding(mode);
 	}
-	protected final LinkedBindingBuilder<SupernetworkRoutesContainer> bindSupernetworkRoutesContainer(String mode) {
+	protected final LinkedBindingBuilder<RoutesContainer> bindRoutesContainer(String mode) {
 		return containerBinder.addBinding(mode);
 	}
 	

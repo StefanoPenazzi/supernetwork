@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.matsim.core.router.util.TravelTime;
 
-import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
@@ -17,6 +17,6 @@ import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
  */
 public interface UpdateAlgorithm {
 	
-	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks,TravelTime travelTimes);
+	public List<UpdateAlgorithmOutput> getUpdate(RoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks,TravelTime travelTimes);
 
 }

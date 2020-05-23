@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.matsim.core.router.util.TravelTime;
 
-import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
@@ -19,7 +19,7 @@ import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 
 	@Override
-	public List<UpdateAlgorithmOutput> getUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks,
+	public List<UpdateAlgorithmOutput> getUpdate(RoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks,
 			TravelTime travelTimes) {
 		
 		if(supernetworkRoutesContainer.empty()) {
@@ -40,7 +40,7 @@ public class UpdateAlgorithmImpl implements UpdateAlgorithm {
 		return output;
 	}
 	
-	private List<UpdateAlgorithmOutput> runningUpdate(SupernetworkRoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks){
+	private List<UpdateAlgorithmOutput> runningUpdate(RoutesContainer supernetworkRoutesContainer,List<Middlenetwork> middlenetworks){
 		List<UpdateAlgorithmOutput> output = new ArrayList<>();
 		for (Middlenetwork mn: middlenetworks) {
 			double time = 7200;

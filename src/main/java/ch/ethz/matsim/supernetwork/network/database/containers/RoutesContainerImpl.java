@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.database;
+package ch.ethz.matsim.supernetwork.network.database.containers;
 
 
 import java.util.TreeMap;
@@ -15,12 +15,12 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  * @author stefanopenazzi
  *
  */
-public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContainer{
+public class RoutesContainerImpl implements RoutesContainer{
 
 	private TreeMap<PathTimeKey,Path> container = new TreeMap<>();
 	
 	@Inject
-	public SupernetworkRoutesContainerImpl() {
+	public RoutesContainerImpl() {
 		
 	}
 	
