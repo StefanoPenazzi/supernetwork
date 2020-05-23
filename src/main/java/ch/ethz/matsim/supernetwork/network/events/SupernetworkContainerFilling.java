@@ -8,7 +8,7 @@ import org.matsim.core.controler.listener.IterationStartsListener;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.network.Supernetwork;
+import ch.ethz.matsim.supernetwork.network.Network;
 
 /**
  * @author stefanopenazzi
@@ -16,10 +16,10 @@ import ch.ethz.matsim.supernetwork.network.Supernetwork;
  */
 public class SupernetworkContainerFilling implements IterationStartsListener{
 	
-    private Supernetwork supernet;
+    private Network supernet;
 	
 	@Inject
-	public SupernetworkContainerFilling (Supernetwork supernet) {
+	public SupernetworkContainerFilling (Network supernet) {
 		this.supernet = supernet;
 	}
 	

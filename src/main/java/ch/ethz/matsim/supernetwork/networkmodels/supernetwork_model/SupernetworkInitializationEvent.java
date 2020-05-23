@@ -6,7 +6,7 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
 import com.google.inject.Inject;
-import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
+import ch.ethz.matsim.supernetwork.network.NetworkFactory;
 
 
 /**
@@ -16,10 +16,10 @@ import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
 public class SupernetworkInitializationEvent implements StartupListener {
 
 	Scenario scenario;
-	SupernetworkFactory supernetFactory;
+	NetworkFactory supernetFactory;
 	
 	@Inject
-	SupernetworkInitializationEvent (Scenario scenario,SupernetworkFactory supernetFactory){
+	SupernetworkInitializationEvent (Scenario scenario,NetworkFactory supernetFactory){
 		this.scenario = scenario;
 		this.supernetFactory = supernetFactory;
 	}

@@ -5,20 +5,12 @@ package ch.ethz.matsim.supernetwork.network.utilities;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.TreeSet;
-
 import javax.inject.Inject;
-
 import org.matsim.core.config.groups.ControlerConfigGroup;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.io.UncheckedIOException;
-
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
-import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.network.Supernetwork;
+import ch.ethz.matsim.supernetwork.network.Network;
 
 /**
  * @author stefanopenazzi
@@ -28,7 +20,7 @@ public class SupernetPrintImpl implements SupernetPrint {
 
 	public static final String FILENAME_SUPERNET = "supernetwork";
 	
-	private final Supernetwork supernet;
+	private final Network supernet;
 	final private BufferedWriter supernetOut ;
 	private final ControlerConfigGroup controlerConfigGroup;
 	final private String supernetFileName; 
@@ -40,7 +32,7 @@ public class SupernetPrintImpl implements SupernetPrint {
 	private int[] clustersActivitiesAverageDistCentroidFreqAnalysis;
 	
 	@Inject
-	SupernetPrintImpl(Supernetwork supernet,ControlerConfigGroup controlerConfigGroup,OutputDirectoryHierarchy controlerIO){
+	SupernetPrintImpl(Network supernet,ControlerConfigGroup controlerConfigGroup,OutputDirectoryHierarchy controlerIO){
 		this.supernet = supernet;
 		this.controlerConfigGroup = controlerConfigGroup;
 		this.supernetFileName = controlerIO.getOutputFilename( FILENAME_SUPERNET ) ;

@@ -3,10 +3,10 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 import org.matsim.core.controler.AbstractModule;
-import ch.ethz.matsim.supernetwork.network.Supernetwork;
-import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
-import ch.ethz.matsim.supernetwork.network.SupernetworkFactoryImpl;
-import ch.ethz.matsim.supernetwork.network.SupernetworkImpl;
+import ch.ethz.matsim.supernetwork.network.Network;
+import ch.ethz.matsim.supernetwork.network.NetworkFactory;
+import ch.ethz.matsim.supernetwork.network.NetworkFactoryImpl;
+import ch.ethz.matsim.supernetwork.network.NetworkImpl;
 import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
 import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrintImpl;
 
@@ -24,8 +24,8 @@ public class SupernetworkModule extends AbstractModule {
 	
 	@Override
 	public void install() {
-		bind(Supernetwork.class).to(SupernetworkImpl.class).asEagerSingleton();
-		bind(SupernetworkFactory.class).to(SupernetworkFactoryImpl.class);
+		bind(Network.class).to(NetworkImpl.class).asEagerSingleton();
+		bind(NetworkFactory.class).to(NetworkFactoryImpl.class);
 		bind(SupernetPrint.class).to(SupernetPrintImpl.class);
 		
         install(new ModulesSet());

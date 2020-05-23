@@ -11,7 +11,7 @@ import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFa
 import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
-import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
+import ch.ethz.matsim.supernetwork.network.NetworkFactory;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactory;
 import ch.ethz.matsim.supernetwork.network.database.manager.RoutingManagerFactory;
@@ -27,7 +27,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected MapBinder<String,ClusteringModelFactory> clusteringModelFactoryBinder;
 	protected MapBinder<String,SubnetworkFactory> subnetworkFactoryBinder;
 	protected MapBinder<String,MiddlenetworkFactory> middlenetworkFactoryBinder;
-	protected MapBinder<String,SupernetworkFactory> supernetworkFactoryBinder;
+	protected MapBinder<String,NetworkFactory> networkFactoryBinder;
 	
 	protected MapBinder<String, UpdateAlgorithm> updateAlgorithmBinder;
 	protected MapBinder<String, RoutesContainer> containerBinder;
@@ -39,7 +39,7 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 		clusteringModelFactoryBinder = MapBinder.newMapBinder(binder(), String.class,ClusteringModelFactory.class);
 		subnetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SubnetworkFactory.class);
 		middlenetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,MiddlenetworkFactory.class);
-		supernetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SupernetworkFactory.class);
+		networkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,NetworkFactory.class);
 		
 		updateAlgorithmBinder = MapBinder.newMapBinder(binder(), String.class,UpdateAlgorithm.class);
 		containerBinder = MapBinder.newMapBinder(binder(), String.class,RoutesContainer.class);
@@ -56,8 +56,8 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	protected final LinkedBindingBuilder<MiddlenetworkFactory> bindMiddlenetworkFactory(String name) {
 		return middlenetworkFactoryBinder.addBinding(name);
 	}
-	protected final LinkedBindingBuilder<SupernetworkFactory> bindSupernetworkFactory(String name) {
-		return supernetworkFactoryBinder.addBinding(name);
+	protected final LinkedBindingBuilder<NetworkFactory> bindNetworkFactory(String name) {
+		return networkFactoryBinder.addBinding(name);
 	}
 	
 	protected final LinkedBindingBuilder<UpdateAlgorithm> bindUpdateAlgorithm(String mode) {

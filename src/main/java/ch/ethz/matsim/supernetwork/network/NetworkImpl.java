@@ -16,9 +16,9 @@ import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
  * @author stefanopenazzi
  *
  */
-public class SupernetworkImpl implements Supernetwork{
+public class NetworkImpl implements Network{
 
-	private final static Logger log = Logger.getLogger(SupernetworkImpl.class);
+	private final static Logger log = Logger.getLogger(NetworkImpl.class);
 	
 	private  ContainerManager containerManager;
 	

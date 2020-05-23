@@ -13,7 +13,7 @@ import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
  * @author stefanopenazzi
  *
  */
-public interface Supernetwork {
+public interface Network {
 
 	public void setContainerManager(ContainerManager containerManager);
 	public ContainerManager getContainerManager();

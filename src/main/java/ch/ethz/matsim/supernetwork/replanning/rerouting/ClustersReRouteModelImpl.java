@@ -5,7 +5,6 @@ package ch.ethz.matsim.supernetwork.replanning.rerouting;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
@@ -20,10 +19,7 @@ import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.population.routes.RouteUtils;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.facilities.Facility;
-
 import com.google.inject.Inject;
-
-import ch.ethz.matsim.supernetwork.network.Supernetwork;
 
 /**
  * @author stefanopenazzi
@@ -32,11 +28,11 @@ import ch.ethz.matsim.supernetwork.network.Supernetwork;
 public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 
 	private final Network network;
-	private final Supernetwork supernet;
+	private final ch.ethz.matsim.supernetwork.network.Network supernet;
 	private final PopulationFactory populationFactory;
 	
 	@Inject
-	public ClustersReRouteModelImpl(Network network,Supernetwork supernet,final PopulationFactory populationFactory) {
+	public ClustersReRouteModelImpl(Network network, ch.ethz.matsim.supernetwork.network.Network supernet,final PopulationFactory populationFactory) {
 		Gbl.assertNotNull(network);
 		this.network = network;
 		this.supernet = supernet;

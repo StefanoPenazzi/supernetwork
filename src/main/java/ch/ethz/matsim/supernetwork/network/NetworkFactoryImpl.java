@@ -26,11 +26,11 @@ import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
  * @author stefanopenazzi
  *
  */
-public class SupernetworkFactoryImpl implements SupernetworkFactory {
+public class NetworkFactoryImpl implements NetworkFactory {
 	
-	private final static Logger log = Logger.getLogger(SupernetworkFactoryImpl.class);
+	private final static Logger log = Logger.getLogger(NetworkFactoryImpl.class);
 	
-	Supernetwork supernet;
+	Network supernet;
 	ClustersContainer clustersContainer;
 	Scenario scenario;
 	SupernetworkConfigGroup supernetworkConfigGroup;
@@ -42,7 +42,7 @@ public class SupernetworkFactoryImpl implements SupernetworkFactory {
 
 	
 	@Inject
-	public SupernetworkFactoryImpl(Supernetwork supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
+	public NetworkFactoryImpl(Network supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
 			SupernetPrint supernetPrint,ContainerManagerFactory containerManagerFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
