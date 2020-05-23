@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms;
+package ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms;
 
 import java.util.List;
 

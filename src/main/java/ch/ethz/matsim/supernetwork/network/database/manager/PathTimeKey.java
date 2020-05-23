@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
+package ch.ethz.matsim.supernetwork.network.database.manager;
 
 import org.matsim.api.core.v01.network.Node;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;

@@ -4,8 +4,6 @@
 package ch.ethz.matsim.supernetwork.modules;
 
 import org.matsim.core.controler.AbstractModule;
-import org.matsim.core.router.util.LeastCostPathCalculatorFactory;
-
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
 import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
@@ -14,10 +12,10 @@ import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactory;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.RoutingManagerFactory;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactory;
+import ch.ethz.matsim.supernetwork.network.database.manager.RoutingManagerFactory;
+import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
 
 
 /**

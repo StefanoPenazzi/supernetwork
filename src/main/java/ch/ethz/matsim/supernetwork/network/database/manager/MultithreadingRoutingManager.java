@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
+package ch.ethz.matsim.supernetwork.network.database.manager;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.matsim.core.utils.misc.Counter;
 import com.google.common.collect.Iterables;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
+import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmOutput;
 
 /**
  * @author stefanopenazzi

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
+package ch.ethz.matsim.supernetwork.network.database.manager;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,9 +18,9 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
+import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmOutput;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
 

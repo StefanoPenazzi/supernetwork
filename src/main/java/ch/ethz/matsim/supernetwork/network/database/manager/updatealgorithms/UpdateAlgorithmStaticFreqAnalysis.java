@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms;
+package ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import java.util.Map;
 import org.matsim.core.router.util.TravelTime;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
+import ch.ethz.matsim.supernetwork.network.database.SupernetworkRoutesContainer;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**

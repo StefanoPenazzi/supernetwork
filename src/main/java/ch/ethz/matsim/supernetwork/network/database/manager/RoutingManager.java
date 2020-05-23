@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
+package ch.ethz.matsim.supernetwork.network.database.manager;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import org.javatuples.Pair;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
+import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmOutput;
 
 /**
  * @author stefanopenazzi
