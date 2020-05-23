@@ -22,6 +22,7 @@ import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
  */
 public interface SupernetworkLeastCostTreeCalculatorFactory extends MatsimFactory, MatsimExtensionPoint {
 	
-	public LeastCostTreeCalculator createTreeCalculator(final Network network, final List<Middlenetwork> middlenetworks, final TravelDisutility travelCosts, final TravelTime travelTimes, final Person person);
+	public LeastCostTreeCalculator createTreeCalculator(String routingMode);
 
+	public void setRoutingNetwork(Network network, List<Middlenetwork> middlenetworks);
 }

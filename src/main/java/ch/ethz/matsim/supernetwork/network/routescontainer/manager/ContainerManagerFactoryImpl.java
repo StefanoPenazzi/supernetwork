@@ -24,14 +24,14 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, SupernetworkRoutesContainer> containersMap;
-	private final SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory; 
+	private final RoutingManagerFactory routingManagerFactory; 
 	private final Map<String, TravelTime> travelTimes;
 	
 	@Inject
-	public ContainerManagerFactoryImpl(SupernetworkRoutingModuleFactory supernetworkRoutingModuleFactory,
+	public ContainerManagerFactoryImpl(RoutingManagerFactory routingManagerFactory,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
 			SupernetworkRoutesContainer> containersMap,Map<String, TravelTime> travelTimes) {
-		this.supernetworkRoutingModuleFactory = supernetworkRoutingModuleFactory;
+		this.routingManagerFactory = routingManagerFactory;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
 		this.travelTimes = travelTimes;
@@ -42,7 +42,7 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 		
 		//check if the maps have the same keys
 		
-		return new ContainerManagerImpl(this.supernetworkRoutingModuleFactory.getSupernetworkRoutingModule("car",middlenetworks),
+		return new ContainerManagerImpl(this.routingManagerFactory.createRoutingManager(middlenetworks),
 				this.updateAlgorithmsMap,this.containersMap,middlenetworks,travelTimes);
 	}
 

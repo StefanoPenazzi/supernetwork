@@ -1,13 +1,13 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.algorithms.router.shortest_path;
+package ch.ethz.matsim.supernetwork.network.routescontainer.manager;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Inject;
+
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Person;
@@ -17,17 +17,20 @@ import org.matsim.core.network.algorithms.TransportModeNetworkFilter;
 import org.matsim.core.router.SingleModeNetworksCache;
 import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.TravelTime;
+
+import com.google.inject.Inject;
+
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.LeastCostTreeCalculator;
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingModuleFactory {
+public class RoutingManagerFactoryImpl implements RoutingManagerFactory{
 
-	private String routingMode;
+    private String routingMode;
 	
 	Map<String, TravelTime> travelTimes;
 	Map<String, TravelDisutilityFactory> travelDisutilityFactories;
@@ -38,7 +41,7 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 	Scenario scenario ;
 	
 	@Inject
-	public SupernetworRoutingModuleFactoryImpl(Map<String, TravelTime> travelTimes,
+	public  RoutingManagerFactoryImpl(Map<String, TravelTime> travelTimes,
 	 Map<String, TravelDisutilityFactory> travelDisutilityFactories,
 	 SingleModeNetworksCache singleModeNetworksCache,
 	 Network network,
@@ -53,13 +56,13 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 		this.populationFactory=populationFactory;
 		this.supernetworkLeastCostTreeCalculatorFactory=supernetworkLeastCostTreeCalculatorFactory;
 		this.scenario= scenario;
-		this.routingMode = null;
+		this.routingMode = "car";
 		
 	}
+	
 
 	@Override
-	public SupernetworkRoutingModule getSupernetworkRoutingModule(String mode,List<Middlenetwork> middlenetworks) {
-		this.routingMode = mode ;
+	public RoutingManager createRoutingManager(List<Middlenetwork> middlenetworks) {
 		
 		// the network refers to the (transport)mode:
 		Network filteredNetwork = null;
@@ -76,10 +79,10 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 				this.singleModeNetworksCache.getSingleModeNetworksCache().put(routingMode, filteredNetwork);
 			}
 		}
-
-		this.supernetworkLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks); 
 		
-		return new SupernetworkRoutingModuleImpl(routingMode, this.supernetworkLeastCostTreeCalculatorFactory);
+		this.supernetworkLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks);
 		
+		// TODO Auto-generated method stub
+		return new RoutingManagerImpl(4,this.supernetworkLeastCostTreeCalculatorFactory);
 	}
 }

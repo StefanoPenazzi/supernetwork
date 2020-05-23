@@ -34,31 +34,31 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.LeastCostTree
 public class SupernetworkRoutingModuleImpl implements SupernetworkRoutingModule {
 
 	private final String mode;
-	private final PopulationFactory populationFactory;
-
-	private final Network network;
-	private final LeastCostTreeCalculator treeAlgo;
+	private final SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
 
 
 	 public SupernetworkRoutingModuleImpl(
 			final String mode,
-			final PopulationFactory populationFactory,
-			final Network network,
-			final LeastCostTreeCalculator treeAlgo) {
-		 Gbl.assertNotNull(network);
-		 this.network = network;
-		 this.treeAlgo = treeAlgo;
+			final SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory) {
+		 
+		 this.supernetworkLeastCostTreeCalculatorFactory = supernetworkLeastCostTreeCalculatorFactory;
 		 this.mode = mode;
-		 this.populationFactory = populationFactory;
 	}
 	
 	public Path[] calcTree(final Node root, List<Node> toNodes ,final double departureTime) {		
 		
-		Path[] paths = treeAlgo.calcLeastCostTree(root, toNodes ,departureTime);
+		LeastCostTreeCalculator leastCostTreeCalculator = supernetworkLeastCostTreeCalculatorFactory.createTreeCalculator("car");
+		Path[] paths = leastCostTreeCalculator.calcLeastCostTree(root, toNodes ,departureTime);
 		//first link and node are the middlelink and supernode this are not considered  in path
 		for(Path p: paths) {
-			p.links.remove(0);
-			p.nodes.remove(0);
+			if(p.links.size() >0) {
+				p.links.remove(0);
+				p.nodes.remove(0);
+			}
+			else
+			{
+				p = null;
+			}
 		}
 		return paths;
 	}

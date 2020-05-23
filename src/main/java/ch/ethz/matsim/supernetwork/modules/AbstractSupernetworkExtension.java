@@ -16,6 +16,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkR
 import ch.ethz.matsim.supernetwork.network.SupernetworkFactory;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainer;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactory;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.RoutingManagerFactory;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
 
 
@@ -78,6 +79,10 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	
 	protected final com.google.inject.binder.LinkedBindingBuilder<ContainerManagerFactory> bindContainerManagerFactory() {
 		return bind(ContainerManagerFactory.class);
+	}
+	
+	protected final com.google.inject.binder.LinkedBindingBuilder<RoutingManagerFactory> bindRoutingManagerFactory() {
+		return bind(RoutingManagerFactory.class);
 	}
 
 	abstract protected void installExtension();

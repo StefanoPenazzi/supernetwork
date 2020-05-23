@@ -18,6 +18,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.PredecessorNo
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModule;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.PathTimeKey;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmOutput;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
@@ -29,7 +30,7 @@ import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
  */
 public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContainer{
 
-	private TreeMap<Domain,Path> container = new TreeMap<>();
+	private TreeMap<PathTimeKey,Path> container = new TreeMap<>();
 	
 	@Inject
 	public SupernetworkRoutesContainerImpl() {
@@ -38,12 +39,12 @@ public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContai
 	
 	@Override
 	public void add(Supernode supernode, Node toNode, double time,Path ln) {
-		container.put(new Domain(supernode,time,toNode), ln);
+		container.put(new PathTimeKey(supernode,time,toNode), ln);
 	}
 	
 	@Override
 	public Path getPath(Supernode supernode, Node toNode, double time) {
-		Domain d = new Domain(supernode,time,toNode);
+		PathTimeKey d = new PathTimeKey(supernode,time,toNode);
 		Path p = container.floorEntry(d).getValue();
 		return p;
 	}  
@@ -55,63 +56,4 @@ public class SupernetworkRoutesContainerImpl implements SupernetworkRoutesContai
 		else 
 			return false;
 	}
-	
-	public class Domain  implements Comparable<Domain>
-	{  
-		private Supernode supernode;
-		private double time;
-		private Node toNode;
-	    // Constructor  
-	    public Domain(Supernode supernode, double time,Node toNode)  
-	    {  
-	        this.supernode = supernode;  
-	        this.time = time;  
-	        this.toNode = toNode;
-	    } 
-	    public Supernode getSupernode(){
-	    	return this.supernode;
-	    }
-	    public double getTime() {
-	    	return time;
-	    }
-	    public Node getToNode() {
-	    	return this.toNode;
-	    }
-	    @Override
-		public int compareTo(Domain domain) {
-	    	int compSupernode = this.supernode.getNode().getId().compareTo(domain.getSupernode().getNode().getId());
-			if(compSupernode > 0) {
-				return 1;
-			}
-			else if (compSupernode < 0) {
-				return -1;
-			}
-			else {
-				int compToNode = this.toNode.getId().compareTo(domain.getToNode().getId());
-				if(compToNode > 0) {
-					return 1;
-				}
-				else if(compToNode < 0) {
-					return -1;
-				}
-				else {
-					if(this.time > 0) {
-						return 1;
-					}
-					else if(this.time<0) {
-						return -1;
-					}
-					else {
-						return 0;
-					}
-				}
-			}
-		}
-		@Override
-		public String toString(){
-			return supernode.getNode().getId().toString() + String.valueOf(time);
-		}
-	}
-
-	
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.javatuples.Pair;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
@@ -32,15 +33,15 @@ public class ContainerManagerImpl implements ContainerManager {
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, SupernetworkRoutesContainer> containersMap;
 	private final Map<String, TravelTime> travelTimes;
-	private final SupernetworkRoutingModule supernetworkRoutingModule; 
+	private final RoutingManager routingManager; 
 	private List<Middlenetwork> middlenetworks;
 	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
 	
-	public ContainerManagerImpl(SupernetworkRoutingModule supernetworkRoutingModule,
+	public ContainerManagerImpl(RoutingManager routingManager,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
 			SupernetworkRoutesContainer> containersMap,List<Middlenetwork> middlenetworks,
 			Map<String, TravelTime> travelTimes) {
-		this.supernetworkRoutingModule = supernetworkRoutingModule;
+		this.routingManager = routingManager;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
 		this.middlenetworks = middlenetworks;
@@ -54,12 +55,25 @@ public class ContainerManagerImpl implements ContainerManager {
 	  UpdateAlgorithm ua  = updateAlgorithmsMap.get(mode);
 	  TravelTime tt = this.travelTimes.get(mode);
 	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,middlenetworks,tt);
-	  for (UpdateAlgorithmOutput mn: inputs) {
-		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSupernode().getNode(), mn.getToNodes(),mn.getTime());
-		  for(Path p: paths) {
-			  src.add(mn.getSupernode(),Iterables.getLast(p.nodes),mn.getTime(),p);
-		  }
+	  routingManager.init();
+	  for (UpdateAlgorithmOutput uao: inputs) {
+		  routingManager.addRequest(uao);
+//		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSupernode().getNode(), mn.getToNodes(),mn.getTime());
+//		  for(Path p: paths) {
+//			  src.add(mn.getSupernode(),Iterables.getLast(p.nodes),mn.getTime(),p);
+//		  }
+		  
 	  }	
+	  
+	  List<Pair<PathTimeKey,Path>> res;
+	  
+	  res = routingManager.run();
+	   
+	  
+	  for(Pair<PathTimeKey,Path> p: res) {
+		  src.add(p.getValue0().getSupernode(),Iterables.getLast(p.getValue1().nodes),p.getValue0().getTime(),p.getValue1());
+	  }
+	  
 	  System.out.println("---");
 	}
 	

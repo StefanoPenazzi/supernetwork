@@ -97,44 +97,11 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 		this.person = person;
 		this.vehicle = vehicle;
 
-		// if (this.pruneDeadEnds) {
-		// super.deadEndEntryNode = getPreProcessData(toNode).getDeadEndEntryNode();
-		// }
-
 		RouterPriorityQueue<Node> pendingNodes = (RouterPriorityQueue<Node>) createRouterPriorityQueue();
 
-		// long startTimeT = System.nanoTime();
         initFromNode(routingNetworkFromNode, toNode, startTime, pendingNodes);
 		searchLogic(routingNetworkFromNode, toNode, pendingNodes);
 		
-//		if(printing > 100) {
-//			//System.out.println(" average  time: " + Double.toString((totTime/1000000000)/100) + " -- " +printingCounter);
-//			printing = 0;
-//			totTime = 0;
-//			printingCounter++;
-//		}
-//		else {
-//			printing++;
-//			printingCounter++;
-//		}
-		
-		
-		
-		
-		
-
-		// long endTimeT = System.nanoTime();
-		// totTime += (double)(endTimeT - startTimeT);
-		// if(printing > 10) {
-		// System.out.println(" time: " + Double.toString(totTime/1000000000) + " -- "
-		// +printingCounter);
-		// printing = 0;
-		// }
-		// else {
-		// printing++;
-		// printingCounter++;
-		// }
-
 		return null;
 	}
 

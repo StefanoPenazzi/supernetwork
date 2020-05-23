@@ -7,7 +7,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.FastDijkstraS
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworRoutingModuleFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.SupernetworkRoutesContainerImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.ContainerManagerFactoryImpl;
-import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmImpl;
+import ch.ethz.matsim.supernetwork.network.routescontainer.manager.RoutingManagerFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.routescontainer.manager.updatealgorithms.UpdateAlgorithmStaticFreqAnalysis;
 
 /**
@@ -26,6 +26,8 @@ public class SupernetworkContainerModule extends AbstractSupernetworkExtension {
 		
 		bindSupernetworkRoutingModuleFactory().to(SupernetworRoutingModuleFactoryImpl.class);
 		bindSupernetworkLeastCostTreeCalculatorFactory().to(FastDijkstraShortestTreeFactory.class);
+		
+		bindRoutingManagerFactory().to(RoutingManagerFactoryImpl.class);
 		
 		//install(new SupernetworkTripRouterModule());
 	}
