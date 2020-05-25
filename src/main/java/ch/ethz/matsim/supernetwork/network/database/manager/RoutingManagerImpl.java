@@ -11,7 +11,7 @@ import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkR
  * @author stefanopenazzi
  *
  */
-public class RoutingManagerImpl extends MultithreadingRoutingManager {
+public class RoutingManagerImpl extends  AbstractMultithreadingRoutingManager {
 
 	private final SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
 	/**

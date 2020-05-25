@@ -26,19 +26,4 @@ public class NetworkImpl implements Network{
 	public ContainerManager getContainerManager() {
 		return this.containerManager;
 	}
-
-	@Override
-	public void setContainerManager(ContainerManager containerManager) {
-		this.containerManager = containerManager;
-	}
-
-	@Override
-	public void containerUpdate() {
-		this.containerManager.updateContainer("car");		
-	}
-
-	@Override
-	public Path getPath(Activity act, Node toNode, int time, String mode) {
-		return this.containerManager.getPath(act, toNode ,time, mode);
-	}	
 }

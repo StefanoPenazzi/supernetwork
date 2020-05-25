@@ -29,7 +29,7 @@ import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.Upd
  * @author stefanopenazzi
  *
  */
-public abstract class MultithreadingRoutingManager implements RoutingManager {
+public abstract class AbstractMultithreadingRoutingManager implements RoutingManager {
 
 	private int count = 0;
 	private final int numOfThreads;
@@ -41,9 +41,9 @@ public abstract class MultithreadingRoutingManager implements RoutingManager {
 	private List<List<UpdateAlgorithmOutput>> uaoLists;
 	private List<RoutingThread> routingThreadList;
 
-	static final private Logger log = Logger.getLogger(MultithreadingRoutingManager.class);
+	static final private Logger log = Logger.getLogger( AbstractMultithreadingRoutingManager.class);
 
-	public MultithreadingRoutingManager(int numOfThreads) {
+	public  AbstractMultithreadingRoutingManager(int numOfThreads) {
 		this.numOfThreads = numOfThreads;
 	}
 	

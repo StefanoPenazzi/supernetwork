@@ -3,12 +3,6 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 import org.matsim.core.controler.AbstractModule;
-import ch.ethz.matsim.supernetwork.network.Network;
-import ch.ethz.matsim.supernetwork.network.NetworkFactory;
-import ch.ethz.matsim.supernetwork.network.NetworkFactoryImpl;
-import ch.ethz.matsim.supernetwork.network.NetworkImpl;
-import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
-import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrintImpl;
 
 
 /**

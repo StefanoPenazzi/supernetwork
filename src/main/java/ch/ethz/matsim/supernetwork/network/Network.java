@@ -14,11 +14,5 @@ import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
  *
  */
 public interface Network {
-
-	public void setContainerManager(ContainerManager containerManager);
 	public ContainerManager getContainerManager();
-	public void containerUpdate();
-	public Path getPath(Activity act,Node toNode,int time,String mode);
-
-
 }
