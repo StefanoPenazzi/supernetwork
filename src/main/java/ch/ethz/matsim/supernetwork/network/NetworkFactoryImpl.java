@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
+import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactory;
 import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
 import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
@@ -38,13 +39,13 @@ public class NetworkFactoryImpl implements NetworkFactory {
 	SubnetworkFactory subnetworkFactory; 
 	MiddlenetworkFactory middlenetworkFactory;
 	SupernetPrint supernetPrint;
-	ContainerManagerFactory containerManagerFactory; 
+	ContainerManager containerManager; 
 
 	
 	@Inject
 	public NetworkFactoryImpl(Network supernet, ClustersContainer clustersContainer, Scenario scenario,MatsimServices matsimServices,
 			SubnetworkFactory subnetworkFactory,MiddlenetworkFactory middlenetworkFactory,
-			SupernetPrint supernetPrint,ContainerManagerFactory containerManagerFactory) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
+			SupernetPrint supernetPrint,ContainerManager containerManager) {//, SupernetworkConfigGroup supernetworkConfigGroup) {
 		this.supernet = supernet;
 		this.clustersContainer = clustersContainer;
 		this.scenario = scenario;
@@ -52,7 +53,7 @@ public class NetworkFactoryImpl implements NetworkFactory {
 		this.subnetworkFactory = subnetworkFactory;
 		this.middlenetworkFactory = middlenetworkFactory;
 		this.supernetPrint = supernetPrint;
-		this.containerManagerFactory = containerManagerFactory;
+		this.containerManager = containerManager;
 		create();
 		//this.supernetworkConfigGroup = supernetworkConfigGroup;
 	}
@@ -61,13 +62,7 @@ public class NetworkFactoryImpl implements NetworkFactory {
 	public
 	final void create() {
 		
-		List<Middlenetwork> middlenetworks = new ArrayList<Middlenetwork>();
-		List<ClusterActivitiesLocation> lc = this.clustersContainer.getClusters();
-		for(ClusterActivitiesLocation cdi: lc) {
-			Subnetwork sn = subnetworkFactory.generateSubnetworkByCluster(cdi); 
-			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
-		}
-		supernet.setContainerManager(containerManagerFactory.createContainerManager(middlenetworks));
+		supernet.setContainerManager(containerManager);
 		//this.supernetPrint.print();
 	}
 }

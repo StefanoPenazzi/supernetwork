@@ -24,9 +24,9 @@ public class SupernetworkModule extends AbstractModule {
 	
 	@Override
 	public void install() {
-		bind(Network.class).to(NetworkImpl.class).asEagerSingleton();
-		bind(NetworkFactory.class).to(NetworkFactoryImpl.class);
-		bind(SupernetPrint.class).to(SupernetPrintImpl.class);
+//		bind(Network.class).to(NetworkImpl.class).asEagerSingleton();
+//		bind(NetworkFactory.class).to(NetworkFactoryImpl.class);
+//		bind(SupernetPrint.class).to(SupernetPrintImpl.class);
 		
         install(new ModulesSet());
 	}

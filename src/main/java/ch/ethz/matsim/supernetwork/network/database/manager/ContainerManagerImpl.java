@@ -13,6 +13,8 @@ import org.matsim.api.core.v01.population.Activity;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
+
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
@@ -29,20 +31,22 @@ public class ContainerManagerImpl implements ContainerManager {
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, RoutesContainer> containersMap;
 	private final Map<String, TravelTime> travelTimes;
-	private final RoutingManager routingManager; 
+	private final RoutingManagerFactory routingManagerFactory; 
+	private RoutingManager routingManager;
 	private List<Middlenetwork> middlenetworks;
 	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
 	
-	public ContainerManagerImpl(RoutingManager routingManager,
+	@Inject
+	public ContainerManagerImpl(RoutingManagerFactory routingManagerFactory,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
-			RoutesContainer> containersMap,List<Middlenetwork> middlenetworks,
+			RoutesContainer> containersMap,
 			Map<String, TravelTime> travelTimes) {
-		this.routingManager = routingManager;
+		this.routingManagerFactory = routingManagerFactory;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
-		this.middlenetworks = middlenetworks;
+		this.middlenetworks = null;
 		this.travelTimes = travelTimes;
-		initialize();
+		
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public class ContainerManagerImpl implements ContainerManager {
 	  RoutesContainer src = containersMap.get(mode);
 	  UpdateAlgorithm ua  = updateAlgorithmsMap.get(mode);
 	  TravelTime tt = this.travelTimes.get(mode);
-	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,middlenetworks,tt);
+	  List<UpdateAlgorithmOutput> inputs = ua.getUpdate(src,this.middlenetworks,tt);
 	  routingManager.init();
 	  for (UpdateAlgorithmOutput uao: inputs) {
 		  routingManager.addRequest(uao);
@@ -60,16 +64,11 @@ public class ContainerManagerImpl implements ContainerManager {
 //		  }
 		  
 	  }	
-	  
 	  List<Pair<PathTimeKey,Path>> res;
-	  
 	  res = routingManager.run();
-	   
-	  
 	  for(Pair<PathTimeKey,Path> p: res) {
 		  src.add(p.getValue0().getSupernode(),Iterables.getLast(p.getValue1().nodes),p.getValue0().getTime(),p.getValue1());
 	  }
-	  
 	  System.out.println("---");
 	}
 	
@@ -93,7 +92,16 @@ public class ContainerManagerImpl implements ContainerManager {
 		return this.middlenetworks;
 	}
 	
+	@Override
+	public void setMiddlenetworks(List<Middlenetwork> middlenetworks) {
+		this.middlenetworks = middlenetworks;
+		initialize();
+	}
+	
 	public void initialize() {
+		
+		routingManager = routingManagerFactory.createRoutingManager(middlenetworks);
+		
 		for(Middlenetwork mn: this.middlenetworks) {
 			List<ElementActivity> activities = mn.getCluster().getComponents();
 			for(ElementActivity ea : activities) {
@@ -143,4 +151,6 @@ public class ContainerManagerImpl implements ContainerManager {
 		}
 		
 	}
+
+	
 }

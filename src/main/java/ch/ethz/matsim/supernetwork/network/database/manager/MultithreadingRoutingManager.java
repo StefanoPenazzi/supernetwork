@@ -31,10 +31,6 @@ import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.Upd
  */
 public abstract class MultithreadingRoutingManager implements RoutingManager {
 
-//	private RoutingThread[] routingThreads = null;
-//	private Thread[] threads = null;
-//	private String name = null;
-//
 	private int count = 0;
 	private final int numOfThreads;
 //

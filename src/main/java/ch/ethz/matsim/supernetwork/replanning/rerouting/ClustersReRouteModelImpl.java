@@ -21,6 +21,8 @@ import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.facilities.Facility;
 import com.google.inject.Inject;
 
+import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+
 /**
  * @author stefanopenazzi
  *
@@ -28,14 +30,14 @@ import com.google.inject.Inject;
 public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 
 	private final Network network;
-	private final ch.ethz.matsim.supernetwork.network.Network supernet;
+	private final ContainerManager containerManager;
 	private final PopulationFactory populationFactory;
 	
 	@Inject
-	public ClustersReRouteModelImpl(Network network, ch.ethz.matsim.supernetwork.network.Network supernet,final PopulationFactory populationFactory) {
+	public ClustersReRouteModelImpl(Network network, ContainerManager containerManager,final PopulationFactory populationFactory) {
 		Gbl.assertNotNull(network);
 		this.network = network;
-		this.supernet = supernet;
+		this.containerManager = containerManager;
 		this.populationFactory = populationFactory;
 	}
 
@@ -53,7 +55,7 @@ public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 		Gbl.assertNotNull(toLink);
 		
 		Node endNode = toLink.getFromNode();
-		Path path = this.supernet.getPath(fromActivity, endNode, (int)departureTime,"car");
+		Path path = this.containerManager.getPath(fromActivity, endNode, (int)departureTime,"car");
 		
 //		String s = "";
 //		for(Node n: path.nodes) {

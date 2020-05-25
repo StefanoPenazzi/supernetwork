@@ -9,6 +9,7 @@ import org.matsim.core.controler.listener.IterationStartsListener;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.network.Network;
+import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 
 /**
  * @author stefanopenazzi
@@ -16,16 +17,16 @@ import ch.ethz.matsim.supernetwork.network.Network;
  */
 public class SupernetworkContainerFilling implements IterationStartsListener{
 	
-    private Network supernet;
+    private ContainerManager containerManager;
 	
 	@Inject
-	public SupernetworkContainerFilling (Network supernet) {
-		this.supernet = supernet;
+	public SupernetworkContainerFilling (ContainerManager containerManager) {
+		this.containerManager = containerManager;
 	}
 	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
-		supernet.containerUpdate();
+		containerManager.updateContainer("car");
 	}
 
 }

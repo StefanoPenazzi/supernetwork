@@ -3,10 +3,13 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
+import com.google.inject.Singleton;
+
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.FastDijkstraShortestTreeFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworRoutingModuleFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainerImpl;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactoryImpl;
+import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerImpl;
 import ch.ethz.matsim.supernetwork.network.database.manager.RoutingManagerFactoryImpl;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmStaticFreqAnalysis;
 
@@ -19,7 +22,8 @@ public class SupernetworkContainerModule extends AbstractSupernetworkExtension {
 	@Override
 	public void installExtension() {
 		
-		bindContainerManagerFactory().to(ContainerManagerFactoryImpl.class );
+		bindContainerManager().to(ContainerManagerImpl.class).asEagerSingleton();
+		bindContainerManagerFactory().to(ContainerManagerFactoryImpl.class);
 		
 		bindRoutesContainer("car").to(RoutesContainerImpl.class);
 		bindUpdateAlgorithm("car").to(UpdateAlgorithmStaticFreqAnalysis.class);

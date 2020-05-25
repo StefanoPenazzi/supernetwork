@@ -13,6 +13,6 @@ import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
  */
 public interface ContainerManagerFactory {
 	
-	public ContainerManager createContainerManager(List<Middlenetwork> middlenetworks);
+	public void setContainerManager();
 
 }
