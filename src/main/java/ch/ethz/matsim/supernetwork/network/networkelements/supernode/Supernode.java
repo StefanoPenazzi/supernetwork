@@ -1,15 +1,15 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.networkelements.supernode;
+package ch.ethz.matsim.supernetwork.network.networkelements.supernode;
 
 import java.util.List;
 
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Node;
 
-import ch.ethz.matsim.supernetwork.networkelements.middlelink.Middlelink;
-import ch.ethz.matsim.supernetwork.networkelements.superlink.Superlink;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlelink.Middlelink;
+import ch.ethz.matsim.supernetwork.network.networkelements.superlink.Superlink;
 
 /**
  * @author stefanopenazzi

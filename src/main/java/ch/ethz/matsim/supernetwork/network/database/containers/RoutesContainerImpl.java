@@ -9,7 +9,7 @@ import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.network.database.manager.PathTimeKey;
-import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
 
 /**
  * @author stefanopenazzi

@@ -19,10 +19,10 @@ import ch.ethz.matsim.supernetwork.network.Network;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.MiddlenetworkFactory;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactory;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkFactory;
 
 /**
  * @author stefanopenazzi

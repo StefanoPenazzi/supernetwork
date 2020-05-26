@@ -19,7 +19,7 @@ import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.TravelTime;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.LeastCostTreeCalculator;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi

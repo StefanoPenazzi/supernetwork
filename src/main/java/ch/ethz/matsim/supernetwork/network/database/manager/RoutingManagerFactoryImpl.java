@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.LeastCostTreeCalculator;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi

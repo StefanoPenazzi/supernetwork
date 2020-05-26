@@ -22,7 +22,7 @@ import org.matsim.core.router.util.ArrayRoutingNetworkNode;
 import org.matsim.core.router.util.RoutingNetworkLink;
 import org.matsim.core.router.util.RoutingNetworkNode;
 
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
 
 
 /**

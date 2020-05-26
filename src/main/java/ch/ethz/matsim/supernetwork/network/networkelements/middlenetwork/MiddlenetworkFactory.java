@@ -1,10 +1,10 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.networkelements.middlenetwork;
+package ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork;
 
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.Subnetwork;
 
 /**
  * @author stefanopenazzi

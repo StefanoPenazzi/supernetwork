@@ -9,10 +9,10 @@ import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkDefaultImpl;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkFactory;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.SubnetworkUtils;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkDefaultImpl;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkUtils;
 
 /**
  * @author stefanopenazzi

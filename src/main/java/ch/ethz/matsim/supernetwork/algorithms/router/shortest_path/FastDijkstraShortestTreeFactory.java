@@ -17,7 +17,7 @@ import org.matsim.core.router.util.RoutingNetwork;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
 
 
 /**

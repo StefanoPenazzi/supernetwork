@@ -2,7 +2,7 @@
  * 
  */
 
-package ch.ethz.matsim.supernetwork.networkelements.middlenetwork;
+package ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,10 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALRegion;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.Element;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
-import ch.ethz.matsim.supernetwork.networkelements.middlelink.Middlelink;
-import ch.ethz.matsim.supernetwork.networkelements.middlelink.MiddlelinkImpl;
-import ch.ethz.matsim.supernetwork.networkelements.subnetwork.Subnetwork;
-import ch.ethz.matsim.supernetwork.networkelements.supernode.SupernodeImpl;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlelink.Middlelink;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlelink.MiddlelinkImpl;
+import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.Subnetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.supernode.SupernodeImpl;
 import ch.ethz.matsim.supernetwork.utilities.graph.LinkWeight;
 
 

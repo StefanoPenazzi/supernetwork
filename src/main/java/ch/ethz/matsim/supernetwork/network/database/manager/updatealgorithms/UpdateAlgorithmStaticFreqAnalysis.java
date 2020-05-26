@@ -9,7 +9,7 @@ import java.util.List;
 import org.matsim.core.router.util.TravelTime;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
 
 /**
  * @author stefanopenazzi

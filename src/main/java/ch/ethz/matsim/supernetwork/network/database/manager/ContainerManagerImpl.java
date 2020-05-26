@@ -19,8 +19,8 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActiv
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmOutput;
-import ch.ethz.matsim.supernetwork.networkelements.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.supernetwork.networkelements.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
 
 /**
  * @author stefanopenazzi
