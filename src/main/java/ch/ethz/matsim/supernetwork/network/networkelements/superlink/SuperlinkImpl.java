@@ -6,6 +6,7 @@ package ch.ethz.matsim.supernetwork.network.networkelements.superlink;
 import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.network.networkelements.supernode.TimeSupernode;
 
 /**
  * @author stefanopenazzi
@@ -14,24 +15,24 @@ import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
 public class SuperlinkImpl implements Superlink  {
 	
 	
-	private Supernode from;
-	private Supernode to;
+	private TimeSupernode from;
+	private TimeSupernode to;
 	private double weight;
 	
-	public SuperlinkImpl(Supernode from,Supernode to,double weight) {
+	public SuperlinkImpl(TimeSupernode from,TimeSupernode to,double weight) {
 		this.from = from;
 		this.to = to;
 		this.weight = weight;
 	}
 
 	@Override
-	public Supernode getFrom() {
+	public TimeSupernode getFrom() {
 		// TODO Auto-generated method stub
 		return this.from;
 	}
 
 	@Override
-	public Supernode getTo() {
+	public TimeSupernode getTo() {
 		// TODO Auto-generated method stub
 		return this.to;
 	}

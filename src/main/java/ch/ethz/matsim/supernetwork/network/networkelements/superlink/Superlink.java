@@ -7,6 +7,7 @@ package ch.ethz.matsim.supernetwork.network.networkelements.superlink;
 import org.matsim.api.core.v01.network.Node;
 
 import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
+import ch.ethz.matsim.supernetwork.network.networkelements.supernode.TimeSupernode;
 
 /**
  * @author stefanopenazzi
@@ -14,8 +15,8 @@ import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
  */
 public interface Superlink {
 	
-	public Supernode getFrom();
-	public Supernode getTo();
+	public TimeSupernode getFrom();
+	public TimeSupernode getTo();
 	public double getWeight();
 
 }
