@@ -5,6 +5,7 @@ package ch.ethz.matsim.supernetwork.replanning.supernetwork;
 
 import java.util.List;
 
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 
 
@@ -14,5 +15,5 @@ import org.matsim.api.core.v01.population.PlanElement;
  */
 public interface SupernetworkModel {
 
-	public List<? extends PlanElement> newPlan();
+	public List<? extends PlanElement> newPlan(Plan plan);
 }
