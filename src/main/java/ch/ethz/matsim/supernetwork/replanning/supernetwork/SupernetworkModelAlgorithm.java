@@ -28,7 +28,8 @@ public class SupernetworkModelAlgorithm implements PlanAlgorithm{
 	
 	@Override
 	public void run(Plan plan) {
-		// TODO Auto-generated method stub
+		// change the plan with the result of the model
+		this.supernetworkModel.newPlan(plan);
 		
 	}
 

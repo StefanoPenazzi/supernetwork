@@ -20,7 +20,6 @@ public class SupernetPrintImpl implements SupernetPrint {
 
 	public static final String FILENAME_SUPERNET = "supernetwork";
 	
-	private final Network supernet;
 	final private BufferedWriter supernetOut ;
 	private final ControlerConfigGroup controlerConfigGroup;
 	final private String supernetFileName; 
@@ -32,8 +31,7 @@ public class SupernetPrintImpl implements SupernetPrint {
 	private int[] clustersActivitiesAverageDistCentroidFreqAnalysis;
 	
 	@Inject
-	SupernetPrintImpl(Network supernet,ControlerConfigGroup controlerConfigGroup,OutputDirectoryHierarchy controlerIO){
-		this.supernet = supernet;
+	SupernetPrintImpl(ControlerConfigGroup controlerConfigGroup,OutputDirectoryHierarchy controlerIO){
 		this.controlerConfigGroup = controlerConfigGroup;
 		this.supernetFileName = controlerIO.getOutputFilename( FILENAME_SUPERNET ) ;
 		this.supernetOut = IOUtils.getBufferedWriter(this.supernetFileName + ".txt");
