@@ -10,7 +10,7 @@ import org.matsim.core.config.groups.ControlerConfigGroup;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.utils.io.IOUtils;
 import org.matsim.core.utils.io.UncheckedIOException;
-import ch.ethz.matsim.supernetwork.network.Network;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp.*;
 
 /**
  * @author stefanopenazzi

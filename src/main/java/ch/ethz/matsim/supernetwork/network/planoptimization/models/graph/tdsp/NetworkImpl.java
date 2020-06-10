@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network;
+package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.network.Node;
@@ -20,9 +20,12 @@ public class NetworkImpl implements Network{
 
 	private final static Logger log = Logger.getLogger(NetworkImpl.class);
 	
-	private  ContainerManager containerManager;
+	private final  ContainerManager containerManager;
 	
-	@Override
+	public NetworkImpl(ContainerManager containerManager) {
+		this.containerManager = containerManager;
+	}
+	
 	public ContainerManager getContainerManager() {
 		return this.containerManager;
 	}

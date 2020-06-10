@@ -5,20 +5,9 @@ package ch.ethz.matsim.supernetwork.network.database.manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.core.controler.MatsimServices;
-import org.matsim.core.router.util.TravelTime;
 import com.google.inject.Inject;
-
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.ClusterActivitiesLocation;
 import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.network.Network;
-import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
-import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
-import ch.ethz.matsim.supernetwork.network.utilities.SupernetPrint;
 import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.Middlenetwork;
 import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.Subnetwork;
@@ -30,10 +19,6 @@ import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.Subnetwork
  */
 public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 
-	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
-	private final Map<String, RoutesContainer> containersMap;
-	private final RoutingManagerFactory routingManagerFactory; 
-	private final Map<String, TravelTime> travelTimes;
 	private final ClustersContainer clustersContainer;
 	private final SubnetworkFactory subnetworkFactory; 
 	private final MiddlenetworkFactory middlenetworkFactory; 
@@ -42,19 +27,13 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 	
 	
 	@Inject
-	public ContainerManagerFactoryImpl(RoutingManagerFactory routingManagerFactory,
-			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
-			RoutesContainer> containersMap,Map<String, TravelTime> travelTimes,
+	public ContainerManagerFactoryImpl(
 			ClustersContainer clustersContainer,
 			SubnetworkFactory subnetworkFactory, 
 			MiddlenetworkFactory middlenetworkFactory,
 			ContainerManager containerManager
 			
     ) {
-		this.routingManagerFactory = routingManagerFactory;
-		this.updateAlgorithmsMap = updateAlgorithmsMap;
-		this.containersMap = containersMap;
-		this.travelTimes = travelTimes;
 		this.clustersContainer = clustersContainer;
 		this.subnetworkFactory = subnetworkFactory; 
 		this.middlenetworkFactory = middlenetworkFactory; 

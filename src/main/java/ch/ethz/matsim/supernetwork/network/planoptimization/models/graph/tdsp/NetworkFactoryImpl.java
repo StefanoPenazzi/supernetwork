@@ -1,14 +1,11 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network;
-
-import java.util.List;
+package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp;
 
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
-import org.matsim.core.scoring.ScoringFunctionFactory;
 import org.matsim.core.scoring.functions.ScoringParameters;
 import org.matsim.core.scoring.functions.ScoringParametersForPerson;
 
@@ -44,7 +41,7 @@ public class NetworkFactoryImpl implements NetworkFactory {
 			}
 		}
 		
-		return new NetworkImpl();
+		return new NetworkImpl(containerManager);
 	}
 	
 	

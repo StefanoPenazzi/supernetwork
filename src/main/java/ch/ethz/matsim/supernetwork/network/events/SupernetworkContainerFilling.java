@@ -8,7 +8,6 @@ import org.matsim.core.controler.listener.IterationStartsListener;
 
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.network.Network;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 
 /**

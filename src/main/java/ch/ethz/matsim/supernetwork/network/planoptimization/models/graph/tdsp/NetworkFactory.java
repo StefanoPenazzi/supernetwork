@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.supernetwork.network;
+package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp;
 
 import org.matsim.api.core.v01.population.Plan;
 
