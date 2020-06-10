@@ -6,12 +6,22 @@ package ch.ethz.matsim.supernetwork.network.database.manager;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import org.javatuples.Pair;
 import org.matsim.api.core.v01.Coord;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.core.gbl.Gbl;
+import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+import org.matsim.facilities.ActivityFacilities;
+import org.matsim.facilities.FacilitiesUtils;
+import org.matsim.facilities.Facility;
+
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
@@ -35,17 +45,22 @@ public class ContainerManagerImpl implements ContainerManager {
 	private RoutingManager routingManager;
 	private List<Middlenetwork> middlenetworks;
 	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
+	private final ActivityFacilities facilities;
+	private final Network network;
 	
 	@Inject
 	public ContainerManagerImpl(RoutingManagerFactory routingManagerFactory,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
 			RoutesContainer> containersMap,
-			Map<String, TravelTime> travelTimes) {
+			Map<String, TravelTime> travelTimes,ActivityFacilities facilities,
+			Network network) {
 		this.routingManagerFactory = routingManagerFactory;
 		this.updateAlgorithmsMap = updateAlgorithmsMap;
 		this.containersMap = containersMap;
 		this.middlenetworks = null;
 		this.travelTimes = travelTimes;
+		this.facilities = facilities;
+		this.network= network;
 		
 	}
 
@@ -85,6 +100,28 @@ public class ContainerManagerImpl implements ContainerManager {
 			return null;
 		}
 		return getPath(this.activitySupernodeMap.get(c),toNode,time,mode);
+	}
+	
+	@Override
+	public Path getPath(Activity startActivity, Activity endActivity, double time, String mode) {
+		
+		Coordin c = new Coordin(startActivity.getCoord());
+		Supernode sn = this.activitySupernodeMap.get(c);
+		if(sn == null) {
+			return null;
+		}
+		//this is useful if the routing data would be saved ad Activity->Activity
+		Facility toFacility = FacilitiesUtils.toFacility(endActivity, facilities );
+		Gbl.assertNotNull(toFacility);
+		Link toLink = this.network.getLinks().get(toFacility.getLinkId());
+		if ( toLink==null ) {
+			Gbl.assertNotNull( toFacility.getCoord() ) ;
+			toLink = NetworkUtils.getNearestLink(network, toFacility.getCoord());
+		}
+		Gbl.assertNotNull(toLink);
+		Node endNode = toLink.getFromNode();
+		return getPath(this.activitySupernodeMap.get(c),endNode,time,mode);
+		
 	}
 	
 	@Override 
@@ -151,6 +188,8 @@ public class ContainerManagerImpl implements ContainerManager {
 		}
 		
 	}
+
+	
 
 	
 }

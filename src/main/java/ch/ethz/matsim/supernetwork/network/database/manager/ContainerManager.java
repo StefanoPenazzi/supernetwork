@@ -22,6 +22,7 @@ public interface ContainerManager {
 	public void updateContainer(String mode);
 	public Path getPath(Supernode supernode, Node toNode ,double time,String mode);
 	public Path getPath(Activity activity, Node toNode ,double time,String mode);
+	public Path getPath(Activity startActivity, Activity endActivity ,double time,String mode);
 	public void setMiddlenetworks(List<Middlenetwork> middlenetworks);
 	public List<Middlenetwork> getMiddlenetworks();
 }
