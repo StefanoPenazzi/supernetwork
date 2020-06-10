@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Graph;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 import ch.ethz.matsim.supernetwork.replanning.supernetwork.SupernetworkModel;
 
 /**
@@ -27,14 +28,20 @@ public class tdspOrdaRom implements SupernetworkModel {
 	private final ContainerManager containerManager;
 	private final ScoringParametersForPerson params;
 	private final TripRouter tripRouter;
-	
+	private final ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph; 
 	
 	
 	@Inject
-	public tdspOrdaRom(ContainerManager containerManager,ScoringParametersForPerson params,TripRouter tripRouter) {
+	public tdspOrdaRom(ContainerManager containerManager,ScoringParametersForPerson params,TripRouter tripRouter,ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph) {
 		this.containerManager = containerManager;
 		this.params = params;
 		this.tripRouter = tripRouter;
+		this.scoringFunctionsForPopulationGraph = scoringFunctionsForPopulationGraph;
+		
+	}
+	
+	public void init() {
+		this.scoringFunctionsForPopulationGraph.init();
 	}
 	
 	@Override

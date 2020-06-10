@@ -12,7 +12,6 @@ public class Link {
 	private int id;
 	private Node startNode;
 	private Node endNode;
-	private String mode;
 	
 	protected Link() {
 		
