@@ -7,6 +7,11 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elemen
  * @author stefanopenazzi
  *
  */
-public class Graph {
+public interface Graph {
 
+	public Node[] getNodes();
+	public Link[] getLinks();
+	public void build();
+	public void addNode(Node node);
+	public void addLink(Link link);
 }

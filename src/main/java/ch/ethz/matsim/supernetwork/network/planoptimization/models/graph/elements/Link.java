@@ -7,23 +7,12 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elemen
  * @author stefanopenazzi
  *
  */
-public class Link {
+public interface Link {
+	
+	public int getId();
+	public int getFromNodeId();
+	public int getToNodeId();
+	public void setFromNodeId(int fromNodeId);
+	public void setToNodeId(int toNodeId);
 
-	private int id;
-	private Node startNode;
-	private Node endNode;
-	
-	protected Link() {
-		
-	}
-	
-	public int getId() {
-		return this.id ;
-	};
-	public Node getStartNode() {
-		return this.startNode;
-	};
-	public Node getEndNode() {
-		return this.endNode;
-	};
 }

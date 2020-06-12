@@ -3,33 +3,17 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements;
 
-import org.matsim.api.core.v01.population.Activity;
+import java.util.List;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class Node {
+public interface Node {
+	
+	public int getId();
+	public void setId(int id);
+	public List<Link> getInLinks();
+	public List<Link> getOutLinks();
 
-	private int id;
-	private Activity activity;
-	private Link[] inLinks;
-	private Link[] outLinks;
-	
-	protected Node() {
-		
-	}
-	
-	public int getId() {
-		return this.id;
-	};
-	public Activity getActivity() {
-		return this.activity;
-	};
-	public Link[] getInLinks() {
-		return this.inLinks;
-	};
-	public Link[] getOutLinks() {
-		return this.outLinks;
-	};
 }
