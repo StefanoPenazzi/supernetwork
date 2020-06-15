@@ -7,6 +7,6 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.manager;
  * @author stefanopenazzi
  *
  */
-public class planModelForPopulationManagerImpl {
+public class PlanModelForPopulationManagerImpl implements PlanModelForPopulationManager{
 
 }
