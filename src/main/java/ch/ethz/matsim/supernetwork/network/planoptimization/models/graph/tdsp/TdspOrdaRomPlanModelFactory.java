@@ -70,8 +70,9 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 	}
 	
 	
-	//this should be build only one time.
-	private Graph createGraph(Plan plan) {
+	
+	@Override
+	public Graph createPlanModel(Plan plan) {
 		Graph graph = new GraphImpl();
 		final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
 		int idNode = 0;
