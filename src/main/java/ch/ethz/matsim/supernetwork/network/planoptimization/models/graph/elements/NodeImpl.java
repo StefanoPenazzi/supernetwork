@@ -35,6 +35,18 @@ public class NodeImpl implements Node{
 	public void setId(int id) {
 		this.id = id;
 		
+	}
+
+	@Override
+	public void addInLink(Link l) {
+	     inLinks.add(l);
+		
+	}
+
+	@Override
+	public void addOutLink(Link l) {
+		outLinks.add(l);
+		
 	};
 	
 }

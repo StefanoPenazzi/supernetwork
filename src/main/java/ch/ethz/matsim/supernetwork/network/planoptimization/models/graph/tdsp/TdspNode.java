@@ -19,9 +19,11 @@ public class TdspNode implements Node {
 	private int id;
 	private List<Link> inLinks;
 	private List<Link> outLinks;
+	private Activity activity;
 	
-	public TdspNode(int id) {
+	public TdspNode(int id,Activity activity ) {
 		this.id = id;
+		this.activity = activity;
 	}
 	
 	@Override
@@ -48,5 +50,20 @@ public class TdspNode implements Node {
 		
 	}
 
+	public Activity getActivity() {
+		return this.activity;
+	}
+
+	@Override
+	public void addInLink(Link l) {
+		inLinks.add(l);
+		
+	}
+
+	@Override
+	public void addOutLink(Link l) {
+		outLinks.add(l);
+		
+	}
 	
 }

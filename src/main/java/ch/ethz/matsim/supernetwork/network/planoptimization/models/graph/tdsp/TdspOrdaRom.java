@@ -83,6 +83,7 @@ public class TdspOrdaRom implements SupernetworkModel {
 		if(plan.getPerson().getAttributes().getAttribute("car_avail") != "always") {
 			planModes.remove("car");
 		}
+		List<TdspNode> nodesList = new ArrayList<>();
 		
 		for(int j =0; j< activities.size(); j++) {
 			Activity act = activities.get(j);
@@ -92,25 +93,31 @@ public class TdspOrdaRom implements SupernetworkModel {
 					System.out.println("");
 				}
 			}
-			TdspNode n = new TdspNode(idNode);
-			
+			TdspNode n = new TdspNode(idNode,act);
+			nodesList.add(n);
+			idNode++;
+		}
+		
+		for(int j= 0;j<nodesList.size()-1;++j) {
 			//LINKS
 			//for the activity durations
+			Activity act = nodesList.get(j).getActivity();
 			double[] durations = activityDurations(act);
 			for(int i =0;i<durations.length;i++) {
 				//for all the mode
 				for(int k=0;k<planModes.size();++k) {
-					
 					//TODO LINKS
-					//TdspLink link = new TdspLink(idLink,idNode,idNode+1,act,);
+					Activity linkAct = this.populationFactory.createActivityFromLinkId(act.getType(),act.getLinkId());
+					Leg linkLeg = this.populationFactory.createLeg(planModes.get(k));
+					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg);
+					nodesList.get(j).addOutLink(link);
+					nodesList.get(j+1).addInLink(link);
 					idLink++;
 				}
 			}
 			
-			graph.addNode(n);
-			idNode++;
 		}
-		graph.build();
+		graph.buildLinksIntoNodes();
 		return graph;
 	}
 

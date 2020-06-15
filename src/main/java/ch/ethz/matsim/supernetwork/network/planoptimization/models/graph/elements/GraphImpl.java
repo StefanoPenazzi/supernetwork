@@ -39,7 +39,7 @@ public class GraphImpl implements Graph {
 	}
 
 	@Override
-	public void build() {
+	public void buildLinksNotIntoNodes() {
 		finish = true;
 		nodes = new Node[nodesList.size()];
 		links = new Link[linksList.size()];
@@ -78,6 +78,35 @@ public class GraphImpl implements Graph {
 		}
 		else {
 			// exception
+		}
+		
+	}
+
+	@Override
+	public void buildLinksIntoNodes() {
+		
+		finish = true;
+		nodes = new Node[nodesList.size()];
+		HashMap<Integer,Integer> newNodeId = new HashMap<Integer,Integer>(); 
+		// map with the node id and the new id equal to the position in th
+		nodesList.toArray(nodes);
+		for(int i =0;i<nodes.length;++i) {
+			newNodeId.put(nodes[i].getId(), i);
+			//TODO exception in case the from/to node can not be found
+			nodes[i].setId(i);
+		}
+		//TODO exception in case the from/to node can not be found
+		for (int i =0;i<nodes.length;++i) {
+			
+			for(Link l: nodes[i].getInLinks()) {
+				l.setFromNodeId(newNodeId.get(l.getFromNodeId()));
+				l.setToNodeId(i);
+			}
+			
+            for(Link l: nodes[i].getOutLinks()) {
+            	l.setFromNodeId(i);
+				l.setToNodeId(l.getToNodeId());
+			}
 		}
 		
 	}

@@ -15,5 +15,7 @@ public interface Node {
 	public void setId(int id);
 	public List<Link> getInLinks();
 	public List<Link> getOutLinks();
+	public void addInLink(Link l);
+	public void addOutLink(Link l);
 
 }

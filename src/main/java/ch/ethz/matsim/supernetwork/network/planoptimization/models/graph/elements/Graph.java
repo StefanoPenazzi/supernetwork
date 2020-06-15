@@ -11,7 +11,8 @@ public interface Graph {
 
 	public Node[] getNodes();
 	public Link[] getLinks();
-	public void build();
+	public void buildLinksNotIntoNodes();
+	public void buildLinksIntoNodes();
 	public void addNode(Node node);
 	public void addLink(Link link);
 }

@@ -3,8 +3,11 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp;
 
+import java.util.List;
+
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Leg;
+import org.matsim.core.router.TripStructureUtils.Trip;
 
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Link;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Node;
@@ -19,14 +22,14 @@ public class TdspLink implements Link {
 	private int fromNodeId;
 	private int toNodeId;
 	private Activity activity;
-	private Leg leg;
+	private Leg trip;
 	
-	protected TdspLink(int id,int fromNodeId,int toNodeId,Activity activity,Leg leg) {
+	protected TdspLink(int id,int fromNodeId,int toNodeId,Activity activity,Leg trip) {
 		this.id=id;
 		this.fromNodeId = fromNodeId;
 		this.toNodeId = toNodeId;
 		this.activity = activity;
-		this.leg = leg;
+		this.trip = trip;
 	}
 	
 	@Override
@@ -58,7 +61,7 @@ public class TdspLink implements Link {
 		return this.activity;
 	}
 	
-	public Leg getLeg() {
-		return this.leg;
+	public Leg getTrip() {
+		return this.trip;
 	}
 }
