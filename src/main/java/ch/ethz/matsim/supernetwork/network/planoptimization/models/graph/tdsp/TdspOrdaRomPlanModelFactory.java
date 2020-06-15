@@ -22,17 +22,20 @@ import org.matsim.core.utils.misc.Time;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Graph;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.GraphImpl;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.NodeImpl;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
+import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.OrdaRomOptimizationAlgorithm;
 import ch.ethz.matsim.supernetwork.replanning.supernetwork.SupernetworkModel;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class TdspOrdaRom implements SupernetworkModel {
+public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 
 	private final ContainerManager containerManager;
 	private final ScoringParametersForPerson params;
@@ -40,6 +43,7 @@ public class TdspOrdaRom implements SupernetworkModel {
 	private final ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph;
 	private final PlanCalcScoreConfigGroup planCalcScoreConfigGroup;
     private final PopulationFactory populationFactory;
+    
 	
 	
 	private  List<String> modes = Arrays.asList("car","walk","bike");
@@ -49,7 +53,7 @@ public class TdspOrdaRom implements SupernetworkModel {
 	
 	
 	@Inject
-	public TdspOrdaRom(ContainerManager containerManager,ScoringParametersForPerson params,TripRouter tripRouter,
+	public TdspOrdaRomPlanModelFactory(ContainerManager containerManager,ScoringParametersForPerson params,TripRouter tripRouter,
 			ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph,PlanCalcScoreConfigGroup planCalcScoreConfigGroup,
 			PopulationFactory populationFactory) {
 		this.containerManager = containerManager;
@@ -65,13 +69,6 @@ public class TdspOrdaRom implements SupernetworkModel {
 		this.scoringFunctionsForPopulationGraph.init();
 	}
 	
-	@Override
-	public List<? extends PlanElement> newPlan(Plan plan) {
-		// create the graph from the plan
-		
-		//find the optimal solution
-		return null;
-	}
 	
 	//this should be build only one time.
 	private Graph createGraph(Plan plan) {
@@ -118,6 +115,8 @@ public class TdspOrdaRom implements SupernetworkModel {
 			
 		}
 		graph.buildLinksIntoNodes();
+		
+		graph.setOptimizationAlgorithm(new OrdaRomOptimizationAlgorithm());
 		return graph;
 	}
 

@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.matsim.api.core.v01.population.PlanElement;
+
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp.TdspLink;
+import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.OptimizationAlgorithm;
 
 /**
  * @author stefanopenazzi
@@ -109,6 +112,24 @@ public class GraphImpl implements Graph {
 			}
 		}
 		
+	}
+
+	@Override
+	public OptimizationAlgorithm getOptimizationAlgorithm() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setOptimizationAlgorithm(OptimizationAlgorithm optimizationAlgorithm) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<? extends PlanElement> getNewPlan() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
