@@ -16,29 +16,31 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorith
  * @author stefanopenazzi
  *
  */
-public class GraphImpl implements Graph {
+public abstract class GraphImpl implements Graph {
 	
 	private List<Node> nodesList;
 	private List<Link> linksList;
 	private Node[] nodes;
 	private Link[] links;
 	private boolean finish = false;
+	private final OptimizationAlgorithm optimizationAlgorithm;
 	
-	public GraphImpl() {
+	public GraphImpl(OptimizationAlgorithm optimizationAlgorithm) {
 		nodesList = new ArrayList<>();
 		linksList = new ArrayList<>();
+		this.optimizationAlgorithm = optimizationAlgorithm;
 	}
 
 	@Override
 	public Node[] getNodes() {
 		// TODO Auto-generated method stub
-		return null;
+		return nodes;
 	}
 
 	@Override
 	public Link[] getLinks() {
 		// TODO Auto-generated method stub
-		return null;
+		return links;
 	}
 
 	@Override
@@ -117,19 +119,12 @@ public class GraphImpl implements Graph {
 	@Override
 	public OptimizationAlgorithm getOptimizationAlgorithm() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.optimizationAlgorithm;
 	}
 
-	@Override
-	public void setOptimizationAlgorithm(OptimizationAlgorithm optimizationAlgorithm) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
-	public List<? extends PlanElement> getNewPlan() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public
+	abstract List<? extends PlanElement> getNewPlan();
 
 }

@@ -34,13 +34,15 @@ public class PlanModelForPopulationContainerImpl implements PlanModelForPopulati
 		this.planModelFactory = planModelFactory;
 	}
 	
-	private void init() {
+	@Override
+	public void init() {
 		for (Person person : this.population.getPersons().values()) {
 			PlanModel planModel = this.planModelFactory.createPlanModel(person.getPlans().get(0));
 			this.agentPlanModels.put(person.getId(), planModel);
 		}
 	}
 	
+	@Override
 	public PlanModel getPlanModelForAgent(final Id<Person> agentId) {
 		return this.agentPlanModels.get(agentId);
 	}

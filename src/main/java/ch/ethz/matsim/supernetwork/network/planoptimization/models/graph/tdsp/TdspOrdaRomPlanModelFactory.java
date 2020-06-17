@@ -73,7 +73,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 	
 	@Override
 	public Graph createPlanModel(Plan plan) {
-		Graph graph = new GraphImpl();
+		TdspGraphOrdaRom graph = new TdspGraphOrdaRom(new OrdaRomOptimizationAlgorithm());
 		final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
 		int idNode = 0;
 		int idLink = 0;
@@ -116,8 +116,6 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			
 		}
 		graph.buildLinksIntoNodes();
-		
-		graph.setOptimizationAlgorithm(new OrdaRomOptimizationAlgorithm());
 		return graph;
 	}
 

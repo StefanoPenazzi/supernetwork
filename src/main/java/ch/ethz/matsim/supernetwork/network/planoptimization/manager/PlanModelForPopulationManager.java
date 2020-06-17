@@ -8,5 +8,7 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.manager;
  *
  */
 public interface PlanModelForPopulationManager {
+	
+	public void populationNewPlans();
 
 }
