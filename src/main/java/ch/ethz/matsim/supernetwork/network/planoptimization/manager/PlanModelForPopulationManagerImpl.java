@@ -36,6 +36,11 @@ public class PlanModelForPopulationManagerImpl implements PlanModelForPopulation
 			//it is probably better to have this is the replanning strategy but the scoring becomes useless
 			List<? extends PlanElement> pe = planModelForPopulationContainer.getPlanModelForAgent(person.getId()).getNewPlan();
 		}
+	}
+
+	@Override
+	public void init() {
+		this.planModelForPopulationContainer.init();
 		
 	}
 

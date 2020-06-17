@@ -9,6 +9,9 @@ import com.google.inject.multibindings.MapBinder;
 import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
 import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.network.planoptimization.containers.PlanModelForPopulationContainer;
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanModelForPopulationManager;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
@@ -38,7 +41,6 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 		clusteringModelFactoryBinder = MapBinder.newMapBinder(binder(), String.class,ClusteringModelFactory.class);
 		subnetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,SubnetworkFactory.class);
 		middlenetworkFactoryBinder = MapBinder.newMapBinder(binder(), String.class,MiddlenetworkFactory.class);
-		
 		
 		updateAlgorithmBinder = MapBinder.newMapBinder(binder(), String.class,UpdateAlgorithm.class);
 		containerBinder = MapBinder.newMapBinder(binder(), String.class,RoutesContainer.class);
@@ -80,6 +82,20 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	
 	protected final com.google.inject.binder.LinkedBindingBuilder<RoutingManagerFactory> bindRoutingManagerFactory() {
 		return bind(RoutingManagerFactory.class);
+	}
+	
+	//plan optimizazion 
+	
+	protected final com.google.inject.binder.LinkedBindingBuilder<PlanModelForPopulationContainer> bindPlanModelForPopulationContainer() {
+		return bind(PlanModelForPopulationContainer.class);
+	}
+	
+	protected final com.google.inject.binder.LinkedBindingBuilder<PlanModelForPopulationManager> bindPlanModelForPopulationManager() {
+		return bind(PlanModelForPopulationManager.class);
+	}
+	
+	protected final com.google.inject.binder.LinkedBindingBuilder<PlanModelFactory> bindPlanModelFactory() {
+		return bind(PlanModelFactory.class);
 	}
 
 	abstract protected void installExtension();
