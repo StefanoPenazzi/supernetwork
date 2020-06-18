@@ -3,6 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements;
 
+import java.util.List;
+
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 
 /**
@@ -13,8 +15,6 @@ public interface Graph extends PlanModel {
 
 	public Node[] getNodes();
 	public Link[] getLinks();
-	public void buildLinksNotIntoNodes();
-	public void buildLinksIntoNodes();
-	public void addNode(Node node);
-	public void addLink(Link link);
+	public void buildLinksNotIntoNodes(List<? extends Node> nodesList, List<? extends Link> linksList);
+	public void buildLinksIntoNodes(List<? extends Node> nodesList);
 }

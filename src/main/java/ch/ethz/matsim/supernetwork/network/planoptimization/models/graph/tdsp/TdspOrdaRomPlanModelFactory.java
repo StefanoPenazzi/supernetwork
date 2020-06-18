@@ -47,7 +47,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 	
 	
 	private  List<String> modes = Arrays.asList("car","walk","bike");
-	private double timeStep = 5;
+	private double timeStep = 360;
 	private double defaultRange = 3600;
 	
 	
@@ -96,7 +96,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			idNode++;
 		}
 		
-		for(int j= 0;j<nodesList.size()-1;++j) {
+		for(int j = 0;j<nodesList.size()-1;j++) {
 			//LINKS
 			//for the activity durations
 			Activity act = nodesList.get(j).getActivity();
@@ -115,7 +115,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			}
 			
 		}
-		graph.buildLinksIntoNodes();
+		graph.buildLinksIntoNodes(nodesList);
 		return graph;
 	}
 
@@ -137,7 +137,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 		if(!Time.isUndefinedTime(activityParams.getMinimalDuration())) {
 			minDuration = activityParams.getMinimalDuration();
 			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
-				maxDuration = activityParams.getMinimalDuration();
+				maxDuration = activity.getMaximumDuration();
 			}
 			else {
 				maxDuration = activity.getEndTime() - activity.getStartTime()+defaultRange/2;
@@ -149,7 +149,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			minDuration = (minDuration < 0)? 0: minDuration; 
 			
 			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
-				maxDuration = activityParams.getMinimalDuration();
+				maxDuration = activity.getMaximumDuration();
 			}
 			else {
 				maxDuration = activity.getEndTime() - activity.getStartTime()+defaultRange/2;
@@ -158,6 +158,13 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 		maxDuration = (maxDuration > 86400)? 86400: maxDuration; 
 		
 		range = maxDuration - minDuration;
+		
+		if(range <= 0) {
+			result = new double[1];
+			result[0] = maxDuration;
+			return result;
+		}
+		
 		steps = (int) Math.floor(range/timeStep);
 		
 		result = new double[steps+2];

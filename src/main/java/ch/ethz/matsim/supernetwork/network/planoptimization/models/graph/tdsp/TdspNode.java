@@ -3,6 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.matsim.api.core.v01.population.Activity;
@@ -24,24 +25,23 @@ public class TdspNode implements Node {
 	public TdspNode(int id,Activity activity ) {
 		this.id = id;
 		this.activity = activity;
+		inLinks = new ArrayList<>();
+		outLinks = new ArrayList<>();
 	}
 	
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.id;
 	}
 
 	@Override
 	public List<Link> getInLinks() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.inLinks;
 	}
 
 	@Override
 	public List<Link> getOutLinks() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.outLinks;
 	}
 
 	@Override

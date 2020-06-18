@@ -3,13 +3,9 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.matsim.api.core.v01.population.PlanElement;
-
-import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp.TdspLink;
 import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.OptimizationAlgorithm;
 
 /**
@@ -18,36 +14,34 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorith
  */
 public abstract class GraphImpl implements Graph {
 	
-	private List<Node> nodesList;
-	private List<Link> linksList;
 	private Node[] nodes;
 	private Link[] links;
 	private boolean finish = false;
 	private final OptimizationAlgorithm optimizationAlgorithm;
 	
 	public GraphImpl(OptimizationAlgorithm optimizationAlgorithm) {
-		nodesList = new ArrayList<>();
-		linksList = new ArrayList<>();
 		this.optimizationAlgorithm = optimizationAlgorithm;
 	}
 
 	@Override
 	public Node[] getNodes() {
-		// TODO Auto-generated method stub
 		return nodes;
 	}
 
 	@Override
 	public Link[] getLinks() {
-		// TODO Auto-generated method stub
 		return links;
 	}
+	
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void buildLinksNotIntoNodes() {
+	public void buildLinksNotIntoNodes(List<? extends Node> nodesList, List<? extends Link> linksList) {
 		finish = true;
-		nodes = new Node[nodesList.size()];
+		nodes =  new Node[nodesList.size()];
+		nodesList.toArray(nodes);
 		links = new Link[linksList.size()];
+		linksList.toArray(links); 
 		HashMap<Integer,Integer> newNodeId = new HashMap<Integer,Integer>(); 
 		// map with the node id and the new id equal to the position in th
 		nodesList.toArray(nodes);
@@ -66,32 +60,15 @@ public abstract class GraphImpl implements Graph {
 		}
 	}
 
-	@Override
-	public void addNode(Node node) {
-		if(!finish) {
-			nodesList.add(node);
-		}
-		else {
-			//TODO exception
-		}
-	}
 
 	@Override
-	public void addLink(Link link) {
-		if(!finish) {
-			linksList.add((TdspLink)link);
-		}
-		else {
-			// exception
-		}
-		
-	}
-
-	@Override
-	public void buildLinksIntoNodes() {
+	public void buildLinksIntoNodes(List<? extends Node> nodesList) {
 		
 		finish = true;
-		nodes = new Node[nodesList.size()];
+		
+		nodes =  new Node[nodesList.size()];
+		nodesList.toArray(nodes);
+		
 		HashMap<Integer,Integer> newNodeId = new HashMap<Integer,Integer>(); 
 		// map with the node id and the new id equal to the position in th
 		nodesList.toArray(nodes);
