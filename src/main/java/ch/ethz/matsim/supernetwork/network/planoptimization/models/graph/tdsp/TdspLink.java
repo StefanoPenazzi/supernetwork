@@ -22,14 +22,18 @@ public class TdspLink implements Link {
 	private int fromNodeId;
 	private int toNodeId;
 	private Activity activity;
+	private double activityDuration;
+	private double activityUtilityFunctionValue;
 	private Leg trip;
 	
-	protected TdspLink(int id,int fromNodeId,int toNodeId,Activity activity,Leg trip) {
+	protected TdspLink(int id,int fromNodeId,int toNodeId,Activity activity,Leg trip,double activityDuration,double activityUtilityFunctionValue) {
 		this.id=id;
 		this.fromNodeId = fromNodeId;
 		this.toNodeId = toNodeId;
 		this.activity = activity;
 		this.trip = trip;
+		this.activityDuration = activityDuration;
+		this.activityUtilityFunctionValue = activityUtilityFunctionValue;
 	}
 	
 	@Override
@@ -63,5 +67,13 @@ public class TdspLink implements Link {
 	
 	public Leg getTrip() {
 		return this.trip;
+	}
+	
+	public double getActivityDuration() {
+		return this.activityDuration;
+	} 
+	
+	public double getActivityUtilityFunctionValue() {
+		return this.activityUtilityFunctionValue;
 	}
 }

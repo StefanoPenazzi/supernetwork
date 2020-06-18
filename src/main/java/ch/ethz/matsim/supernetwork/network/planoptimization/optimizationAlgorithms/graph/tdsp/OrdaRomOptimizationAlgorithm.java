@@ -8,6 +8,7 @@ import java.util.List;
 import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp.TdspGraphOrdaRom;
 import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.OptimizationAlgorithm;
 
 /**
@@ -18,7 +19,8 @@ public class OrdaRomOptimizationAlgorithm implements OptimizationAlgorithm {
 
 	@Override
 	public List<? extends PlanElement> run(PlanModel planModel) {
-		// TODO Auto-generated method stub
+		TdspGraphOrdaRom graph = (TdspGraphOrdaRom)planModel;
+		
 		return null;
 	}
 

@@ -107,7 +107,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 					//TODO LINKS
 					Activity linkAct = this.populationFactory.createActivityFromLinkId(act.getType(),act.getLinkId());
 					Leg linkLeg = this.populationFactory.createLeg(planModes.get(k));
-					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg);
+					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg,0,0);
 					nodesList.get(j).addOutLink(link);
 					nodesList.get(j+1).addInLink(link);
 					idLink++;

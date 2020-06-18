@@ -12,7 +12,9 @@ import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.ControlerListenerManager;
 import org.matsim.core.controler.events.IterationStartsEvent;
+import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
+import org.matsim.core.controler.listener.StartupListener;
 import org.matsim.core.events.algorithms.Vehicle2DriverEventHandler;
 import org.matsim.core.scoring.EventsToActivities;
 import org.matsim.core.scoring.EventsToLegs;
@@ -41,8 +43,16 @@ public class ScoringFunctionsForPopulationGraph {
 			
 			this.population = population;
 			this.scoringFunctionFactory = scoringFunctionFactory;
+			controlerListenerManager.addControlerListener(new StartupListener() {
+				@Override
+				public void notifyStartup(StartupEvent event) {
+					init();
+				}
+			});
 		}
 
+		
+		//why this is done each iteration?
 		public void init() {
 			for (Person person : this.population.getPersons().values()) {
 				ScoringFunction data = this.scoringFunctionFactory.createNewScoringFunction(person);
@@ -52,6 +62,4 @@ public class ScoringFunctionsForPopulationGraph {
 		public ScoringFunction getScoringFunctionForAgent(final Id<Person> agentId) {
 			return this.agentScorers.get(agentId);
 		}
-
-
 }
