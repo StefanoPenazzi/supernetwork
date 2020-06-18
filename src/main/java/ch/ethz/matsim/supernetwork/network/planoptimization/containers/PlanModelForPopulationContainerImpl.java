@@ -40,6 +40,7 @@ public class PlanModelForPopulationContainerImpl implements PlanModelForPopulati
 			PlanModel planModel = this.planModelFactory.createPlanModel(person.getPlans().get(0));
 			this.agentPlanModels.put(person.getId(), planModel);
 		}
+		System.out.println("");
 	}
 	
 	@Override

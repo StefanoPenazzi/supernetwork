@@ -7,6 +7,8 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -43,23 +45,34 @@ public class ScoringFunctionsForPopulationGraph {
 			
 			this.population = population;
 			this.scoringFunctionFactory = scoringFunctionFactory;
-			controlerListenerManager.addControlerListener(new StartupListener() {
-				@Override
-				public void notifyStartup(StartupEvent event) {
-					init();
-				}
-			});
 		}
 
-		
-		//why this is done each iteration?
 		public void init() {
 			for (Person person : this.population.getPersons().values()) {
 				ScoringFunction data = this.scoringFunctionFactory.createNewScoringFunction(person);
 				this.agentScorers.put(person.getId(), data);
 			}
 		}
+		
 		public ScoringFunction getScoringFunctionForAgent(final Id<Person> agentId) {
 			return this.agentScorers.get(agentId);
 		}
+		
+		public double getActivityUtilityFunctionValueForAgent(final Id<Person> agentId, Activity activity) {
+			ScoringFunction scoringFunction = this.agentScorers.get(agentId);
+ 			double oldScore = scoringFunction.getScore();
+ 			scoringFunction.handleActivity(activity);
+ 			double newScore = scoringFunction.getScore();
+			return newScore - oldScore;
+		}
+		
+		public double getLegUtilityFunctionValueForAgent(final Id<Person> agentId, Leg leg) {
+			ScoringFunction scoringFunction = this.agentScorers.get(agentId);
+ 			double oldScore = scoringFunction.getScore();
+ 			scoringFunction.handleLeg(leg);
+ 			double newScore = scoringFunction.getScore();
+			return newScore - oldScore;
+		}
+		
+		
 }

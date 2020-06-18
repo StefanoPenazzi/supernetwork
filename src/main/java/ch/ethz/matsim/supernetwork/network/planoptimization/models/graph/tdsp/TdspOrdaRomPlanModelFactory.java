@@ -47,7 +47,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 	
 	
 	private  List<String> modes = Arrays.asList("car","walk","bike");
-	private double timeStep = 360;
+	private double timeStep = 1200;
 	private double defaultRange = 3600;
 	
 	
@@ -83,7 +83,8 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 		}
 		List<TdspNode> nodesList = new ArrayList<>();
 		
-		for(int j =0; j< activities.size(); j++) {
+		//NODES
+		for(int j =0; j < activities.size(); j++) {
 			Activity act = activities.get(j);
 			Activity nextAct = (j<activities.size()-1)? activities.get(j+1):null;
 			if(nextAct != null) {
@@ -95,25 +96,29 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			nodesList.add(n);
 			idNode++;
 		}
+		//the last node doesn't represent an activity but it is necessary to consider the time spent in the last activity of the plan
+		TdspNode n = new TdspNode(idNode,null);
+		nodesList.add(n);
 		
+		//LINKS
 		for(int j = 0;j<nodesList.size()-1;j++) {
-			//LINKS
 			//for the activity durations
 			Activity act = nodesList.get(j).getActivity();
 			double[] durations = activityDurations(act);
 			for(int i =0;i<durations.length;i++) {
+				double uf = this.scoringFunctionsForPopulationGraph.getActivityUtilityFunctionValueForAgent(plan.getPerson().getId(), act);
 				//for all the mode
 				for(int k=0;k<planModes.size();++k) {
-					//TODO LINKS
 					Activity linkAct = this.populationFactory.createActivityFromLinkId(act.getType(),act.getLinkId());
+					linkAct.setStartTime(0);
+					linkAct.setEndTime(durations[i]);
 					Leg linkLeg = this.populationFactory.createLeg(planModes.get(k));
-					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg,0,0);
+					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg,durations[i],uf);
 					nodesList.get(j).addOutLink(link);
 					nodesList.get(j+1).addInLink(link);
 					idLink++;
 				}
 			}
-			
 		}
 		graph.buildLinksIntoNodes(nodesList);
 		return graph;
@@ -134,41 +139,39 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			return result;
 		}
 		
+		double startTime = (Time.isUndefinedTime(activity.getStartTime())) ? 0 : activity.getStartTime();
+		double endTime = (Time.isUndefinedTime(activity.getEndTime())) ? 0 : activity.getEndTime();
+		
+		
 		if(!Time.isUndefinedTime(activityParams.getMinimalDuration())) {
 			minDuration = activityParams.getMinimalDuration();
 			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
 				maxDuration = activity.getMaximumDuration();
 			}
 			else {
-				maxDuration = activity.getEndTime() - activity.getStartTime()+defaultRange/2;
+				maxDuration = endTime - startTime+defaultRange/2;
 			}
 		}
 		else {
-			
-			minDuration = activity.getEndTime() - activity.getStartTime()-defaultRange/2;
+			minDuration = endTime - startTime-defaultRange/2;
 			minDuration = (minDuration < 0)? 0: minDuration; 
 			
 			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
 				maxDuration = activity.getMaximumDuration();
 			}
 			else {
-				maxDuration = activity.getEndTime() - activity.getStartTime()+defaultRange/2;
+				maxDuration = endTime - startTime+defaultRange/2;
 			}
 		}
 		maxDuration = (maxDuration > 86400)? 86400: maxDuration; 
-		
 		range = maxDuration - minDuration;
-		
 		if(range <= 0) {
 			result = new double[1];
 			result[0] = maxDuration;
 			return result;
 		}
-		
 		steps = (int) Math.floor(range/timeStep);
-		
 		result = new double[steps+2];
-		
 		for(int j = 0;j<=steps; ++j) {
 			result[j] = minDuration + timeStep*j;
 		}
