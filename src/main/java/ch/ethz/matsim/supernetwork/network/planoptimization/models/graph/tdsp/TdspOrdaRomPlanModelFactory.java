@@ -106,12 +106,11 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 			Activity act = nodesList.get(j).getActivity();
 			double[] durations = activityDurations(act);
 			for(int i =0;i<durations.length;i++) {
-				double uf = this.scoringFunctionsForPopulationGraph.getActivityUtilityFunctionValueForAgent(plan.getPerson().getId(), act);
+				//All the links ref to the same activity
+				Activity linkAct = this.populationFactory.createActivityFromLinkId(act.getType(),act.getLinkId());
+				double uf = this.scoringFunctionsForPopulationGraph.getActivityUtilityFunctionValueForAgent(plan.getPerson(), linkAct,durations[i]);
 				//for all the mode
 				for(int k=0;k<planModes.size();++k) {
-					Activity linkAct = this.populationFactory.createActivityFromLinkId(act.getType(),act.getLinkId());
-					linkAct.setStartTime(0);
-					linkAct.setEndTime(durations[i]);
 					Leg linkLeg = this.populationFactory.createLeg(planModes.get(k));
 					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg,durations[i],uf);
 					nodesList.get(j).addOutLink(link);
@@ -132,16 +131,15 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 		double range;
 		int steps;
 		
-		// single duration for the interaction
-		if (activity.getType().endsWith("interaction")) {
-			result = new double[1];
-			result[0] = activity.getEndTime() - activity.getStartTime();
-			return result;
-		}
-		
 		double startTime = (Time.isUndefinedTime(activity.getStartTime())) ? 0 : activity.getStartTime();
 		double endTime = (Time.isUndefinedTime(activity.getEndTime())) ? 0 : activity.getEndTime();
 		
+		// single duration for the interaction
+		if (activity.getType().endsWith("interaction")) {
+			result = new double[1];
+			result[0] = endTime - startTime;
+			return result;
+		}
 		
 		if(!Time.isUndefinedTime(activityParams.getMinimalDuration())) {
 			minDuration = activityParams.getMinimalDuration();

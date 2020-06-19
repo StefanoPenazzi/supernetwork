@@ -22,6 +22,9 @@ import org.matsim.core.scoring.EventsToActivities;
 import org.matsim.core.scoring.EventsToLegs;
 import org.matsim.core.scoring.ScoringFunction;
 import org.matsim.core.scoring.ScoringFunctionFactory;
+import org.matsim.core.scoring.functions.ScoringParameters;
+import org.matsim.core.scoring.functions.ScoringParametersForPerson;
+import org.matsim.core.utils.misc.Time;
 
 import com.google.inject.Inject;
 
@@ -33,6 +36,7 @@ public class ScoringFunctionsForPopulationGraph {
 	  
 	    private final Population population;
 		private final ScoringFunctionFactory scoringFunctionFactory;
+		private final ScoringParametersForPerson params;
 		
 		private final TreeMap<Id<Person>, ScoringFunction> agentScorers = new TreeMap<Id<Person>,ScoringFunction>();
 		private final AtomicReference<Throwable> exception = new AtomicReference<>();
@@ -41,10 +45,11 @@ public class ScoringFunctionsForPopulationGraph {
 
 		@Inject
 		public ScoringFunctionsForPopulationGraph( ControlerListenerManager controlerListenerManager, EventsManager eventsManager, EventsToActivities eventsToActivities, EventsToLegs eventsToLegs,
-							 Population population, ScoringFunctionFactory scoringFunctionFactory) {
+							 Population population, ScoringFunctionFactory scoringFunctionFactory,ScoringParametersForPerson params) {
 			
 			this.population = population;
 			this.scoringFunctionFactory = scoringFunctionFactory;
+			this.params = params;
 		}
 
 		public void init() {
@@ -58,8 +63,14 @@ public class ScoringFunctionsForPopulationGraph {
 			return this.agentScorers.get(agentId);
 		}
 		
-		public double getActivityUtilityFunctionValueForAgent(final Id<Person> agentId, Activity activity) {
-			ScoringFunction scoringFunction = this.agentScorers.get(agentId);
+		public double getActivityUtilityFunctionValueForAgent(final Person person, Activity activity, double duration) {
+			ScoringParameters parameters = params.getScoringParameters( person );
+			double openingTime = parameters.utilParams.get(activity.getType()).getOpeningTime();
+			openingTime = (Time.isUndefinedTime(openingTime)) ? 0 : openingTime;
+			activity.setMaximumDuration(duration);
+			activity.setStartTime(openingTime);
+			activity.setEndTime(openingTime+duration);
+			ScoringFunction scoringFunction = this.agentScorers.get(person.getId());
  			double oldScore = scoringFunction.getScore();
  			scoringFunction.handleActivity(activity);
  			double newScore = scoringFunction.getScore();
