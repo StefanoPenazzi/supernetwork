@@ -7,6 +7,7 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.containers.PlanModel
 import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanModelForPopulationManagerImpl;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp.TdspOrdaRomPlanModelFactory;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalPlanModelFactory;
 
 /**
  * @author stefanopenazzi
@@ -20,7 +21,7 @@ public class PlanOptimizationModule extends AbstractSupernetworkExtension {
 		bindPlanModelForPopulationContainer().to(PlanModelForPopulationContainerImpl.class).asEagerSingleton();
 		bindPlanModelForPopulationManager().to(PlanModelForPopulationManagerImpl.class).asEagerSingleton();
 		
-		bindPlanModelFactory().to(TdspOrdaRomPlanModelFactory.class);
+		bindPlanModelFactory().to(TdspIntermodalPlanModelFactory.class);
 		
 		
 		bind(ScoringFunctionsForPopulationGraph.class).asEagerSingleton();

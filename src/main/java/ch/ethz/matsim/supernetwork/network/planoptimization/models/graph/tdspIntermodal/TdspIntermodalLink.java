@@ -33,6 +33,8 @@ public class TdspIntermodalLink implements Link {
 		this.toNodeId = toNodeId;
 		this.utility = utility;
 		this.mode = mode;
+		this.type = type;
+		this.duration = duration;
 	}
 	
 	@Override

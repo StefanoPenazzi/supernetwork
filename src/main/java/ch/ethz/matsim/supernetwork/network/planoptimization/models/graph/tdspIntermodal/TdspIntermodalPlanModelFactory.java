@@ -96,10 +96,11 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		nodesListPerPosition.add(nlf);
 		
 		//Add intermed activities
-		for(int j = 1; j < activities.size()-1; j++) {
+		for(int j = 1; j < activities.size()-1; ++j) {
+			List<TdspIntermodalNode> nl = new ArrayList<>();
 			for(int k=0;k<planModes.size();++k) {
 				
-				List<TdspIntermodalNode> nl = new ArrayList<>();
+				
 				//Activity_start node
 				TdspIntermodalNode actStartNode = new TdspIntermodalNode(idNode,activities.get(j),planModes.get(k),nodeType[0],0,j);
 				nodesList.add(actStartNode);
@@ -125,9 +126,8 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 				nodesList.add(actDepNode);
 				idNode++;
 				nl.add(actDepNode);
-				
-				nodesListPerPosition.add(nl);
 			}
+			nodesListPerPosition.add(nl);
 		}
 		//Add last activity
 		TdspIntermodalNode lastNode = new TdspIntermodalNode(idNode,activities.get(activities.size()-1),null,nodeType[0],0,activities.size()-1);
@@ -141,12 +141,17 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		for(int j = 0; j < activities.size()-1; j++) {
 			if(j == 0) {
 				//Activity_departure -> Activity_start(j+1)
-				TdspIntermodalNode node = nodesListPerPosition.get(0).get(0); 
-				for(TdspIntermodalNode n: nodesList) {
-					if(n.getPosition() == 1 && n.getNodeType() == nodeType[0]) {
-						TdspIntermodalLink link = new TdspIntermodalLink(idLink,0,n.getId(),linkType[2],n.getMode(),0,0);
-						idLink++;
-						node.addOutLink(link);
+				for(TdspIntermodalNode n: nodesListPerPosition.get(j)) { 
+					if(n.getNodeType() == nodeType[2]) {
+						for(TdspIntermodalNode nn: nodesListPerPosition.get(j+1)) {
+							if(nn.getNodeType() == nodeType[0]) {
+								TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[0],nn.getMode(),0,0);
+								idLink++;
+								n.addOutLink(link);
+								nn.addInLink(link);
+								System.out.println("");
+							}
+						}
 					}
 				}
 			}
@@ -156,7 +161,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 					if(n.getNodeType() == nodeType[0]) {
 						for(TdspIntermodalNode nn: nodesListPerPosition.get(j)) {
 							if(nn.getNodeType() == nodeType[1] && n.getMode() == nn.getMode()) {
-								TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId() ,nn.getId(),linkType[0],n.getMode(),nn.getDuration(),0);
+								TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId() ,nn.getId(),linkType[1],n.getMode(),nn.getDuration(),0);
 								idLink++;
 								n.addOutLink(link);
 								nn.addInLink(link);
@@ -170,7 +175,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 						if(n.getMode() == "car") {
 							for(TdspIntermodalNode nn: nodesListPerPosition.get(j)) {
 								if(nn.getNodeType() == nodeType[2]) {
-									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[1],n.getMode(),0,0);
+									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[2],n.getMode(),0,0);
 									idLink++;
 									n.addOutLink(link);
 									nn.addInLink(link);
@@ -180,7 +185,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 						else {
 							for(TdspIntermodalNode nn: nodesListPerPosition.get(j)) {
 								if(nn.getNodeType() == nodeType[2] && nn.getMode() != "car") {
-									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[1],n.getMode(),0,0);
+									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[2],n.getMode(),0,0);
 									idLink++;
 									n.addOutLink(link);
 									nn.addInLink(link);
@@ -195,7 +200,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 						if(j<activities.size()-2) {
 							for(TdspIntermodalNode nn: nodesListPerPosition.get(j+1)) {
 								if(nn.getNodeType() == nodeType[0] && n.getMode() == nn.getMode()) {
-									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId() ,nn.getId(),linkType[2],n.getMode(),0,0);
+									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId() ,nn.getId(),linkType[0],n.getMode(),0,0);
 									idLink++;
 									n.addOutLink(link);
 									nn.addInLink(link);
@@ -205,7 +210,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 						else {
 							for(TdspIntermodalNode nn: nodesListPerPosition.get(j+1)) {
 								if(nn.getNodeType() == nodeType[0]) {
-									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[2],n.getMode(),0,0);
+									TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId(),nn.getId(),linkType[0],n.getMode(),0,0);
 									idLink++;
 									n.addOutLink(link);
 									nn.addInLink(link);
@@ -217,6 +222,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 			}
 		}
 		graph.buildLinksIntoNodes(nodesList);
+		graph.print();
 		return graph;
 	}
 	
