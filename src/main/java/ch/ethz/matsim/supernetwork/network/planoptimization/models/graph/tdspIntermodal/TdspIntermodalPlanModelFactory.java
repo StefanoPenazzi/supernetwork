@@ -225,7 +225,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 			}
 		}
 		graph.buildLinksIntoNodes(nodesList);
-		graph.print();
+		//graph.print();
 		return graph;
 	}
 	

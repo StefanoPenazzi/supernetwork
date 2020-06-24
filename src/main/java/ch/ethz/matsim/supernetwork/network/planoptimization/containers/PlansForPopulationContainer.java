@@ -6,6 +6,7 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.containers;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.population.Person;
 
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 
 /**
@@ -15,5 +16,5 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 public interface PlansForPopulationContainer {
 
 	public void init();
-	public PlanModel getPlanModelForAgent(final Id<Person> agentId);
+	public PlanManager getPlanManagerForAgent(final Id<Person> agentId);
 }

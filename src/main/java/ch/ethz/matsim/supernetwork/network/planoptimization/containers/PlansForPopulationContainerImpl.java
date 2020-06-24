@@ -14,6 +14,8 @@ import org.matsim.core.scoring.ScoringFunction;
 
 import com.google.inject.Inject;
 
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanManager;
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanManagerFactory;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
 import gnu.trove.list.array.TDoubleArrayList;
@@ -25,27 +27,27 @@ import gnu.trove.list.array.TDoubleArrayList;
 public class PlansForPopulationContainerImpl implements PlansForPopulationContainer {
 	
 	private final Population population;
-	private final Map<Id<Person>, PlanModel> agentPlanModels = new HashMap<>();
-	private final PlanModelFactory planModelFactory;
+	private final Map<Id<Person>, PlanManager> planManagerContainer = new HashMap<>();
+	private final PlanManagerFactory planManagerFactory;
 	
 	@Inject
-	public PlansForPopulationContainerImpl(Population population,  PlanModelFactory planModelFactory){
+	public PlansForPopulationContainerImpl(Population population,  PlanManagerFactory planManagerFactory){
 		this.population = population;
-		this.planModelFactory = planModelFactory;
+		this.planManagerFactory = planManagerFactory;
 	}
 	
 	@Override
 	public void init() {
 		for (Person person : this.population.getPersons().values()) {
-			PlanModel planModel = this.planModelFactory.createPlanModel(person.getPlans().get(0));
-			this.agentPlanModels.put(person.getId(), planModel);
+			PlanManager planManager = this.planManagerFactory.createPlanManager(person.getPlans().get(0));
+			this.planManagerContainer.put(person.getId(), planManager);
 		}
 		System.out.println("");
 	}
 	
 	@Override
-	public PlanModel getPlanModelForAgent(final Id<Person> agentId) {
-		return this.agentPlanModels.get(agentId);
+	public PlanManager getPlanManagerForAgent(final Id<Person> agentId) {
+		return this.planManagerContainer.get(agentId);
 	}
 
 
