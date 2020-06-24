@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
@@ -75,7 +76,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	
 	@Override
 	public Graph createPlanModel(Plan plan) {
-		TdspIntermodalGraph graph = new TdspIntermodalGraph(new OrdaRomOptimizationAlgorithm());
+		TdspIntermodalGraph graph = new TdspIntermodalGraph(new OrdaRomOptimizationAlgorithm(), plan.getPerson());
 		final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
 		int idNode = 0;
 		int idLink = 0;
@@ -157,11 +158,13 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 			}
 			else {
 				//Activity_start -> Activity_end
+				Activity linkAct = this.populationFactory.createActivityFromLinkId(activities.get(j).getType(),activities.get(j).getLinkId());
 				for(TdspIntermodalNode n: nodesListPerPosition.get(j)) {
 					if(n.getNodeType() == nodeType[0]) {
 						for(TdspIntermodalNode nn: nodesListPerPosition.get(j)) {
 							if(nn.getNodeType() == nodeType[1] && n.getMode() == nn.getMode()) {
-								TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId() ,nn.getId(),linkType[1],n.getMode(),nn.getDuration(),0);
+								double uf = this.scoringFunctionsForPopulationGraph.getActivityUtilityFunctionValueForAgent(plan.getPerson(), linkAct,nn.getDuration());
+								TdspIntermodalLink link = new TdspIntermodalLink(idLink,n.getId() ,nn.getId(),linkType[1],n.getMode(),nn.getDuration(),uf);
 								idLink++;
 								n.addOutLink(link);
 								nn.addInLink(link);

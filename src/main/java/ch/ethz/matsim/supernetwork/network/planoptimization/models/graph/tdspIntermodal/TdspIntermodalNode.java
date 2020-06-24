@@ -96,12 +96,12 @@ public class TdspIntermodalNode implements Node {
 		System.out.println(">>> InLinks : ");
 		for(Link l: this.inLinks) {
 			TdspIntermodalLink link = (TdspIntermodalLink)l;
-			System.out.println(">>>>>> Id = "+link.getFromNodeId()+ " ; mode = "+ link.getMode() + " ; type = "+ link.getType()+" ; duration = "+ link.getDuration());
+			System.out.println(">>>>>> Id = "+link.getFromNodeId()+ " ; mode = "+ link.getMode() + " ; type = "+ link.getType()+" ; duration = "+ link.getDuration() + " ; uf = "+link.getUtility());
 		}
 		System.out.println(">>> OutLinks : ");
 		for(Link l: this.outLinks) {
 			TdspIntermodalLink link = (TdspIntermodalLink)l;
-			System.out.println(">>>>>> Id = "+link.getToNodeId()+ " ; mode = "+ link.getMode() + " ; type = "+ link.getType()+" ; duration = "+ link.getDuration()); 
+			System.out.println(">>>>>> Id = "+link.getToNodeId()+ " ; mode = "+ link.getMode() + " ; type = "+ link.getType()+" ; duration = "+ link.getDuration() + " ; uf = "+link.getUtility()); 
 		}
 		System.out.println("");
 	}

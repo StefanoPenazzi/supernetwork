@@ -5,6 +5,7 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIn
 
 import java.util.List;
 
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.GraphImpl;
@@ -19,10 +20,12 @@ public class TdspIntermodalGraph extends GraphImpl {
 
 	/**
 	 * @param optimizationAlgorithm
-	 */
-	public TdspIntermodalGraph(OptimizationAlgorithm optimizationAlgorithm) {
+	 */ 
+	private final Person person;
+	
+	public TdspIntermodalGraph(OptimizationAlgorithm optimizationAlgorithm,Person person) {
 		super(optimizationAlgorithm);
-		// TODO Auto-generated constructor stub;
+		this.person = person;
 	}
 
 	@Override
@@ -35,6 +38,11 @@ public class TdspIntermodalGraph extends GraphImpl {
 			TdspIntermodalNode node = (TdspIntermodalNode)n;
 			node.print();
 		}
+	}
+
+	@Override
+	public Person getPerson() {
+		return null;
 	}
 
 }
