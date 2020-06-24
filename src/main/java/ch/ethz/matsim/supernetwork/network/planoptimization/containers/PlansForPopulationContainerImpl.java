@@ -22,14 +22,14 @@ import gnu.trove.list.array.TDoubleArrayList;
  * @author stefanopenazzi
  *
  */
-public class PlanModelForPopulationContainerImpl implements PlanModelForPopulationContainer {
+public class PlansForPopulationContainerImpl implements PlansForPopulationContainer {
 	
 	private final Population population;
 	private final Map<Id<Person>, PlanModel> agentPlanModels = new HashMap<>();
 	private final PlanModelFactory planModelFactory;
 	
 	@Inject
-	public PlanModelForPopulationContainerImpl(Population population,  PlanModelFactory planModelFactory){
+	public PlansForPopulationContainerImpl(Population population,  PlanModelFactory planModelFactory){
 		this.population = population;
 		this.planModelFactory = planModelFactory;
 	}

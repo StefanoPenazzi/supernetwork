@@ -5,11 +5,10 @@ package ch.ethz.matsim.supernetwork.network.events;
 
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
-
 import com.google.inject.Inject;
-
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
-import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanModelForPopulationManager;
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlansForPopulationManager;
+
 
 /**
  * @author stefanopenazzi
@@ -18,18 +17,18 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanModelFor
 public class SupernetworkContainerFilling implements IterationStartsListener{
 	
     private ContainerManager containerManager;
-    private final PlanModelForPopulationManager planModelForPopulationManager;
+    private final PlansForPopulationManager plansForPopulationManager;
 	
 	@Inject
-	public SupernetworkContainerFilling (ContainerManager containerManager,PlanModelForPopulationManager planModelForPopulationManager) {
+	public SupernetworkContainerFilling (ContainerManager containerManager,PlansForPopulationManager plansForPopulationManager) {
 		this.containerManager = containerManager;
-		this.planModelForPopulationManager = planModelForPopulationManager;
+		this.plansForPopulationManager = plansForPopulationManager;
 	}
 	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
 		containerManager.updateContainer("car");
-		this.planModelForPopulationManager.populationNewPlans();
+		this.plansForPopulationManager.populationNewPlans();
 	}
 
 }

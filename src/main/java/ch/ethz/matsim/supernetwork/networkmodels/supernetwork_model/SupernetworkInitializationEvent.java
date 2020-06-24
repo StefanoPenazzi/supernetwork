@@ -7,7 +7,7 @@ import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactory;
-import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanModelForPopulationManager;
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlansForPopulationManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 
 
@@ -18,14 +18,14 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring
 public class SupernetworkInitializationEvent implements StartupListener {
 
 	private final ContainerManagerFactory containerManagerFactory;
-	private final PlanModelForPopulationManager planModelForPopulationManager;
+	private final PlansForPopulationManager plansForPopulationManager;
 	private final ScoringFunctionsForPopulationGraph scoringFunctionsForPopulationGraph;
 	
 	@Inject
-	SupernetworkInitializationEvent (ContainerManagerFactory containerManagerFactory,PlanModelForPopulationManager planModelForPopulationManager,
+	SupernetworkInitializationEvent (ContainerManagerFactory containerManagerFactory,PlansForPopulationManager plansForPopulationManager,
 			ScoringFunctionsForPopulationGraph scoringFunctionsForPopulationGraph){
 		this.containerManagerFactory = containerManagerFactory;
-		this.planModelForPopulationManager = planModelForPopulationManager;
+		this.plansForPopulationManager = plansForPopulationManager;
 		this.scoringFunctionsForPopulationGraph = scoringFunctionsForPopulationGraph;
 	}
 
@@ -33,7 +33,7 @@ public class SupernetworkInitializationEvent implements StartupListener {
 	public void notifyStartup(StartupEvent event) {
 		containerManagerFactory.setContainerManager();
 		this.scoringFunctionsForPopulationGraph.init();
-		planModelForPopulationManager.init();
+		plansForPopulationManager.init();
 		System.out.println("...");
 	}
 }

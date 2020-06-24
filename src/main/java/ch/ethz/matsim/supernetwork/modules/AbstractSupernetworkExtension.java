@@ -9,8 +9,8 @@ import com.google.inject.multibindings.MapBinder;
 import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
 import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkFactory;
-import ch.ethz.matsim.supernetwork.network.planoptimization.containers.PlanModelForPopulationContainer;
-import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanModelForPopulationManager;
+import ch.ethz.matsim.supernetwork.network.planoptimization.containers.PlansForPopulationContainer;
+import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlansForPopulationManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
@@ -86,12 +86,12 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	
 	//plan optimizazion 
 	
-	protected final com.google.inject.binder.LinkedBindingBuilder<PlanModelForPopulationContainer> bindPlanModelForPopulationContainer() {
-		return bind(PlanModelForPopulationContainer.class);
+	protected final com.google.inject.binder.LinkedBindingBuilder<PlansForPopulationContainer> bindPlansForPopulationContainer() {
+		return bind(PlansForPopulationContainer.class);
 	}
 	
-	protected final com.google.inject.binder.LinkedBindingBuilder<PlanModelForPopulationManager> bindPlanModelForPopulationManager() {
-		return bind(PlanModelForPopulationManager.class);
+	protected final com.google.inject.binder.LinkedBindingBuilder<PlansForPopulationManager> bindPlansForPopulationManager() {
+		return bind(PlansForPopulationManager.class);
 	}
 	
 	protected final com.google.inject.binder.LinkedBindingBuilder<PlanModelFactory> bindPlanModelFactory() {
