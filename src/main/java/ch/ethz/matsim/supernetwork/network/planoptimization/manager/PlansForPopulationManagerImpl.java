@@ -31,8 +31,9 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 
 	@Override
 	public void populationNewPlans() {
+		//TODO
 		for (Person person : this.population.getPersons().values()) {
-			//it is probably better to have this is the replanning strategy but the scoring becomes useless
+			//it is probably better to have this in the replanning strategy but the scoring becomes useless
 			List<? extends PlanElement> pe = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
 		}
 	}

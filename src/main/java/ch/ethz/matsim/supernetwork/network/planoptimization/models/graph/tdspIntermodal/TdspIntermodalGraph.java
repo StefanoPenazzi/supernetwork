@@ -23,14 +23,9 @@ public class TdspIntermodalGraph extends GraphImpl {
 	 */ 
 	private final Person person;
 	
-	public TdspIntermodalGraph(OptimizationAlgorithm optimizationAlgorithm,Person person) {
-		super(optimizationAlgorithm);
+	public TdspIntermodalGraph(Person person) {
+		super();
 		this.person = person;
-	}
-
-	@Override
-	public List<? extends PlanElement> getNewPlan() {
-		return this.getOptimizationAlgorithm().run(this);
 	}
 	
 	public void print() {

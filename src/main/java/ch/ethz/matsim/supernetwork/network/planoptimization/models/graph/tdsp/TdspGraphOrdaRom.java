@@ -20,14 +20,9 @@ public class TdspGraphOrdaRom extends GraphImpl {
 	/**
 	 * @param optimizationAlgorithm
 	 */
-	public TdspGraphOrdaRom(OptimizationAlgorithm optimizationAlgorithm) {
-		super(optimizationAlgorithm);
+	public TdspGraphOrdaRom() {
+		super();
 		// TODO Auto-generated constructor stub;
-	}
-
-	@Override
-	public List<? extends PlanElement> getNewPlan() {
-		return this.getOptimizationAlgorithm().run(this);
 	}
 
 	@Override

@@ -17,10 +17,9 @@ public abstract class GraphImpl implements Graph {
 	private Node[] nodes;
 	private Link[] links;
 	private boolean finish = false;
-	private final OptimizationAlgorithm optimizationAlgorithm;
 	
-	public GraphImpl(OptimizationAlgorithm optimizationAlgorithm) {
-		this.optimizationAlgorithm = optimizationAlgorithm;
+	public GraphImpl() {
+		
 	}
 
 	@Override
@@ -92,16 +91,5 @@ public abstract class GraphImpl implements Graph {
 		}
 		
 	}
-
-	@Override
-	public OptimizationAlgorithm getOptimizationAlgorithm() {
-		// TODO Auto-generated method stub
-		return this.optimizationAlgorithm;
-	}
-
-
-	@Override
-	public
-	abstract List<? extends PlanElement> getNewPlan();
 
 }

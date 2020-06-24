@@ -76,7 +76,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	
 	@Override
 	public TdspIntermodalGraph createPlanModel(Plan plan) {
-		TdspIntermodalGraph graph = new TdspIntermodalGraph(new OrdaRomOptimizationAlgorithm(), plan.getPerson());
+		TdspIntermodalGraph graph = new TdspIntermodalGraph(plan.getPerson());
 		final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
 		int idNode = 0;
 		int idLink = 0;

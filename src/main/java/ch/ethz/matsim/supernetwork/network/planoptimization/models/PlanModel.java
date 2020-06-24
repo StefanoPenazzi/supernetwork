@@ -16,7 +16,5 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorith
  */
 public interface PlanModel {
 
-	public OptimizationAlgorithm getOptimizationAlgorithm();
-	public List<? extends PlanElement> getNewPlan();
 	public Person getPerson();
 }
