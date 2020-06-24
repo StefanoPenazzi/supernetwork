@@ -15,6 +15,6 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
  */
 public interface PlansForPopulationContainer {
 
-	public void init();
 	public PlanManager getPlanManagerForAgent(final Id<Person> agentId);
+	public void addPlanManager(Id<Person> id, PlanManager planManager);
 }

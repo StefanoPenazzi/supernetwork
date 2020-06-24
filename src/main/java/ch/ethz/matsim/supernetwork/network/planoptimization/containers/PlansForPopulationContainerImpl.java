@@ -25,29 +25,22 @@ import gnu.trove.list.array.TDoubleArrayList;
  *
  */
 public class PlansForPopulationContainerImpl implements PlansForPopulationContainer {
-	
-	private final Population population;
+
 	private final Map<Id<Person>, PlanManager> planManagerContainer = new HashMap<>();
-	private final PlanManagerFactory planManagerFactory;
 	
 	@Inject
-	public PlansForPopulationContainerImpl(Population population,  PlanManagerFactory planManagerFactory){
-		this.population = population;
-		this.planManagerFactory = planManagerFactory;
-	}
-	
-	@Override
-	public void init() {
-		for (Person person : this.population.getPersons().values()) {
-			PlanManager planManager = this.planManagerFactory.createPlanManager(person.getPlans().get(0));
-			this.planManagerContainer.put(person.getId(), planManager);
-		}
-		System.out.println("");
+	public PlansForPopulationContainerImpl(){
+
 	}
 	
 	@Override
 	public PlanManager getPlanManagerForAgent(final Id<Person> agentId) {
 		return this.planManagerContainer.get(agentId);
+	}
+
+	@Override
+	public void addPlanManager(Id<Person> id, PlanManager planManager) {
+		this.planManagerContainer.put(id,planManager);
 	}
 
 

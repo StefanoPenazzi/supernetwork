@@ -20,11 +20,13 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 	
 	private final PlansForPopulationContainer plansForPopulationContainer;
 	private final Population population;
+	private final PlanManagerFactory planManagerFactory;
 	
 	@Inject
-	public PlansForPopulationManagerImpl(PlansForPopulationContainer plansForPopulationContainer, Population population) {
+	public PlansForPopulationManagerImpl(PlansForPopulationContainer plansForPopulationContainer, Population population,PlanManagerFactory planManagerFactory) {
 		this.plansForPopulationContainer = plansForPopulationContainer;
 		this.population = population;
+		this.planManagerFactory = planManagerFactory;
 	}
 
 	@Override
@@ -37,8 +39,11 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 
 	@Override
 	public void init() {
-		this.plansForPopulationContainer.init();
-		
+		for (Person person : this.population.getPersons().values()) {
+			PlanManager planManager = this.planManagerFactory.createPlanManager(person.getPlans().get(0));
+			this.plansForPopulationContainer.addPlanManager(person.getId(), planManager);
+		}
+		System.out.println("");
 	}
 
 }
