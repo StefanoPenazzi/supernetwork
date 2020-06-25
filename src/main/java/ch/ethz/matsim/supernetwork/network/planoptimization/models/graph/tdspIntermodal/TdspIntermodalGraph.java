@@ -22,6 +22,9 @@ public class TdspIntermodalGraph extends GraphImpl {
 	 * @param optimizationAlgorithm
 	 */ 
 	private final Person person;
+	private int rootId;
+	private int destinationId;
+	private double[] startTimes;
 	
 	public TdspIntermodalGraph(Person person) {
 		super();
@@ -39,5 +42,28 @@ public class TdspIntermodalGraph extends GraphImpl {
 	public Person getPerson() {
 		return null;
 	}
+	
+	public int getRootId() {
+		return this.rootId;
+	}
 
+	public int getDestinationId() {
+		return this.destinationId;
+	}
+	
+	public void setRootId(int rootId) {
+		this.rootId = rootId;
+	}
+
+	public void setDestinationId(int destinationId) {
+		this.destinationId = destinationId;
+	}
+	
+	public double[] getStartTimes() {
+		return this.startTimes;
+	}
+	
+	public void setStartTimes(double[] startTimes) {
+		this.startTimes = startTimes;
+	}
 }

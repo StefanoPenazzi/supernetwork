@@ -87,6 +87,8 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		List<TdspIntermodalNode> nodesList = new ArrayList<>();
 		List<List<TdspIntermodalNode>> nodesListPerPosition = new ArrayList<>();
 		
+		graph.setStartTimes(multiStartTimes(activities.get(0)));
+		
 		//NODES
 		//Add first activity not considering the modes
 		TdspIntermodalNode firstNode = new TdspIntermodalNode(idNode,activities.get(0),null, nodeType[2],0,0);
@@ -95,6 +97,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		List<TdspIntermodalNode> nlf = new ArrayList<>();
 		nlf.add(firstNode);
 		nodesListPerPosition.add(nlf);
+		graph.setRootId(0);
 		
 		//Add intermed activities
 		for(int j = 1; j < activities.size()-1; ++j) {
@@ -107,12 +110,8 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 				nodesList.add(actStartNode);
 				idNode++;
 				nl.add(actStartNode);
-//				Activity nextAct = (j<activities.size()-1)? activities.get(j+1):null;
-//				if(nextAct != null) {
-//					if (nextAct.getType().endsWith("interaction")) {
-//						System.out.println("");
-//					}
-//				}
+
+				
 				//Activity_end nodes
 				double[] durations = activityDurations(activities.get(j));
 				for(int d = 0;d<durations.length;d++) {
@@ -122,6 +121,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 					nl.add(actEndNode);
 				}
 				
+				
 				//Activity_departure node
 				TdspIntermodalNode actDepNode = new TdspIntermodalNode(idNode,null,planModes.get(k),nodeType[2],0,j);
 				nodesList.add(actDepNode);
@@ -130,13 +130,16 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 			}
 			nodesListPerPosition.add(nl);
 		}
+		
 		//Add last activity
 		TdspIntermodalNode lastNode = new TdspIntermodalNode(idNode,activities.get(activities.size()-1),null,nodeType[0],0,activities.size()-1);
 		nodesList.add(lastNode);
-		idNode++;
 		List<TdspIntermodalNode> nll = new ArrayList<>();
 		nll.add(lastNode);
 		nodesListPerPosition.add(nll);
+		graph.setDestinationId(idNode);
+		
+		
 		
 		//LINKS
 		for(int j = 0; j < activities.size()-1; j++) {
@@ -281,5 +284,39 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		}
 		result[steps+1] = maxDuration;
 		return result;
+	}
+	
+	public double[] multiStartTimes(Activity activity) {
+		
+		double[] res;
+		double duration = 0;
+		int steps = (int)Math.ceil((defaultRange/2)/timeStep);
+		
+		if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
+			duration = activity.getMaximumDuration();
+		}
+		
+		if(duration == 0) {
+			res = new double[steps];
+			for(int i = 0;i<steps;i++) {
+				res[i] = i*timeStep;
+			}
+		}
+		else if(duration < (defaultRange/2)/timeStep ){
+			res = new double[steps];
+			for(int i = 0;i<steps;i++) {
+				res[i] = duration + i*timeStep;
+			}
+		}
+		else {
+			res = new double[steps*2];
+			duration = duration - (defaultRange/2);
+			for(int i = 0;i<steps*2;i++) {
+				res[i] = duration + i*timeStep;
+			}
+		}
+		
+		return res;
+		
 	}
 }

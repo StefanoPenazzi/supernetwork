@@ -34,16 +34,13 @@ public abstract class OrdaRomOptimizationAlgorithm implements OptimizationAlgori
 
 	
 	
-	public abstract void init(TdspIntermodalGraph graph,double[] startTimes,int rootNodeId);
-		
-		
-	
+	public abstract void init(GraphImpl graph);
 	
 	public abstract void setPermanentLabels(); 
 	
 	public abstract void setTemporaryLabels(); 
 	
-	public abstract List<? extends PlanElement> buildSolution(int firstActivityNodeId, int lastActivityNodeId);
+	public abstract List<? extends PlanElement> buildSolution(GraphImpl graph);
 	
 
 	 class LinkTimeKey implements Comparable<LinkTimeKey> {

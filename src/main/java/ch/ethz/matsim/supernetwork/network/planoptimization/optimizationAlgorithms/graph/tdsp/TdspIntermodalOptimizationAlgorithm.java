@@ -15,6 +15,7 @@ import org.matsim.api.core.v01.population.PopulationFactory;
 
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
+import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.GraphImpl;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Link;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Node;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
@@ -48,11 +49,13 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	}
 	
 	
-	public void init(TdspIntermodalGraph graph,double[] startTimes,int rootNodeId) {
+	public void init(GraphImpl g) {
+		
+		TdspIntermodalGraph graph = (TdspIntermodalGraph)g;
 		
 		this.graph = graph;
 		
-		this.startTimes = startTimes;
+		this.startTimes = graph.getStartTimes();
 		
 		finish = false;
 		
@@ -73,7 +76,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		}
 		
 		for(int i =0;i<this.startTimes.length;i++) {
-			permanentLabels[rootNodeId][i] = this.startTimes[i];
+			permanentLabels[graph.getRootId()][i] = this.startTimes[i];
 		}
 		
 	}
@@ -156,23 +159,25 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		}
 	}
 	
-	public List<? extends PlanElement> buildSolution(int firstActivityNodeId, int lastActivityNodeId) {
+	public List<? extends PlanElement> buildSolution(GraphImpl g) {
+		
+		TdspIntermodalGraph graph = (TdspIntermodalGraph)g;
 		
 		double min = Double.MAX_VALUE;
 		int minStartTime = 0;
 		List<Integer> predecessorsList = new ArrayList<>(); 
 		
 		for(int i = 0;i<startTimes.length;i++) {
-			if(min>permanentLabels[lastActivityNodeId][i]) {
-				min = permanentLabels[lastActivityNodeId][i];
+			if(min>permanentLabels[graph.getDestinationId()][i]) {
+				min = permanentLabels[graph.getDestinationId()][i];
 				minStartTime = i;
 			}
 		}
 		
 		boolean rootFind = false;
-		int currActivityNode = lastActivityNodeId;
+		int currActivityNode = graph.getDestinationId();
 		int previousActivityNode = 0;
-		predecessorsList.add(lastActivityNodeId);
+		predecessorsList.add(graph.getDestinationId());
 		
 		while(!rootFind) {
 			min = Double.MAX_VALUE;
@@ -185,7 +190,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 			
 			predecessorsList.add(previousActivityNode);
 			
-			if(previousActivityNode == firstActivityNodeId) {
+			if(previousActivityNode == graph.getRootId()) {
 				return null;
 			}
 			else {
@@ -200,13 +205,13 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	public List<? extends PlanElement> run(PlanModel planModel) {
 		TdspIntermodalGraph graph = (TdspIntermodalGraph)planModel;
 		//TODO startTimes
-		init(graph, new double[5],0);
+		init(graph);
 		while(!finish) {
 			setTemporaryLabels();
 			setPermanentLabels();
 		}
 		
-		return buildSolution(0,graph.getNodes().length);
+		return buildSolution(graph);
 	}
 
 }
