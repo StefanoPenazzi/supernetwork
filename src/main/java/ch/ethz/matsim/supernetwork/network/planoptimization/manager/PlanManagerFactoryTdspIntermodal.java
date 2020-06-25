@@ -13,6 +13,7 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFact
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalGraph;
 import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.OrdaRomOptimizationAlgorithm;
+import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.TdspIntermodalOptimizationAlgorithm;
 
 /**
  * @author stefanopenazzi
@@ -37,7 +38,7 @@ public class PlanManagerFactoryTdspIntermodal implements PlanManagerFactory {
 	@Override
 	public PlanManager createPlanManager(Plan plan) {
 		TdspIntermodalGraph planModel = (TdspIntermodalGraph) this.planModelFactory.createPlanModel(plan);
-		return new PlanManagerTdspIntermodal(planModel, new OrdaRomOptimizationAlgorithm(this.scoringFunctionForPopulationGraph,this.containerManager,this.populationFactory));
+		return new PlanManagerTdspIntermodal(planModel, new TdspIntermodalOptimizationAlgorithm(this.scoringFunctionForPopulationGraph,this.containerManager,this.populationFactory));
 	}
 
 }
