@@ -17,6 +17,7 @@ public abstract class GraphImpl implements Graph {
 	private Node[] nodes;
 	private Link[] links;
 	private boolean finish = false;
+	private int numLinks = 0;
 	
 	public GraphImpl() {
 		
@@ -30,6 +31,10 @@ public abstract class GraphImpl implements Graph {
 	@Override
 	public Link[] getLinks() {
 		return links;
+	}
+	
+	public int getNumLinks() {
+		return this.numLinks;
 	}
 	
 
@@ -64,9 +69,9 @@ public abstract class GraphImpl implements Graph {
 	public void buildLinksIntoNodes(List<? extends Node> nodesList) {
 		
 		finish = true;
-		
 		nodes =  new Node[nodesList.size()];
 		nodesList.toArray(nodes);
+		int nLinks = 0;
 		
 		HashMap<Integer,Integer> newNodeId = new HashMap<Integer,Integer>(); 
 		// map with the node id and the new id equal to the position in th
@@ -79,6 +84,8 @@ public abstract class GraphImpl implements Graph {
 		//TODO exception in case the from/to node can not be found
 		for (int i =0;i<nodes.length;++i) {
 			
+			nLinks += nodes[i].getInLinks().size();
+			
 			for(Link l: nodes[i].getInLinks()) {
 				l.setFromNodeId(newNodeId.get(l.getFromNodeId()));
 				l.setToNodeId(i);
@@ -89,7 +96,7 @@ public abstract class GraphImpl implements Graph {
 				l.setToNodeId(l.getToNodeId());
 			}
 		}
-		
+		this.numLinks = nLinks;
 	}
 
 }
