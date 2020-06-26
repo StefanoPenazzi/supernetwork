@@ -9,9 +9,18 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
+import org.matsim.core.network.NetworkUtils;
+import org.matsim.core.population.routes.NetworkRoute;
+import org.matsim.core.population.routes.RouteUtils;
+import org.matsim.core.router.RoutingModule;
+import org.matsim.core.router.TripRouter;
+import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+import org.matsim.facilities.ActivityFacilities;
+import org.matsim.facilities.FacilitiesUtils;
 
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
@@ -33,6 +42,9 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	private final ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph;
 	private final ContainerManager containerManager;
 	private final PopulationFactory populationFactory;
+	private final Network network;
+	private final TripRouter tripRouter;
+	private final ActivityFacilities facilities;
 	
 	private double[] startTimes;
 	private double[][] arrivalTime;
@@ -42,10 +54,14 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	private boolean finish = false;
 	
 	
-	public TdspIntermodalOptimizationAlgorithm(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,ContainerManager containerManager,PopulationFactory populationFactory) {
+	public TdspIntermodalOptimizationAlgorithm(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,ContainerManager containerManager,PopulationFactory populationFactory
+			,Network network,TripRouter tripRouter,ActivityFacilities facilities) {
 		this.scoringFunctionForPopulationGraph = scoringFunctionForPopulationGraph;
 		this.containerManager = containerManager;
 		this.populationFactory = populationFactory;
+		this.network = network;
+		this.tripRouter = tripRouter;
+		this.facilities = facilities;
 	}
 	
 	
@@ -104,8 +120,9 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	public void setTemporaryLabels() {
 		for (LinkTimeKey ltk : tempLabelsMap.keySet()) {
 			double permanentLabel = permanentLabels[ltk.getFromNode()][ltk.getTime()];
+			double travelTime = 0;
 			if(permanentLabel != Double.MAX_VALUE) {
-				double label = 0;
+				double label = permanentLabel;
 				//TODO this can be done with an array of links
 				TdspIntermodalLink link = null;
 				for(Link l: graph.getNodes()[ltk.getFromNode()].getOutLinks()) {
@@ -122,19 +139,44 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 					case "car":
 						
 						Leg leg = this.populationFactory.createLeg( "car" );
-						double travelTime = (containerManager.getPath(fromNode.getActivity(),toNode.getActivity() , arrivalTime[ltk.getFromNode()][ltk.getTime()],fromNode.getMode())).travelTime;
-						leg.setTravelTime(travelTime);
-						double uf = this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson().getId(), leg);
-						label = permanentLabel - uf;
+						NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, null, null);
+						Path path = containerManager.getPath(fromNode.getActivity(),toNode.getActivity() , arrivalTime[ltk.getFromNode()][ltk.getTime()],fromNode.getMode());
+						
+						route.setTravelTime(path.travelTime);
+						route.setTravelCost(path.travelCost);
+						route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
+						leg.setRoute(route);
+						leg.setTravelTime(path.travelTime);
+						leg.setDepartureTime(arrivalTime[ltk.getFromNode()][ltk.getTime()]);
+						
+						//TODO what happens when the arrival time is out of the time window?
+						travelTime = path.travelTime;
+						label -= this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson().getId(), leg);
 						tempLabelsMap.put(ltk, label);
 						arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime;
 						
 						break;
 						
 					case "walk":
+						List<? extends PlanElement> walkLegs = tripRouter.getRoutingModule("walk").calcRoute(FacilitiesUtils.toFacility(fromNode.getActivity(),facilities),
+								FacilitiesUtils.toFacility(toNode.getActivity(),facilities) , arrivalTime[ltk.getFromNode()][ltk.getTime()], graph.getPerson());
+						for(PlanElement l: walkLegs) {
+							travelTime += ((Leg)l).getTravelTime();
+							label -= this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson().getId(), (Leg)l);
+						}
+						tempLabelsMap.put(ltk, label);
+						arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime;
 						break;
 						
 					case "bike":
+                        List<? extends PlanElement> bikeLegs = tripRouter.getRoutingModule("walk").calcRoute(FacilitiesUtils.toFacility(fromNode.getActivity(),facilities),
+                        		FacilitiesUtils.toFacility(toNode.getActivity(),facilities) , arrivalTime[ltk.getFromNode()][ltk.getTime()], graph.getPerson());
+						for(PlanElement l: bikeLegs) {
+							travelTime += ((Leg)l).getTravelTime();
+							label -= this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson().getId(), (Leg)l);
+						}
+						tempLabelsMap.put(ltk, label);
+						arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime;
 						break;
 						
 					case "ride":
