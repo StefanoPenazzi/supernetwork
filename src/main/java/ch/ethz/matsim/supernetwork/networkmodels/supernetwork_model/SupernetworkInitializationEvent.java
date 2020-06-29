@@ -34,7 +34,6 @@ public class SupernetworkInitializationEvent implements StartupListener {
 		containerManagerFactory.setContainerManager();
 		this.scoringFunctionsForPopulationGraph.init();
 		plansForPopulationManager.init();
-		System.out.println("...");
 	}
 }
 

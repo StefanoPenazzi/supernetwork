@@ -3,6 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.manager;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.matsim.api.core.v01.population.Person;
@@ -32,10 +33,16 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 	@Override
 	public void populationNewPlans() {
 		//TODO
+		System.out.println("");
+		long start = System.nanoTime();
 		for (Person person : this.population.getPersons().values()) {
 			//it is probably better to have this in the replanning strategy but the scoring becomes useless
 			List<? extends PlanElement> pe = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
 		}
+		long finish = System.nanoTime();
+		long timeElapsed = finish - start;
+		System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
+		System.out.println("");
 	}
 
 	@Override
@@ -44,7 +51,7 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 			PlanManager planManager = this.planManagerFactory.createPlanManager(person.getPlans().get(0));
 			this.plansForPopulationContainer.addPlanManager(person.getId(), planManager);
 		}
-		System.out.println("");
+	
 	}
 
 }

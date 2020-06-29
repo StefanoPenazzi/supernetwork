@@ -47,7 +47,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
     
 	
 	
-	private  List<String> modes = Arrays.asList("car","walk","bike");
+	private  List<String> modes = Arrays.asList("car","bike");
 	private String[] nodeType = {"actStart","actEnd","actDep"};
 	private String[] linkType = {"depStart","startEnd","endDep"};
 	private double timeStep = 1200;
@@ -82,7 +82,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		int idLink = 0;
 		List<String> planModes = new ArrayList<>(modes);
 		if(plan.getPerson().getAttributes().getAttribute("car_avail") != "always") {
-			planModes.remove("car");
+			//planModes.remove("car");
 		}
 		List<TdspIntermodalNode> nodesList = new ArrayList<>();
 		List<List<TdspIntermodalNode>> nodesListPerPosition = new ArrayList<>();
@@ -123,7 +123,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 				
 				
 				//Activity_departure node
-				TdspIntermodalNode actDepNode = new TdspIntermodalNode(idNode,null,planModes.get(k),nodeType[2],0,j);
+				TdspIntermodalNode actDepNode = new TdspIntermodalNode(idNode,activities.get(j),planModes.get(k),nodeType[2],0,j);
 				nodesList.add(actDepNode);
 				idNode++;
 				nl.add(actDepNode);

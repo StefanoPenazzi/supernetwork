@@ -74,6 +74,7 @@ class ArrayFastRouterDelegate extends AbstractFastRouterDelegate {
 				predecessorNodes[i] = new PredecessorNode(pn,nodeData[i].getTime(),nodeData[i].getCost(),((RoutingNetworkLink)nodeData[i].getPrevLink()).getLink());
 			}
 		}
+		
 		//this should be unmodifiable but I don't know the impact on performance
 		return predecessorNodes;
 	}
@@ -91,7 +92,7 @@ class ArrayFastRouterDelegate extends AbstractFastRouterDelegate {
 		nodes.add(0, toNode);
 		links.add(0,pn[index].getLink());
 		index = pn[index].getPredecessor();
-		arrivalTime += pn[index].getTime();
+		arrivalTime = pn[index].getTime();
 		// last node is the supernode. this must not be in the path
 		pass = (pn[index].getLink().equals(null)) ? false : true;
 
@@ -103,6 +104,6 @@ class ArrayFastRouterDelegate extends AbstractFastRouterDelegate {
 			// last node is the supernode. this must not be in the path
 			pass = (pn[index].getLink().equals(null)) ? false : true;
 		}
-		return new Path(nodes, links, arrivalTime - startTime,cost);
+		return new Path(nodes, links, arrivalTime,cost);
 	}
 }

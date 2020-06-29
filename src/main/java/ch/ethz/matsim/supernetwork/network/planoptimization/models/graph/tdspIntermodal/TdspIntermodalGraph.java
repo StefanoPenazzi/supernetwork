@@ -40,7 +40,7 @@ public class TdspIntermodalGraph extends GraphImpl {
 
 	@Override
 	public Person getPerson() {
-		return null;
+		return this.person;
 	}
 	
 	public int getRootId() {

@@ -66,7 +66,7 @@ import org.matsim.core.utils.collections.RouterPriorityQueue;
 //		}
 		
 		NodeData toNodeData = getData(toNode);
-		return new Path(nodes, links, arrivalTime - startTime, toNodeData.getCost());
+		return new Path(nodes, links,toNodeData.getTime()-startTime , toNodeData.getCost());
 	}
 	
 	@Override

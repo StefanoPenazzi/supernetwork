@@ -110,7 +110,7 @@ public class ContainerManagerImpl implements ContainerManager {
 		if(sn == null) {
 			return null;
 		}
-		//this is useful if the routing data would be saved ad Activity->Activity
+		//this is useless if the routing data would be saved ad Activity->Activity
 		Facility toFacility = FacilitiesUtils.toFacility(endActivity, facilities );
 		Gbl.assertNotNull(toFacility);
 		Link toLink = this.network.getLinks().get(toFacility.getLinkId());
@@ -120,7 +120,8 @@ public class ContainerManagerImpl implements ContainerManager {
 		}
 		Gbl.assertNotNull(toLink);
 		Node endNode = toLink.getFromNode();
-		return getPath(this.activitySupernodeMap.get(c),endNode,time,mode);
+		
+		return getPath(sn,endNode,time,mode);
 		
 	}
 	

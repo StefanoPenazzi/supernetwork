@@ -24,7 +24,7 @@ public class PlanManagerTdspIntermodal implements PlanManager {
 
 	@Override
 	public List<? extends PlanElement> getNewPlan() {
-		// TODO Auto-generated method stub
+		this.optimizationAlgorithm.run(planModel);
 		return null;
 	}
 

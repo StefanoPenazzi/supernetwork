@@ -77,8 +77,8 @@ public class ScoringFunctionsForPopulationGraph {
 			return newScore - oldScore;
 		}
 		
-		public double getLegUtilityFunctionValueForAgent(final Id<Person> agentId, Leg leg) {
-			ScoringFunction scoringFunction = this.agentScorers.get(agentId);
+		public double getLegUtilityFunctionValueForAgent(Person person, Leg leg) {
+			ScoringFunction scoringFunction = this.agentScorers.get(person.getId());
  			double oldScore = scoringFunction.getScore();
  			scoringFunction.handleLeg(leg);
  			double newScore = scoringFunction.getScore();

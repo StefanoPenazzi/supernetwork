@@ -73,8 +73,8 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 
 		Path[] paths = new Path[toNodes.size()];
 		for(int i=0;i<toNodes.size();i++) {
-			//TODO which is the arrivaltime???
-			paths[i] = this.fastRouter.constructPath(this.routingNetwork.getNodes().get(fromNode.getId()), this.routingNetwork.getNodes().get(toNodes.get(i).getId()), startTime, 1000000);
+		
+			paths[i] = this.fastRouter.constructPath(this.routingNetwork.getNodes().get(fromNode.getId()), this.routingNetwork.getNodes().get(toNodes.get(i).getId()), startTime, 0);
 		}
 		
 		return paths;
