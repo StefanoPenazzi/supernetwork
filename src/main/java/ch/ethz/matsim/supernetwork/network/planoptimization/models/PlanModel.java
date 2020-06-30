@@ -6,6 +6,7 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.models;
 import java.util.List;
 
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.OptimizationAlgorithm;
@@ -17,4 +18,5 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorith
 public interface PlanModel {
 
 	public Person getPerson();
+	public Plan getPlan();
 }

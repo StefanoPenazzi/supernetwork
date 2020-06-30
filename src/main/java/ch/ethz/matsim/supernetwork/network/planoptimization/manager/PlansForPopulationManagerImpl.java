@@ -48,7 +48,7 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 	@Override
 	public void init() {
 		for (Person person : this.population.getPersons().values()) {
-			PlanManager planManager = this.planManagerFactory.createPlanManager(person.getPlans().get(0));
+			PlanManager planManager = this.planManagerFactory.createPlanManager(person);
 			this.plansForPopulationContainer.addPlanManager(person.getId(), planManager);
 		}
 	

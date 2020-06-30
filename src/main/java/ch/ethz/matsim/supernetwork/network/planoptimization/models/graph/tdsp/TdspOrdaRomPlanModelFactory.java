@@ -72,57 +72,7 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 	
 	
 	
-	@Override
-	public Graph createPlanModel( Plan plan) {
-//		TdspGraphOrdaRom graph = new TdspGraphOrdaRom(new OrdaRomOptimizationAlgorithm());
-//		final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
-//		int idNode = 0;
-//		int idLink = 0;
-//		List<String> planModes = new ArrayList<>(modes);
-//		if(plan.getPerson().getAttributes().getAttribute("car_avail") != "always") {
-//			planModes.remove("car");
-//		}
-//		List<TdspNode> nodesList = new ArrayList<>();
-//		
-//		//NODES
-//		for(int j =0; j < activities.size(); j++) {
-//			Activity act = activities.get(j);
-//			Activity nextAct = (j<activities.size()-1)? activities.get(j+1):null;
-//			if(nextAct != null) {
-//				if (nextAct.getType().endsWith("interaction")) {
-//					System.out.println("");
-//				}
-//			}
-//			TdspNode n = new TdspNode(idNode,act);
-//			nodesList.add(n);
-//			idNode++;
-//		}
-//		//the last node doesn't represent an activity but it is necessary to consider the time spent in the last activity of the plan
-//		TdspNode n = new TdspNode(idNode,null);
-//		nodesList.add(n);
-//		
-//		//LINKS
-//		for(int j = 0;j<nodesList.size()-1;j++) {
-//			//for the activity durations
-//			Activity act = nodesList.get(j).getActivity();
-//			double[] durations = activityDurations(act);
-//			for(int i =0;i<durations.length;i++) {
-//				//All the links ref to the same activity
-//				Activity linkAct = this.populationFactory.createActivityFromLinkId(act.getType(),act.getLinkId());
-//				double uf = this.scoringFunctionsForPopulationGraph.getActivityUtilityFunctionValueForAgent(plan.getPerson(), linkAct,durations[i]);
-//				//for all the mode
-//				for(int k=0;k<planModes.size();++k) {
-//					Leg linkLeg = this.populationFactory.createLeg(planModes.get(k));
-//					TdspLink link = new TdspLink(idLink,j,j+1,linkAct,linkLeg,durations[i],uf);
-//					nodesList.get(j).addOutLink(link);
-//					nodesList.get(j+1).addInLink(link);
-//					idLink++;
-//				}
-//			}
-//		}
-//		graph.buildLinksIntoNodes(nodesList);
-		return null;
-	}
+	
 
 	private double[] activityDurations(Activity activity) {
 		ActivityParams activityParams =  planCalcScoreConfigGroup.getActivityParams(activity.getType());
@@ -176,6 +126,12 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 		}
 		result[steps+1] = maxDuration;
 		return result;
+	}
+
+	@Override
+	public PlanModel createPlanModel(Person person) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

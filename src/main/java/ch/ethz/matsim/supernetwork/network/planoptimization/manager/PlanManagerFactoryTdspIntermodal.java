@@ -4,6 +4,7 @@
 package ch.ethz.matsim.supernetwork.network.planoptimization.manager;
 
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.core.router.TripRouter;
@@ -45,8 +46,8 @@ public class PlanManagerFactoryTdspIntermodal implements PlanManagerFactory {
 	}
 	
 	@Override
-	public PlanManager createPlanManager(Plan plan) {
-		TdspIntermodalGraph planModel = (TdspIntermodalGraph) this.planModelFactory.createPlanModel(plan);
+	public PlanManager createPlanManager(Person person) {
+		TdspIntermodalGraph planModel = (TdspIntermodalGraph) this.planModelFactory.createPlanModel(person);
 		return new PlanManagerTdspIntermodal(planModel, new TdspIntermodalOptimizationAlgorithm(this.scoringFunctionForPopulationGraph,this.containerManager,
 				this.populationFactory,this.network,this.tripRouter, this.facilities));
 	}

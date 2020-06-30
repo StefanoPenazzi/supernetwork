@@ -12,6 +12,6 @@ import org.matsim.api.core.v01.population.Plan;
  */
 public interface PlanModelFactory {
 	
-	public PlanModel createPlanModel(Plan plan);
+	public PlanModel createPlanModel(Person person);
 
 }

@@ -3,6 +3,7 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.manager;
 
+import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
 
 /**
@@ -12,7 +13,7 @@ import org.matsim.api.core.v01.population.Plan;
 public class PlanManagerFactoryImpl implements PlanManagerFactory {
 
 	@Override
-	public PlanManager createPlanManager(Plan plan) {
+	public PlanManager createPlanManager(Person person) {
 		// TODO Auto-generated method stub
 		return null;
 	}
