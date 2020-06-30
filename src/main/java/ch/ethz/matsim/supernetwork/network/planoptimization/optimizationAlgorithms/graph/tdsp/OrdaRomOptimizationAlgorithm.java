@@ -40,7 +40,7 @@ public abstract class OrdaRomOptimizationAlgorithm implements OptimizationAlgori
 	
 	public abstract void setTemporaryLabels(); 
 	
-	public abstract List<? extends PlanElement> buildSolution(GraphImpl graph);
+	public abstract boolean buildSolution(GraphImpl graph);
 	
 
 	 class LinkTimeKey implements Comparable<LinkTimeKey> {

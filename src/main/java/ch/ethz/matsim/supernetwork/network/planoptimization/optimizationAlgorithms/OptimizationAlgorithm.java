@@ -15,5 +15,5 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
  */
 public interface OptimizationAlgorithm {
 
-	public List<? extends PlanElement> run(PlanModel planModel);
+	public boolean run(PlanModel planModel);
 }

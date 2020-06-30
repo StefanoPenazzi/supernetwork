@@ -17,9 +17,9 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorith
 public class PlanManagerImpl implements PlanManager {
 
 	@Override
-	public List<? extends PlanElement> getNewPlan() {
+	public boolean getNewPlan() {
 		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 }

@@ -59,7 +59,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	private TdspIntermodalGraph graph;
 	private boolean finish = false;
 	
-	int notFoundPath = 0;
+	boolean notFoundPath = false;
 	
 	
 	public TdspIntermodalOptimizationAlgorithm(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,ContainerManager containerManager,PopulationFactory populationFactory
@@ -104,7 +104,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 			arrivalTime[graph.getRootId()][i] = this.startTimes[i];
 			permanentLabels[graph.getRootId()][i] = 0;
 		}
-		
+		notFoundPath = false;
 	}
 	
 	public void setPermanentLabels() {
@@ -165,13 +165,9 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 						
 						Path path = containerManager.getPath(fromNode.getActivity(),toNode.getActivity() , arrivalTime[ltk.getFromNode()][ltk.getTime()],"car");
 						
-						if(path == null) {
+						if(path == null || path.links.size()==0) {
 							tempLabelsMap.put(ltk,new UfTime(Double.MAX_VALUE,Double.MAX_VALUE));
-							
-						}
-						else if(path.links.size()==0) {
-							//TODO
-							tempLabelsMap.put(ltk,new UfTime(Double.MAX_VALUE,Double.MAX_VALUE));
+							notFoundPath = true;
 							
 						}
 						else {
@@ -195,7 +191,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 							double ll = this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson(), leg);
 							label = label - ll;
 							tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime));
-							//arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime;
+							
 						}
 						break;
 						
@@ -207,7 +203,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 							label = label - this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson(), (Leg)l);
 						}
 						tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime));
-						//arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime;
+					
 						break;
 						
 					case "bike":
@@ -218,7 +214,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 							label = label - this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson(), (Leg)l);
 						}
 						tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime));
-						//arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime;
+						
 						break;
 						
 					case "ride":
@@ -234,18 +230,18 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 				}else if(link.getType() == "startEnd") {
 					label = label - link.getUtility();
 					tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()] + link.getDuration()));
-					//arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()] + link.getDuration();
+				
 				}
 				else {
 					label = permanentLabel;
 					tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()]));
-					//arrivalTime[ltk.getToNode()][ltk.getTime()] = arrivalTime[ltk.getFromNode()][ltk.getTime()];
+					
 				}
 			}
 		}
 	}
 	
-	public List<? extends PlanElement> buildSolution(GraphImpl g) {
+	public boolean buildSolution(GraphImpl g) {
 		
 		double fTime = 86400;
 		double sTime = 0;
@@ -355,7 +351,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 			leg.setMode(mode);
 		}
 		
-		return null;
+		return notFoundPath;
 			
 	}
 	
@@ -402,7 +398,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	}
 	
 	@Override
-	public List<? extends PlanElement> run(PlanModel planModel) {
+	public boolean run(PlanModel planModel) {
 		TdspIntermodalGraph jj = (TdspIntermodalGraph)planModel;
 		//jj.print();
 		init(jj);

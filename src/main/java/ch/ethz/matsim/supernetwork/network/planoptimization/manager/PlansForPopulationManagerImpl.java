@@ -35,9 +35,13 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 		//TODO
 		System.out.println("");
 		long start = System.nanoTime();
+		int noPath = 0;
 		for (Person person : this.population.getPersons().values()) {
 			//it is probably better to have this in the replanning strategy but the scoring becomes useless
-			List<? extends PlanElement> pe = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
+			boolean check = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
+			if(check) {
+				noPath++;
+			}
 		}
 		long finish = System.nanoTime();
 		long timeElapsed = finish - start;

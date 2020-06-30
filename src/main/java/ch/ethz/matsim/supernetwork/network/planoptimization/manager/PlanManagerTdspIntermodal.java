@@ -23,9 +23,8 @@ public class PlanManagerTdspIntermodal implements PlanManager {
 	}
 
 	@Override
-	public List<? extends PlanElement> getNewPlan() {
-		this.optimizationAlgorithm.run(planModel);
-		return null;
+	public boolean getNewPlan() {
+		return this.optimizationAlgorithm.run(planModel);
 	}
 
 }
