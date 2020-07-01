@@ -29,12 +29,13 @@ import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGrou
 public class RegionHierarchicalCS {
 
 	public static ClustersContainer<ClusterActivitiesLocation,ElementActivity> generateClustersContainer(Scenario scenario,int cut) {
-		// TODO Auto-generated method stub
+	
 		List<CALNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);
 		regions = cn.getRegions();
 		
 		KDTreeClustersContainer container = new KDTreeClustersContainer(null,regions.size());
+		
 		for(CALNetworkRegionImpl reg: regions) {
 			container.add(reg);
 		}
@@ -84,7 +85,7 @@ public class RegionHierarchicalCS {
 		//	subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
 		//}
 		
-		System.out.println();
+		//System.out.println();
 		return container1;
 	}
 	
