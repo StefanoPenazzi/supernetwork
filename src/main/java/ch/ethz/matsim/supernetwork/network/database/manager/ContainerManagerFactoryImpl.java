@@ -45,8 +45,8 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 		List<Middlenetwork> middlenetworks = new ArrayList<Middlenetwork>();
 		List<ClusterActivitiesLocation> lc = this.clustersContainer.getClusters();
 		for(ClusterActivitiesLocation cdi: lc) {
-			Subnetwork sn = subnetworkFactory.generateSubnetworkByCluster(cdi); 
-			middlenetworks.add(middlenetworkFactory.create(cdi, sn));
+			//Subnetwork sn = subnetworkFactory.generateSubnetworkByCluster(cdi); 
+			middlenetworks.add(middlenetworkFactory.create(cdi, null));
 		}
 		return middlenetworks;
 	}

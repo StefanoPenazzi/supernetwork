@@ -3,12 +3,8 @@
  */
 package ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element;
 
-import java.util.List;
-
-import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.api.core.v01.population.PlanElement;
-
+import org.matsim.facilities.Facility;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 
 
@@ -19,46 +15,27 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
  */
 public class ElementActivity implements Element {
 	
-	private Activity activity;
-	private Activity nextActivity;
-	private Person person;
+	private final Facility facility;
+	private final Facility nextFacility;
+	private final Person person;
 	private Cluster<ElementActivity> cluster;
+	private final double startTime;
 	
-	public ElementActivity(Activity activity,Person plan) {
-		this.activity = activity;
-		this.person = person;
-		this.cluster = null;
-		setNextActivity();
-	}
 	
-	public ElementActivity(Activity activity,Person person,Cluster<ElementActivity> cluster) {
-		this.activity = activity;
+	public ElementActivity(Facility facility,Facility nextFacility ,Person person,Cluster<ElementActivity> cluster,double startTime) {
+		this.facility = facility;
 		this.person = person;
+		this.nextFacility = nextFacility;
 		this.cluster = cluster;
-		setNextActivity();
+		this.startTime = startTime;
 	}
 	
-	public Activity getActivity() {
-		return this.activity;
+	public Facility getFacility() {
+		return this.facility;
 	}
 	
-	public Activity getNextActivity() {
-		return this.nextActivity;
-	}
-	
-	public void setNextActivity() {
-		
-		  this.nextActivity = null;
-		  List<PlanElement> le = person.getPlans().get(0).getPlanElements();
-		  int activityListIndex = le.indexOf(activity);
-		  if(activityListIndex < le.size()-1) {
-		  for(int j = activityListIndex+1; j<le.size() ;++j ) { 
-			  if ( le.get(j) instanceof Activity) { 
-				  nextActivity = (Activity) le.get(j);
-		          break; 
-		         } 
-			  }
-		  }
+	public Facility getNextFacility() {
+		return this.nextFacility;
 	}
 	
 	public Person getPlan() {
@@ -68,16 +45,24 @@ public class ElementActivity implements Element {
 	public Cluster<ElementActivity> getCluster() {
 		return this.cluster;
 	}
+	
+	public double getStartTime() {
+		return this.startTime;
+	}
+	
 	public void setCluster(Cluster<ElementActivity> cluster) {
 		this.cluster = cluster;
 	}
-
-	public double getDistNextActivity() {
-		if(this.nextActivity == null) {
+	
+	public double getDistNextFacility() {
+		if(this.nextFacility == null) {
 			return 0;
 		}else {
-		return Math.sqrt(Math.pow(activity.getCoord().getX() - nextActivity.getCoord().getX(),2) + 
-				Math.pow(activity.getCoord().getY() - nextActivity.getCoord().getY(),2));
+//		return Math.sqrt(Math.pow(facility.getCoord().getX() - nextFacility.getCoord().getX(),2) + 
+//				Math.pow(facility.getCoord().getY() - nextFacility.getCoord().getY(),2));
+//		}
+			//TODO
+			return 0;
 		}
 	}
 }

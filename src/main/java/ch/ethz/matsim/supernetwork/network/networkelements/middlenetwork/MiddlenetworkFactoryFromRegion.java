@@ -10,6 +10,7 @@ import java.util.List;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.network.NetworkUtils;
 import org.matsim.facilities.ActivityFacilities;
 import org.matsim.facilities.FacilitiesUtils;
 import org.matsim.facilities.Facility;
@@ -63,11 +64,21 @@ public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 		mni.setSuperNode(sn);
 		
 		//set toNodes
+		//TODO 
+		//this has to be consistent with the method used in the RoutingModule. Otherwise the path will not be found in the continer
 		List<Node> toNodes = new ArrayList<Node>();
 		for(ElementActivity e : r.getComponents()) {
-			if(e.getNextActivity() != null) {
-				Facility f = FacilitiesUtils.toFacility( e.getNextActivity(), facilities);
-				Link toLink = this.network.getLinks().get(f.getLinkId());//fromFacility.getLinkId());
+			if(e.getNextFacility() != null) {
+				Link toLink;
+				if(e.getNextFacility().getLinkId() == null) {
+					toLink = NetworkUtils.getNearestLink(network, e.getNextFacility().getCoord());
+				}
+				else {
+					toLink = this.network.getLinks().get(e.getNextFacility().getLinkId());//fromFacility.getLinkId());
+				}
+				if(toLink == null) {
+					System.out.println("No link found");
+				}
 				Node n = toLink.getFromNode();
 				toNodes.add(n);
 			}

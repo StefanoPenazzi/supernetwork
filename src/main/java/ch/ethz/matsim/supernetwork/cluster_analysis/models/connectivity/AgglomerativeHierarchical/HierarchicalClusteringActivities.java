@@ -46,10 +46,10 @@ public class HierarchicalClusteringActivities {
 	private double[][] proximityActivitiesMatrix(){
 		double[][] pm = new double[activities.size()][activities.size()];
 		for(int i=0;i<activities.size();++i) {
-			double iX = activities.get(i).getActivity().getCoord().getX();
-			double iY = activities.get(i).getActivity().getCoord().getY();
+			double iX = activities.get(i).getFacility().getCoord().getX();
+			double iY = activities.get(i).getFacility().getCoord().getY();
 			for(int j=0;j<activities.size();++j) {
-				pm[i][j] = Math.sqrt(Math.pow(iX - activities.get(j).getActivity().getCoord().getX(),2)+Math.pow(iY - activities.get(j).getActivity().getCoord().getY(),2));
+				pm[i][j] = Math.sqrt(Math.pow(iX - activities.get(j).getFacility().getCoord().getX(),2)+Math.pow(iY - activities.get(j).getFacility().getCoord().getY(),2));
 			}
 		}
 		return pm;

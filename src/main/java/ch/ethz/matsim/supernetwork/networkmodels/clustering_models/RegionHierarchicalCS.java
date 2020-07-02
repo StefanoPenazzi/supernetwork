@@ -9,6 +9,13 @@ import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.core.router.StageActivityTypes;
+import org.matsim.core.router.TripRouter;
+import org.matsim.core.router.TripStructureUtils;
+import org.matsim.core.router.TripStructureUtils.Trip;
+import org.matsim.facilities.ActivityFacilities;
+import org.matsim.facilities.FacilitiesUtils;
+
 import com.google.inject.Inject;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.Cluster;
 import ch.ethz.matsim.supernetwork.cluster_analysis.cluster.centroid.CALNetworkRegionImpl;
@@ -28,7 +35,9 @@ import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGrou
  */
 public class RegionHierarchicalCS {
 
-	public static ClustersContainer<ClusterActivitiesLocation,ElementActivity> generateClustersContainer(Scenario scenario,int cut) {
+	public static ClustersContainer<ClusterActivitiesLocation,ElementActivity> generateClustersContainer(
+			Scenario scenario,int cut, StageActivityTypes  stageActivityTypes,
+			ActivityFacilities facilities) {
 	
 		List<CALNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);
@@ -42,12 +51,16 @@ public class RegionHierarchicalCS {
 		
 		for(Person p: scenario.getPopulation().getPersons().values()) {
 			if(p.getPlans().size() >= 1) {
-			 List<PlanElement> le = p.getPlans().get(0).getPlanElements();
-		     for(PlanElement pe: le) {
-		    	 if (!(pe instanceof Activity)) continue;
-		    	 KDNode kdn = container.nearestNeighbourSearch(((Activity)pe).getCoord());
-		    	 ElementActivity ea = new ElementActivity((Activity)pe,p,kdn.getCluster());
+				
+			 List<Trip> trips = TripStructureUtils.getTrips(p.getPlans().get(0), stageActivityTypes);
+			 
+		     for(Trip tp: trips) {
+		    	 
+		    	 KDNode kdn = container.nearestNeighbourSearch(tp.getOriginActivity().getCoord());
+		    	 ElementActivity ea = new ElementActivity(FacilitiesUtils.toFacility(tp.getOriginActivity(),facilities),
+		    			 FacilitiesUtils.toFacility(tp.getDestinationActivity(),facilities),p,kdn.getCluster(),tp.getOriginActivity().getStartTime());
 		    	 kdn.getCluster().addComponent(ea);
+		    	 
 		     }	
 		   }
 		}
@@ -73,36 +86,28 @@ public class RegionHierarchicalCS {
 		for(CALRegion c: clusters) {
 			container1.add(c);
 		}
-		
-		//set the centroid for each new cluster in clusters
-		//for(Cluster cdi: clusters) {
-		//	cdi.computeCentroid();
-		//}
-		
-		//subnetwork generation
-		//List<SubnetworkDefaultImpl> subnetworks = new ArrayList();
-		//for(Cluster cdi: clusters) {
-		//	subnetworks.add((SubnetworkDefaultImpl) SubnetworkFromActivitiesCluster.fromActivitiesLocations(scenario.getNetwork(), cdi,0.9));
-		//}
-		
-		//System.out.println();
 		return container1;
 	}
 	
 	public static class Factory implements ClusteringModelFactory{
 
-		RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup;
-		Scenario scenario;
+		private final RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup;
+		private final Scenario scenario;
+		private final TripRouter tripRouter;
+		private final ActivityFacilities facilities;
 		
 		@Inject 
-		public Factory(Scenario scenario,RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup) {
+		public Factory(Scenario scenario,RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup,TripRouter tripRouter,ActivityFacilities facilities) {
 			this.scenario = scenario;
 			this.regionHierarchicalCSConfigGroup = regionHierarchicalCSConfigGroup;
+			this.tripRouter = tripRouter;
+			this.facilities = facilities;
 		}
 		
 		@Override
 		public ClustersContainer generateClusteringModel() {
-			return generateClustersContainer(scenario,regionHierarchicalCSConfigGroup.getCut());
+			return generateClustersContainer(scenario,regionHierarchicalCSConfigGroup.getCut(),tripRouter.getStageActivityTypes(), 
+					this.facilities);
 		}
 	}
 }

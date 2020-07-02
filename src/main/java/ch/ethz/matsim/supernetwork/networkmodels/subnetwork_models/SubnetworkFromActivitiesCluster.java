@@ -29,13 +29,13 @@ public class SubnetworkFromActivitiesCluster {
 		
 		for(int i =0; i< cluster.getComponents().size()*cut; ++i) {
 			ElementActivity ea = cluster.getComponents().get(i);
-			if(ea.getNextActivity() != null) {
-				double dist = Math.pow(xCentroid - ea.getNextActivity().getCoord().getX(), 2)+
-						Math.pow(yCentroid - ea.getNextActivity().getCoord().getY(), 2);
-				if(radius < dist) {
-					radius = dist;
-				}
-			}
+//			if(ea.getNextActivity() != null) {
+//				double dist = Math.pow(xCentroid - ea.getNextActivity().getCoord().getX(), 2)+
+//						Math.pow(yCentroid - ea.getNextActivity().getCoord().getY(), 2);
+//				if(radius < dist) {
+//					radius = dist;
+//				}
+//			}
 		}
 		if(radius >0) {
 			sn = (SubnetworkDefaultImpl)SubnetworkUtils.circularSubnetwork(father,cluster.getCentroid(),Math.sqrt(radius));
@@ -46,13 +46,13 @@ public class SubnetworkFromActivitiesCluster {
 	public double networkByActivitiesRadius(Cluster<ElementActivity> cluster) {
 		double radius =0;
 		for(ElementActivity ea: cluster.getComponents()) {
-			if(ea.getNextActivity() != null) {
-				double dist = Math.pow(cluster.getCentroid().getX()- ea.getNextActivity().getCoord().getX(), 2)+
-						Math.pow(cluster.getCentroid().getY()- ea.getNextActivity().getCoord().getY(), 2);
-				if(radius<dist) {
-					radius = dist;
-				}
-			}
+//			if(ea.getNextActivity() != null) {
+//				double dist = Math.pow(cluster.getCentroid().getX()- ea.getNextActivity().getCoord().getX(), 2)+
+//						Math.pow(cluster.getCentroid().getY()- ea.getNextActivity().getCoord().getY(), 2);
+//				if(radius<dist) {
+//					radius = dist;
+//				}
+//			}
 		}
 		return Math.sqrt(radius);
 	}

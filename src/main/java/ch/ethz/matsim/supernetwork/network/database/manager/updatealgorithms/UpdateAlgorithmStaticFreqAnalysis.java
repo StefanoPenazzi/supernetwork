@@ -38,7 +38,7 @@ public class UpdateAlgorithmStaticFreqAnalysis implements UpdateAlgorithm {
 		for (Middlenetwork mn: middlenetworks) {
 			List<ElementActivity> acts = mn.getCluster().getComponents();
 			for(ElementActivity act: acts ) {
-				int rr = (int)(act.getActivity().getStartTime()/range);
+				int rr = (int)(act.getStartTime()/range);
 				freq[rr] = freq[rr]+1;
 			}
 			for(int i = 0;i<freq.length;i++) {
@@ -47,14 +47,6 @@ public class UpdateAlgorithmStaticFreqAnalysis implements UpdateAlgorithm {
 					staticOutput.add(uao);
 				}
 			}
-			
-			
-//			double time = 7200;
-//			for (int i =1;i<10;++i) {
-//				UpdateAlgorithmOutput uao = new UpdateAlgorithmOutput(mn.getSuperNode(),mn.getToNodes(),time*i);
-//				staticOutput.add(uao);
-//			}	
-			
 		}
 		return staticOutput;
 	}

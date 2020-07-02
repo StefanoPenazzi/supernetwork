@@ -58,8 +58,8 @@ public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 		double x = 0;
 		double y = 0;
 		for(ElementActivity act:activities) {
-			x += act.getActivity().getCoord().getX();
-			y += act.getActivity().getCoord().getY();
+			x += act.getFacility().getCoord().getX();
+			y += act.getFacility().getCoord().getY();
 		}
 		x = x/activities.size();
 		y = y/activities.size();
@@ -69,7 +69,7 @@ public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 	public double variance() {
 		double var = 0;
 		for(ElementActivity act:activities) {
-			var += Math.sqrt(Math.pow(act.getActivity().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getActivity().getCoord().getY() - centroid.getY(), 2));
+			var += Math.sqrt(Math.pow(act.getFacility().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getFacility().getCoord().getY() - centroid.getY(), 2));
 		}
 		var = var/activities.size();
 		return var;
@@ -78,7 +78,7 @@ public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 	public double maxDistAct() {
 		double max = 0;
 		for(ElementActivity act:activities) {
-			double dist = Math.sqrt(Math.pow(act.getActivity().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getActivity().getCoord().getY() - centroid.getY(), 2));
+			double dist = Math.sqrt(Math.pow(act.getFacility().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getFacility().getCoord().getY() - centroid.getY(), 2));
 			if(max < dist) {
 				max = dist;
 			}
@@ -89,7 +89,7 @@ public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 	public double minDistAct() {
 		double min = Double.MAX_VALUE;
 		for(ElementActivity act:activities) {
-			double dist = Math.sqrt(Math.pow(act.getActivity().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getActivity().getCoord().getY() - centroid.getY(), 2));
+			double dist = Math.sqrt(Math.pow(act.getFacility().getCoord().getX() - centroid.getX(), 2) + Math.pow(act.getFacility().getCoord().getY() - centroid.getY(), 2));
 			if(min > dist) {
 				min = dist;
 			}
@@ -104,16 +104,16 @@ public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 				double dist1; 
 				double dist2; 
 				
-				if(e1.getNextActivity() != null) { 
-					dist1 = Math.pow(e1.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
-							Math.pow(e1.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				if(e1.getNextFacility() != null) { 
+					dist1 = Math.pow(e1.getNextFacility().getCoord().getX() - centroid.getX(), 2)+
+							Math.pow(e1.getNextFacility().getCoord().getY() - centroid.getY(), 2);
 				}
 				else {
 					dist1 = Double.MAX_VALUE;
 				}
-				if(e2.getNextActivity() != null) { 
-					dist2 =Math.pow(e2.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
-							Math.pow(e2.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+				if(e2.getNextFacility() != null) { 
+					dist2 =Math.pow(e2.getNextFacility().getCoord().getX() - centroid.getX(), 2)+
+							Math.pow(e2.getNextFacility().getCoord().getY() - centroid.getY(), 2);
 				}
 				else {
 					dist2 = Double.MAX_VALUE;
@@ -138,9 +138,9 @@ public class ClusterActivitiesLocation implements Cluster<ElementActivity>{
 	public void printActivitiesAndDist() {
 		int i =0;
 		for(ElementActivity ea: activities) {
-			if(ea.getNextActivity() != null) {
-				double dist = Math.pow(ea.getNextActivity().getCoord().getX() - centroid.getX(), 2)+
-						Math.pow(ea.getNextActivity().getCoord().getY() - centroid.getY(), 2);
+			if(ea.getNextFacility() != null) {
+				double dist = Math.pow(ea.getNextFacility().getCoord().getX() - centroid.getX(), 2)+
+						Math.pow(ea.getNextFacility().getCoord().getY() - centroid.getY(), 2);
 				System.out.println(i + " - " + dist);
 				++i;
 			}

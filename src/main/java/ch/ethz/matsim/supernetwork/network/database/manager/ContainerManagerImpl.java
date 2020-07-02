@@ -112,7 +112,6 @@ public class ContainerManagerImpl implements ContainerManager {
 		}
 		//this is useless if the routing data would be saved ad Activity->Activity
 		Facility toFacility = FacilitiesUtils.toFacility(endActivity, facilities );
-		Gbl.assertNotNull(toFacility);
 		Link toLink = this.network.getLinks().get(toFacility.getLinkId());
 		if ( toLink==null ) {
 			Gbl.assertNotNull( toFacility.getCoord() ) ;
@@ -120,7 +119,6 @@ public class ContainerManagerImpl implements ContainerManager {
 		}
 		Gbl.assertNotNull(toLink);
 		Node endNode = toLink.getFromNode();
-		
 		return getPath(sn,endNode,time,mode);
 		
 	}
@@ -143,7 +141,7 @@ public class ContainerManagerImpl implements ContainerManager {
 		for(Middlenetwork mn: this.middlenetworks) {
 			List<ElementActivity> activities = mn.getCluster().getComponents();
 			for(ElementActivity ea : activities) {
-				Coordin c = new Coordin(ea.getActivity().getCoord());
+				Coordin c = new Coordin(ea.getFacility().getCoord());
 				activitySupernodeMap.put(c,mn.getSuperNode());
 			}
 		}
