@@ -13,6 +13,7 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.containers.PlansForP
 import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanManagerFactory;
 import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlansForPopulationManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
+import ch.ethz.matsim.supernetwork.network.utilities.ActivityManager;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
 import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
 import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
@@ -101,6 +102,10 @@ public abstract class AbstractSupernetworkExtension extends AbstractModule {
 	
 	protected final com.google.inject.binder.LinkedBindingBuilder<PlanManagerFactory> bindPlanManagerFactory() {
 		return bind(PlanManagerFactory.class);
+	}
+	
+	protected final com.google.inject.binder.LinkedBindingBuilder<ActivityManager > bindActivityManager () {
+		return bind(ActivityManager.class);
 	}
 
 	abstract protected void installExtension();

@@ -157,7 +157,7 @@ public abstract class AbstractMultithreadingRoutingManager implements RoutingMan
 				Path [] paths= this.superNetworkRoutingModule.calcTree(uao.getSupernode().getNode(),uao.getToNodes(),uao.getTime());
 				for(Path p: paths) {
 					if(p != null && p.links.size()>1) {
-						PathTimeKey d = new PathTimeKey(uao.getSupernode(),uao.getTime(),Iterables.getLast(p.nodes));
+						PathTimeKey d = new PathTimeKey(p.nodes.get(0),uao.getTime(),Iterables.getLast(p.nodes));
 						res.add(new Pair<PathTimeKey,Path>(d,p));
 					}
 				}

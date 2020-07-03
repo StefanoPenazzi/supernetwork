@@ -21,8 +21,10 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.population.routes.RouteUtils;
 import org.matsim.core.router.RoutingModule;
+import org.matsim.core.router.StageActivityTypes;
 import org.matsim.core.router.TripRouter;
 import org.matsim.core.router.TripStructureUtils;
+import org.matsim.core.router.TripStructureUtils.Trip;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.facilities.ActivityFacilities;
 import org.matsim.facilities.FacilitiesUtils;
@@ -38,6 +40,7 @@ import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspInt
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalLink;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalNode;
 import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.OrdaRomOptimizationAlgorithm.LinkTimeKey;
+import ch.ethz.matsim.supernetwork.network.utilities.ActivityManager;
 
 /**
  * @author stefanopenazzi
@@ -51,6 +54,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	private final Network network;
 	private final TripRouter tripRouter;
 	private final ActivityFacilities facilities;
+	private final ActivityManager activityManager;
 	
 	private double[] startTimes;
 	private double[][] arrivalTime;
@@ -63,13 +67,14 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	
 	
 	public TdspIntermodalOptimizationAlgorithm(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,ContainerManager containerManager,PopulationFactory populationFactory
-			,Network network,TripRouter tripRouter,ActivityFacilities facilities) {
+			,Network network,TripRouter tripRouter,ActivityFacilities facilities,ActivityManager activityManager) {
 		this.scoringFunctionForPopulationGraph = scoringFunctionForPopulationGraph;
 		this.containerManager = containerManager;
 		this.populationFactory = populationFactory;
 		this.network = network;
 		this.tripRouter = tripRouter;
 		this.facilities = facilities;
+		this.activityManager = activityManager;
 	}
 	
 	
@@ -163,7 +168,8 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 						
 						Leg leg = this.populationFactory.createLeg( "car" );
 						
-						Path path = containerManager.getPath(fromNode.getActivity(),toNode.getActivity() , arrivalTime[ltk.getFromNode()][ltk.getTime()],"car");
+						Path path = containerManager.getPath(activityManager.ActivityToNode(fromNode.getActivity()),
+								activityManager.ActivityFromNode(toNode.getActivity()) , arrivalTime[ltk.getFromNode()][ltk.getTime()],"car");
 						
 						if(path == null || path.links.size()==0) {
 							tempLabelsMap.put(ltk,new UfTime(Double.MAX_VALUE,Double.MAX_VALUE));
@@ -243,6 +249,8 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	
 	public boolean buildSolution(GraphImpl g) {
 		
+		//I should use the RoutingModules
+		
 		double fTime = 86400;
 		double sTime = 0;
 		Activity nextActivity=null;
@@ -260,7 +268,17 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		
 		//first node in the predecessorList is always the last activity. The endTime of the last activity is 11.59pm
 		List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
-		List<Leg> legs = TripStructureUtils.getLegs(plan);
+		List<List<? extends PlanElement>> trips = new ArrayList<>();
+		
+		
+//		final List<Trip> trips = TripStructureUtils.getTrips(plan, tripRouter.getStageActivityTypes()); 
+//		List<Activity> activities = new ArrayList<>();
+//		List<Leg> legs = new ArrayList<>();
+//		for(Trip trip: trips) {
+//			activities.add(trip.getOriginActivity());
+//			legs.add(trip.getLegsOnly().get(0));
+//		}
+//		activities.add(trips.get(trips.size()-1).getDestinationActivity());
 		
 	
 		
@@ -283,38 +301,60 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 			activities.get(index).setMaximumDuration(depTime-arrTime);
 			activities.get(index).setEndTime(depTime);
 			
-			
-			//Leg between the current activity and the next activity visited in the previous iteration
-			Leg leg = legs.get(legs.size()-legCounter);
 			String mode = ((TdspIntermodalNode)graph.getNodes()[optimalSolution.path.get(i)]).getMode();
-			if(mode == "car") {
-				Path path = containerManager.getPath(activities.get(index),nextActivity,arrivalTime[optimalSolution.path.get(i+2)][optimalSolution.startTime] ,"car");
-				NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, null, null);
-				route.setTravelTime(path.travelTime);
-				route.setTravelCost(path.travelCost);
-				route.setStartLinkId(path.links.get(0).getId());
-				route.setEndLinkId(path.links.get(path.links.size()-1).getId());
-				List<Id<org.matsim.api.core.v01.network.Link>> linkIds = new ArrayList<>();
-				for(int j =1;j<path.links.size()-1;j++) {
-					linkIds.add(path.links.get(j).getId());
-				}
-				route.setLinkIds(path.links.get(0).getId(), linkIds, path.links.get(path.links.size()-1).getId() );
-				route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
-				leg.setRoute(route);
-				leg.setTravelTime(path.travelTime);
-				leg.setDepartureTime(depTime);
-				leg.setMode("car");
-			}
-			else {
-				leg.setRoute(null);
-				leg.setTravelTime(nextActivityArrivalTime - depTime);
-				leg.setDepartureTime(depTime);
-				leg.setMode(mode);
-			}
+			
+			
+			final List<? extends PlanElement> newTrip =
+					tripRouter.calcRoute(
+							mode,
+						  FacilitiesUtils.toFacility(activities.get(index), facilities ),
+						  FacilitiesUtils.toFacility(nextActivity, facilities ),
+						  depTime,
+							plan.getPerson());
+			//putVehicleFromOldTripIntoNewTripIfMeaningful(oldTrip, newTrip);
+//			TripRouter.insertTrip(
+//					plan, 
+//					activities.get(index),
+//					newTrip,
+//					nextActivity);
+			trips.add(newTrip);
+		
+			
+			
+			
+			
+			
+			//Trip between the current activity and the next activity visited in the previous iteration
+			//Leg leg = legs.get(legs.size()-legCounter);
+			
+//			if(mode == "car") {
+//				Path path = containerManager.getPath(activityManager.ActivityToNode(activities.get(index)),activityManager.ActivityToNode(nextActivity),arrivalTime[optimalSolution.path.get(i+2)][optimalSolution.startTime] ,"car");
+//				NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, null, null);
+//				route.setTravelTime(path.travelTime);
+//				route.setTravelCost(path.travelCost);
+//				route.setStartLinkId(path.links.get(0).getId());
+//				route.setEndLinkId(path.links.get(path.links.size()-1).getId());
+//				List<Id<org.matsim.api.core.v01.network.Link>> linkIds = new ArrayList<>();
+//				for(int j =1;j<path.links.size()-1;j++) {
+//					linkIds.add(path.links.get(j).getId());
+//				}
+//				route.setLinkIds(path.links.get(0).getId(), linkIds, path.links.get(path.links.size()-1).getId() );
+//				route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
+//				leg.setRoute(route);
+//				leg.setTravelTime(path.travelTime);
+//				leg.setDepartureTime(depTime);
+//				leg.setMode("car");
+//			}
+//			else {
+//				leg.setRoute(null);
+//				leg.setTravelTime(nextActivityArrivalTime - depTime);
+//				leg.setDepartureTime(depTime);
+//				leg.setMode(mode);
+//			}
 			
 			nextActivity = activities.get(index);
 			nextActivityArrivalTime = arrTime;
-			legCounter++;
+			//legCounter++;
 			
 		}
 		
@@ -324,32 +364,41 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		activities.get(index).setMaximumDuration(startTimes[optimalSolution.startTime]-sTime);
 		activities.get(index).setEndTime(startTimes[optimalSolution.startTime]);
 		//first leg
-		Leg leg = legs.get(legs.size()-legCounter);
+//		Leg leg = legs.get(legs.size()-legCounter);
 		String mode = ((TdspIntermodalNode)graph.getNodes()[optimalSolution.path.get(optimalSolution.path.size()-2)]).getMode();
-		if(mode == "car") {
-			Path path = containerManager.getPath(activities.get(index),nextActivity,startTimes[optimalSolution.startTime] ,"car");
-			NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, path.links.get(0).getId(), path.links.get(path.links.size()-1).getId());
-			route.setTravelTime(path.travelTime);
-			route.setTravelCost(path.travelCost);
-			//route.setStartLinkId(path.links.get(0).getId());
-			//route.setEndLinkId(path.links.get(path.links.size()-1).getId());
-			List<Id<org.matsim.api.core.v01.network.Link>> linkIds = new ArrayList<>();
-			for(int j =1;j<path.links.size()-1;j++) {
-				linkIds.add(path.links.get(j).getId());
-			}
-			route.setLinkIds(path.links.get(0).getId(), linkIds, path.links.get(path.links.size()-1).getId() );
-			route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
-			leg.setRoute(route);
-			leg.setTravelTime(path.travelTime);
-			leg.setDepartureTime(startTimes[optimalSolution.startTime]);
-			leg.setMode("car");
-		}
-		else {
-			leg.setRoute(null);
-			leg.setTravelTime(nextActivityArrivalTime - optimalSolution.startTime);
-			leg.setDepartureTime(optimalSolution.startTime);
-			leg.setMode(mode);
-		}
+//		if(mode == "car") {
+//			Path path = containerManager.getPath(activityManager.ActivityToNode(activities.get(index)),activityManager.ActivityToNode(nextActivity),startTimes[optimalSolution.startTime] ,"car");
+//			NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, path.links.get(0).getId(), path.links.get(path.links.size()-1).getId());
+//			route.setTravelTime(path.travelTime);
+//			route.setTravelCost(path.travelCost);
+//			//route.setStartLinkId(path.links.get(0).getId());
+//			//route.setEndLinkId(path.links.get(path.links.size()-1).getId());
+//			List<Id<org.matsim.api.core.v01.network.Link>> linkIds = new ArrayList<>();
+//			for(int j =1;j<path.links.size()-1;j++) {
+//				linkIds.add(path.links.get(j).getId());
+//			}
+//			route.setLinkIds(path.links.get(0).getId(), linkIds, path.links.get(path.links.size()-1).getId() );
+//			route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
+//			leg.setRoute(route);
+//			leg.setTravelTime(path.travelTime);
+//			leg.setDepartureTime(startTimes[optimalSolution.startTime]);
+//			leg.setMode("car");
+//		}
+//		else {
+//			leg.setRoute(null);
+//			leg.setTravelTime(nextActivityArrivalTime - optimalSolution.startTime);
+//			leg.setDepartureTime(optimalSolution.startTime);
+//			leg.setMode(mode);
+//		}
+		
+		final List<? extends PlanElement> newTrip =
+				tripRouter.calcRoute(
+						mode,
+					  FacilitiesUtils.toFacility(activities.get(index), facilities ),
+					  FacilitiesUtils.toFacility(nextActivity, facilities ),
+					  startTimes[optimalSolution.startTime],
+						plan.getPerson());
+		trips.add(newTrip);
 		
 		return notFoundPath;
 			

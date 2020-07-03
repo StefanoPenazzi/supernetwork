@@ -12,18 +12,18 @@ import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
  */
 public class PathTimeKey implements Comparable<PathTimeKey> {
 
-	private Supernode supernode;
+	private Node fromNode;
 	private double time;
 	private Node toNode;
     // Constructor  
-    public PathTimeKey (Supernode supernode, double time,Node toNode)  
+    public PathTimeKey (Node fromNode, double time,Node toNode)  
     {  
-        this.supernode = supernode;  
+        this.fromNode = fromNode;  
         this.time = time;  
         this.toNode = toNode;
     } 
-    public Supernode getSupernode(){
-    	return this.supernode;
+    public Node getFromNode(){
+    	return this.fromNode;
     }
     public double getTime() {
     	return time;
@@ -33,11 +33,11 @@ public class PathTimeKey implements Comparable<PathTimeKey> {
     }
     @Override
 	public int compareTo(PathTimeKey  domain) {
-    	int compSupernode = this.supernode.getNode().getId().compareTo(domain.getSupernode().getNode().getId());
-		if(compSupernode > 0) {
+    	int compFromNode = this.fromNode.getId().compareTo(domain.getFromNode().getId());
+		if(compFromNode > 0) {
 			return 1;
 		}
-		else if (compSupernode < 0) {
+		else if (compFromNode < 0) {
 			return -1;
 		}
 		else {
@@ -49,10 +49,10 @@ public class PathTimeKey implements Comparable<PathTimeKey> {
 				return -1;
 			}
 			else {
-				if(this.time > 0) {
+				if(this.time > domain.getTime()) {
 					return 1;
 				}
-				else if(this.time<0) {
+				else if(this.time<domain.getTime()) {
 					return -1;
 				}
 				else {
@@ -63,6 +63,6 @@ public class PathTimeKey implements Comparable<PathTimeKey> {
 	}
 	@Override
 	public String toString(){
-		return supernode.getNode().getId().toString() + String.valueOf(time);
+		return fromNode.getId().toString() + String.valueOf(time);
 	}
 }

@@ -13,7 +13,7 @@ import ch.ethz.matsim.supernetwork.network.networkelements.supernode.Supernode;
  */
 public interface RoutesContainer {
 	
-	public void add(Supernode supernode,  Node toNode ,double time,Path ln);
-	public Path getPath(Supernode supernode, Node toNode ,double time);
+	public void add(Node fromNode,  Node toNode ,double time,Path ln);
+	public Path getPath(Node fromNode, Node toNode ,double time);
 	public boolean empty();
 }

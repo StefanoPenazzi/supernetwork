@@ -18,6 +18,8 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.population.routes.RouteUtils;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+import org.matsim.facilities.ActivityFacilities;
+import org.matsim.facilities.FacilitiesUtils;
 import org.matsim.facilities.Facility;
 import com.google.inject.Inject;
 
@@ -32,30 +34,40 @@ public class ClustersReRouteModelImpl implements ClustersReRouteModel {
 	private final Network network;
 	private final ContainerManager containerManager;
 	private final PopulationFactory populationFactory;
+	private final ActivityFacilities facilities;
 	
 	@Inject
-	public ClustersReRouteModelImpl(Network network, ContainerManager containerManager,final PopulationFactory populationFactory) {
+	public ClustersReRouteModelImpl(Network network, ContainerManager containerManager,
+			final PopulationFactory populationFactory,ActivityFacilities facilities) {
 		Gbl.assertNotNull(network);
 		this.network = network;
 		this.containerManager = containerManager;
 		this.populationFactory = populationFactory;
+		this.facilities = facilities;
 	}
 
 	@Override
 	public List<? extends PlanElement> calcRoute(Activity fromActivity, Facility toFacility, double departureTime,
 			Person person) {
 		
+		Facility fromFacility = FacilitiesUtils.toFacility(fromActivity, facilities);
+		Link fromLinkActivity = this.network.getLinks().get(fromFacility.getLinkId());
+		if ( fromLinkActivity==null ) {
+			Gbl.assertNotNull( toFacility.getCoord() ) ;
+			fromLinkActivity = NetworkUtils.getNearestLink(network, fromFacility.getCoord());
+		}
+		Gbl.assertNotNull(fromLinkActivity);
+		Node fromNode = fromLinkActivity.getFromNode();
+		
 		Leg newLeg = this.populationFactory.createLeg( "car" );
-		Gbl.assertNotNull(toFacility);
 		Link toLink = this.network.getLinks().get(toFacility.getLinkId());
 		if ( toLink==null ) {
 			Gbl.assertNotNull( toFacility.getCoord() ) ;
 			toLink = NetworkUtils.getNearestLink(network, toFacility.getCoord());
 		}
 		Gbl.assertNotNull(toLink);
-		
-		Node endNode = toLink.getFromNode();
-		Path path = this.containerManager.getPath(fromActivity, endNode, (int)departureTime,"car");
+		Node toNode = toLink.getFromNode();
+		Path path = this.containerManager.getPath(fromNode, toNode, (int)departureTime,"car");
 		
 //		String s = "";
 //		for(Node n: path.nodes) {

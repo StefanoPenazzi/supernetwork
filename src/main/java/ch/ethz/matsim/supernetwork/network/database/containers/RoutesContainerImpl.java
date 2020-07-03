@@ -25,14 +25,20 @@ public class RoutesContainerImpl implements RoutesContainer{
 	}
 	
 	@Override
-	public void add(Supernode supernode, Node toNode, double time,Path ln) {
-		container.put(new PathTimeKey(supernode,time,toNode), ln);
+	public void add(Node fromNode, Node toNode, double time,Path ln) {
+		container.put(new PathTimeKey(fromNode,time,toNode), ln);
 	}
 	
 	@Override
-	public Path getPath(Supernode supernode, Node toNode, double time) {
-		PathTimeKey d = new PathTimeKey(supernode,time,toNode);
-		Path p = container.floorEntry(d).getValue();
+	public Path getPath(Node fromNode, Node toNode, double time) {
+		PathTimeKey d = new PathTimeKey(fromNode,time,toNode);
+		Path p = null;
+		try {
+		    p = container.ceilingEntry(d).getValue();
+		}
+		catch(NullPointerException e) {
+			System.out.println("***************** " + fromNode.getId().toString() + " -- "+ toNode.getId().toString() + " -- "+ time);
+		}
 		return p;
 	}  
 	

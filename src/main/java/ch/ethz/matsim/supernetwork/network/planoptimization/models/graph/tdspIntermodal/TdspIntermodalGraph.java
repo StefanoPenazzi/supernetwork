@@ -24,7 +24,7 @@ public class TdspIntermodalGraph extends GraphImpl {
 	 * @param optimizationAlgorithm
 	 */ 
 	private final Person person;
-	private Plan plan;
+	private final Plan plan;
 	private int rootId;
 	private int destinationId;
 	private double[] startTimes;
@@ -33,8 +33,13 @@ public class TdspIntermodalGraph extends GraphImpl {
 	public TdspIntermodalGraph(Person person) {
 		super();
 		this.person = person;
-		this.plan  = PopulationUtils.createPlan(person);
-		PopulationUtils.copyFromTo(person.getPlans().get(0), this.plan);
+		this.plan  = person.getPlans().get(0);
+	}
+	
+	public TdspIntermodalGraph(Person person, Plan plan) {
+		super();
+		this.person = person;
+		this.plan  = plan;
 	}
 	
 	public void print() {

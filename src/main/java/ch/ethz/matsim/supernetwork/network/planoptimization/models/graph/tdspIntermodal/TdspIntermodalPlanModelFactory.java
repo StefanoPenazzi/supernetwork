@@ -15,13 +15,19 @@ import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
+import org.matsim.core.population.PopulationUtils;
+import org.matsim.core.router.StageActivityTypes;
 import org.matsim.core.router.TripRouter;
 import org.matsim.core.router.TripStructureUtils;
+import org.matsim.core.router.TripStructureUtils.Trip;
 import org.matsim.core.scoring.functions.ScoringParametersForPerson;
 import org.matsim.core.utils.misc.Time;
+import org.matsim.facilities.FacilitiesUtils;
 
 import com.google.inject.Inject;
 
+import ch.ethz.matsim.supernetwork.cluster_analysis.cluster_element.ElementActivity;
+import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.kd_tree.KDNode;
 import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
@@ -44,6 +50,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	private final ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph;
 	private final PlanCalcScoreConfigGroup planCalcScoreConfigGroup;
     private final PopulationFactory populationFactory;
+   
     
 	
 	
@@ -66,6 +73,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		this.planCalcScoreConfigGroup = planCalcScoreConfigGroup;
 		this.populationFactory = populationFactory;
 		
+		
 	}
 	
 	public void init() {
@@ -76,9 +84,20 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	
 	@Override
 	public TdspIntermodalGraph createPlanModel(Person person) {
-		TdspIntermodalGraph graph = new TdspIntermodalGraph(person);
-		Plan plan  = graph.getPlan();
-		final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
+		
+		
+		TdspIntermodalGraph graph = new TdspIntermodalGraph(person,convertPlanForModel(person.getPlans().get(0)));
+		Plan plan = graph.getPlan();
+		
+		//final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
+		
+		final List<Trip> trips = TripStructureUtils.getTrips(plan, tripRouter.getStageActivityTypes());
+		List<Activity> activities = new ArrayList<>();
+		for(Trip trip: trips) {
+			activities.add(trip.getOriginActivity());
+		}
+		activities.add(trips.get(trips.size()-1).getDestinationActivity());
+		
 		int idNode = 0;
 		int idLink = 0;
 		List<String> planModes = new ArrayList<>(modes);
@@ -88,11 +107,12 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		List<TdspIntermodalNode> nodesList = new ArrayList<>();
 		List<List<TdspIntermodalNode>> nodesListPerPosition = new ArrayList<>();
 		
-		graph.setStartTimes(multiStartTimes(activities.get(0)));
+		graph.setStartTimes(multiStartTimes(trips.get(0).getOriginActivity()));
 		
 		//NODES
 		//Add first activity not considering the modes
-		TdspIntermodalNode firstNode = new TdspIntermodalNode(idNode,activities.get(0),null, nodeType[2],0,0);
+		//TdspIntermodalNode firstNode = new TdspIntermodalNode(idNode,activities.get(0),null, nodeType[2],0,0);
+		TdspIntermodalNode firstNode = new TdspIntermodalNode(idNode,trips.get(0).getOriginActivity(),null, nodeType[2],0,0);
 		nodesList.add(firstNode);
 		idNode++;
 		List<TdspIntermodalNode> nlf = new ArrayList<>();
@@ -101,39 +121,44 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		graph.setRootId(0);
 		
 		//Add intermed activities
-		for(int j = 1; j < activities.size()-1; ++j) {
-			List<TdspIntermodalNode> nl = new ArrayList<>();
-			for(int k=0;k<planModes.size();++k) {
-				
-				
-				//Activity_start node
-				TdspIntermodalNode actStartNode = new TdspIntermodalNode(idNode,activities.get(j),planModes.get(k),nodeType[0],0,j);
-				nodesList.add(actStartNode);
-				idNode++;
-				nl.add(actStartNode);
-
-				
-				//Activity_end nodes
-				double[] durations = activityDurations(activities.get(j));
-				for(int d = 0;d<durations.length;d++) {
-					TdspIntermodalNode actEndNode = new TdspIntermodalNode(idNode,null,planModes.get(k),nodeType[1],durations[d],j);
-					nodesList.add(actEndNode);
+		int position = 0;
+		for(Trip trip: trips) {
+			//first trip is already considered
+			if(position != 0) { 
+				List<TdspIntermodalNode> nl = new ArrayList<>();
+				for(int k=0;k<planModes.size();++k) {
+					
+					
+					//Activity_start node
+					TdspIntermodalNode actStartNode = new TdspIntermodalNode(idNode,trip.getOriginActivity(),planModes.get(k),nodeType[0],0,position);
+					nodesList.add(actStartNode);
 					idNode++;
-					nl.add(actEndNode);
+					nl.add(actStartNode);
+	
+					
+					//Activity_end nodes
+					double[] durations = activityDurations(trip.getOriginActivity());
+					for(int d = 0;d<durations.length;d++) {
+						TdspIntermodalNode actEndNode = new TdspIntermodalNode(idNode,null,planModes.get(k),nodeType[1],durations[d],position);
+						nodesList.add(actEndNode);
+						idNode++;
+						nl.add(actEndNode);
+					}
+					
+					
+					//Activity_departure node
+					TdspIntermodalNode actDepNode = new TdspIntermodalNode(idNode,trip.getOriginActivity(),planModes.get(k),nodeType[2],0,position);
+					nodesList.add(actDepNode);
+					idNode++;
+					nl.add(actDepNode);
 				}
-				
-				
-				//Activity_departure node
-				TdspIntermodalNode actDepNode = new TdspIntermodalNode(idNode,activities.get(j),planModes.get(k),nodeType[2],0,j);
-				nodesList.add(actDepNode);
-				idNode++;
-				nl.add(actDepNode);
+				nodesListPerPosition.add(nl);
 			}
-			nodesListPerPosition.add(nl);
+			position++;
 		}
 		
 		//Add last activity
-		TdspIntermodalNode lastNode = new TdspIntermodalNode(idNode,activities.get(activities.size()-1),null,nodeType[0],0,activities.size()-1);
+		TdspIntermodalNode lastNode = new TdspIntermodalNode(idNode,trips.get(trips.size()-1).getDestinationActivity(),null,nodeType[0],0,trips.size()-1);
 		nodesList.add(lastNode);
 		List<TdspIntermodalNode> nll = new ArrayList<>();
 		nll.add(lastNode);
@@ -319,5 +344,25 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		
 		return res;
 		
+	}
+
+	@Override
+	public Plan convertPlanForModel(Plan plan) {
+		
+		final Plan newPlan  = PopulationUtils.createPlan(plan.getPerson());
+		final List<PlanElement> newPlanElements = newPlan.getPlanElements();
+		PopulationUtils.copyFromTo(plan, newPlan);
+		List<Trip> trips = TripStructureUtils.getTrips(newPlan, tripRouter.getStageActivityTypes()); 
+		for ( Trip trip : trips ) {
+			final List<PlanElement> fullTrip =
+					newPlanElements.subList(
+							newPlanElements.indexOf( trip.getOriginActivity() ) + 1,
+							newPlanElements.indexOf( trip.getDestinationActivity() ));
+			final String mode = tripRouter.getMainModeIdentifier().identifyMainMode( fullTrip );
+			fullTrip.clear();
+			fullTrip.add( PopulationUtils.createLeg(mode) );
+			if ( fullTrip.size() != 1 ) throw new RuntimeException( fullTrip.toString() );
+		}
+		return newPlan;
 	}
 }

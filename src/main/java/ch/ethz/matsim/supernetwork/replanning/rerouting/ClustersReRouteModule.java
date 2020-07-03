@@ -4,6 +4,10 @@
 package ch.ethz.matsim.supernetwork.replanning.rerouting;
 
 import org.matsim.core.controler.AbstractModule;
+import org.matsim.core.router.FastAStarLandmarksFactory;
+import org.matsim.core.router.util.LeastCostPathCalculatorFactory;
+
+import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostPathCalculatorFactoryImpl;
 import ch.ethz.matsim.supernetwork.mobsim.SupernetworkMobsimModule;
 import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
 
@@ -19,8 +23,11 @@ public class ClustersReRouteModule extends AbstractModule{
 	public void install() {
 		
 		//For a strategy
-		addPlanStrategyBinding(STRATEGY_NAME).toProvider(ClustersReRouteStrategyProvider.class);
-		bind(ClustersReRouteModel.class).to(ClustersReRouteModelImpl.class);
+		//addPlanStrategyBinding(STRATEGY_NAME).toProvider(ClustersReRouteStrategyProvider.class);
+		//bind(ClustersReRouteModel.class).to(ClustersReRouteModelImpl.class);
+		
+		//only the LeastCostPathCalculator
+		bind(LeastCostPathCalculatorFactory.class).to(SupernetworkLeastCostPathCalculatorFactoryImpl.class);
 		
 		install(new SupernetworkModule());
 	}

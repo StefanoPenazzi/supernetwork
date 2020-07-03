@@ -79,48 +79,18 @@ public class ContainerManagerImpl implements ContainerManager {
 //		  }
 		  
 	  }	
-	  List<Pair<PathTimeKey,Path>> res;
-	  res = routingManager.run();
+	  List<Pair<PathTimeKey,Path>> res = routingManager.run();
 	  for(Pair<PathTimeKey,Path> p: res) {
-		  src.add(p.getValue0().getSupernode(),Iterables.getLast(p.getValue1().nodes),p.getValue0().getTime(),p.getValue1());
+		  src.add(p.getValue0().getFromNode(),Iterables.getLast(p.getValue1().nodes),p.getValue0().getTime(),p.getValue1());
 	  }
-	  System.out.println("---");
 	}
 	
 	@Override
-	public Path getPath(Supernode supernode, Node toNode ,double time,String mode) {
-		return containersMap.get(mode).getPath(supernode, toNode, time);
-	}
-	
-	@Override
-	public Path getPath(Activity activity, Node toNode ,double time,String mode) {
-		Coordin c = new Coordin(activity.getCoord());
-		Supernode sn = this.activitySupernodeMap.get(c);
-		if(sn == null) {
-			return null;
+	public Path getPath(Node fromNode, Node toNode ,double time,String mode) {
+		if(fromNode == null || toNode == null || mode != "car") {
+			System.out.println();
 		}
-		return getPath(this.activitySupernodeMap.get(c),toNode,time,mode);
-	}
-	
-	@Override
-	public Path getPath(Activity startActivity, Activity endActivity, double time, String mode) {
-		
-		Coordin c = new Coordin(startActivity.getCoord());
-		Supernode sn = this.activitySupernodeMap.get(c);
-		if(sn == null) {
-			return null;
-		}
-		//this is useless if the routing data would be saved ad Activity->Activity
-		Facility toFacility = FacilitiesUtils.toFacility(endActivity, facilities );
-		Link toLink = this.network.getLinks().get(toFacility.getLinkId());
-		if ( toLink==null ) {
-			Gbl.assertNotNull( toFacility.getCoord() ) ;
-			toLink = NetworkUtils.getNearestLink(network, toFacility.getCoord());
-		}
-		Gbl.assertNotNull(toLink);
-		Node endNode = toLink.getFromNode();
-		return getPath(sn,endNode,time,mode);
-		
+		return containersMap.get(mode).getPath(fromNode, toNode, time);
 	}
 	
 	@Override 

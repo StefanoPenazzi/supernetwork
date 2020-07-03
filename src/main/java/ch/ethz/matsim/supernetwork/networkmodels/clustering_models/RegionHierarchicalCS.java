@@ -28,6 +28,7 @@ import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.kd_tree.K
 import ch.ethz.matsim.supernetwork.cluster_analysis.models.centroid.ClusteringNetworkRegionAlgorithm;
 import ch.ethz.matsim.supernetwork.cluster_analysis.models.connectivity.AgglomerativeHierarchical.HierarchicalClusteringActivities;
 import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGroup;
+import ch.ethz.matsim.supernetwork.network.utilities.ActivityManager;
 
 /**
  * @author stefanopenazzi
@@ -36,8 +37,8 @@ import ch.ethz.matsim.supernetwork.modules.Config.RegionHierarchicalCSConfigGrou
 public class RegionHierarchicalCS {
 
 	public static ClustersContainer<ClusterActivitiesLocation,ElementActivity> generateClustersContainer(
-			Scenario scenario,int cut, StageActivityTypes  stageActivityTypes,
-			ActivityFacilities facilities) {
+			Scenario scenario,int cut, TripRouter tripRouter,
+			ActivityFacilities facilities,ActivityManager activityManager) {
 	
 		List<CALNetworkRegionImpl> regions;
 		ClusteringNetworkRegionAlgorithm cn = new ClusteringNetworkRegionAlgorithm(scenario);
@@ -52,7 +53,7 @@ public class RegionHierarchicalCS {
 		for(Person p: scenario.getPopulation().getPersons().values()) {
 			if(p.getPlans().size() >= 1) {
 				
-			 List<Trip> trips = TripStructureUtils.getTrips(p.getPlans().get(0), stageActivityTypes);
+			 List<Trip> trips = TripStructureUtils.getTrips(p.getPlans().get(0), tripRouter.getStageActivityTypes());
 			 
 		     for(Trip tp: trips) {
 		    	 
@@ -95,19 +96,22 @@ public class RegionHierarchicalCS {
 		private final Scenario scenario;
 		private final TripRouter tripRouter;
 		private final ActivityFacilities facilities;
+		private final ActivityManager activityManager;
 		
 		@Inject 
-		public Factory(Scenario scenario,RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup,TripRouter tripRouter,ActivityFacilities facilities) {
+		public Factory(Scenario scenario,RegionHierarchicalCSConfigGroup regionHierarchicalCSConfigGroup,
+				TripRouter tripRouter,ActivityFacilities facilities,ActivityManager activityManager) {
 			this.scenario = scenario;
 			this.regionHierarchicalCSConfigGroup = regionHierarchicalCSConfigGroup;
 			this.tripRouter = tripRouter;
 			this.facilities = facilities;
+			this.activityManager = activityManager;
 		}
 		
 		@Override
 		public ClustersContainer generateClusteringModel() {
-			return generateClustersContainer(scenario,regionHierarchicalCSConfigGroup.getCut(),tripRouter.getStageActivityTypes(), 
-					this.facilities);
+			return generateClustersContainer(scenario,regionHierarchicalCSConfigGroup.getCut(),tripRouter, 
+					this.facilities,this.activityManager);
 		}
 	}
 }
