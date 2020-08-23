@@ -24,7 +24,8 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 	private final PlanManagerFactory planManagerFactory;
 	
 	@Inject
-	public PlansForPopulationManagerImpl(PlansForPopulationContainer plansForPopulationContainer, Population population,PlanManagerFactory planManagerFactory) {
+	public PlansForPopulationManagerImpl(PlansForPopulationContainer plansForPopulationContainer,
+			Population population,PlanManagerFactory planManagerFactory) {
 		this.plansForPopulationContainer = plansForPopulationContainer;
 		this.population = population;
 		this.planManagerFactory = planManagerFactory;

@@ -18,6 +18,7 @@ import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.core.network.NetworkUtils;
+import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.population.routes.RouteUtils;
 import org.matsim.core.router.RoutingModule;
@@ -263,25 +264,12 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		int optStartTime = optimalSolution.startTime;
 		List<Integer> optPath = optimalSolution.path;
 		
-		
 		Plan plan = graph.getPlan();
 		
 		//first node in the predecessorList is always the last activity. The endTime of the last activity is 11.59pm
 		List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
 		List<List<? extends PlanElement>> trips = new ArrayList<>();
-		
-		
-//		final List<Trip> trips = TripStructureUtils.getTrips(plan, tripRouter.getStageActivityTypes()); 
-//		List<Activity> activities = new ArrayList<>();
-//		List<Leg> legs = new ArrayList<>();
-//		for(Trip trip: trips) {
-//			activities.add(trip.getOriginActivity());
-//			legs.add(trip.getLegsOnly().get(0));
-//		}
-//		activities.add(trips.get(trips.size()-1).getDestinationActivity());
-		
 	
-		
 		//last activitiy home
 		int index = activities.indexOf(((TdspIntermodalNode)graph.getNodes()[optPath.get(0)]).getActivity());
 		double arrTime = arrivalTime[optPath.get(0)][optStartTime];
@@ -311,47 +299,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 						  FacilitiesUtils.toFacility(nextActivity, facilities ),
 						  depTime,
 							plan.getPerson());
-			//putVehicleFromOldTripIntoNewTripIfMeaningful(oldTrip, newTrip);
-//			TripRouter.insertTrip(
-//					plan, 
-//					activities.get(index),
-//					newTrip,
-//					nextActivity);
 			trips.add(newTrip);
-		
-			
-			
-			
-			
-			
-			//Trip between the current activity and the next activity visited in the previous iteration
-			//Leg leg = legs.get(legs.size()-legCounter);
-			
-//			if(mode == "car") {
-//				Path path = containerManager.getPath(activityManager.ActivityToNode(activities.get(index)),activityManager.ActivityToNode(nextActivity),arrivalTime[optimalSolution.path.get(i+2)][optimalSolution.startTime] ,"car");
-//				NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, null, null);
-//				route.setTravelTime(path.travelTime);
-//				route.setTravelCost(path.travelCost);
-//				route.setStartLinkId(path.links.get(0).getId());
-//				route.setEndLinkId(path.links.get(path.links.size()-1).getId());
-//				List<Id<org.matsim.api.core.v01.network.Link>> linkIds = new ArrayList<>();
-//				for(int j =1;j<path.links.size()-1;j++) {
-//					linkIds.add(path.links.get(j).getId());
-//				}
-//				route.setLinkIds(path.links.get(0).getId(), linkIds, path.links.get(path.links.size()-1).getId() );
-//				route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
-//				leg.setRoute(route);
-//				leg.setTravelTime(path.travelTime);
-//				leg.setDepartureTime(depTime);
-//				leg.setMode("car");
-//			}
-//			else {
-//				leg.setRoute(null);
-//				leg.setTravelTime(nextActivityArrivalTime - depTime);
-//				leg.setDepartureTime(depTime);
-//				leg.setMode(mode);
-//			}
-			
 			nextActivity = activities.get(index);
 			nextActivityArrivalTime = arrTime;
 			//legCounter++;
@@ -364,33 +312,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		activities.get(index).setMaximumDuration(startTimes[optimalSolution.startTime]-sTime);
 		activities.get(index).setEndTime(startTimes[optimalSolution.startTime]);
 		//first leg
-//		Leg leg = legs.get(legs.size()-legCounter);
 		String mode = ((TdspIntermodalNode)graph.getNodes()[optimalSolution.path.get(optimalSolution.path.size()-2)]).getMode();
-//		if(mode == "car") {
-//			Path path = containerManager.getPath(activityManager.ActivityToNode(activities.get(index)),activityManager.ActivityToNode(nextActivity),startTimes[optimalSolution.startTime] ,"car");
-//			NetworkRoute route = this.populationFactory.getRouteFactories().createRoute(NetworkRoute.class, path.links.get(0).getId(), path.links.get(path.links.size()-1).getId());
-//			route.setTravelTime(path.travelTime);
-//			route.setTravelCost(path.travelCost);
-//			//route.setStartLinkId(path.links.get(0).getId());
-//			//route.setEndLinkId(path.links.get(path.links.size()-1).getId());
-//			List<Id<org.matsim.api.core.v01.network.Link>> linkIds = new ArrayList<>();
-//			for(int j =1;j<path.links.size()-1;j++) {
-//				linkIds.add(path.links.get(j).getId());
-//			}
-//			route.setLinkIds(path.links.get(0).getId(), linkIds, path.links.get(path.links.size()-1).getId() );
-//			route.setDistance(RouteUtils.calcDistance(route, 1.0, 1.0, this.network));
-//			leg.setRoute(route);
-//			leg.setTravelTime(path.travelTime);
-//			leg.setDepartureTime(startTimes[optimalSolution.startTime]);
-//			leg.setMode("car");
-//		}
-//		else {
-//			leg.setRoute(null);
-//			leg.setTravelTime(nextActivityArrivalTime - optimalSolution.startTime);
-//			leg.setDepartureTime(optimalSolution.startTime);
-//			leg.setMode(mode);
-//		}
-		
 		final List<? extends PlanElement> newTrip =
 				tripRouter.calcRoute(
 						mode,
@@ -400,8 +322,22 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 						plan.getPerson());
 		trips.add(newTrip);
 		
+		//newPlan
+		final Plan newPlan  = PopulationUtils.createPlan(plan.getPerson());
+		for(int i =0;i<activities.size()-1;i++) {
+			newPlan.addActivity(activities.get(i));
+			for(PlanElement pe: trips.get(i)) {
+				if(pe instanceof Activity) {
+					newPlan.addActivity((Activity)pe);
+				}
+				else {
+					newPlan.addLeg((Leg)pe);
+				}
+			}
+		}
+		newPlan.addActivity(activities.get(activities.size()-1));
+		
 		return notFoundPath;
-			
 	}
 	
 	public OptimalSolution optimalPath(TdspIntermodalGraph graph){
@@ -451,10 +387,16 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 		TdspIntermodalGraph jj = (TdspIntermodalGraph)planModel;
 		//jj.print();
 		init(jj);
+		long start = System.nanoTime();
 		while(!finish) {
 			setTemporaryLabels();
 			setPermanentLabels();
 		}
+		long finish = System.nanoTime();
+		long timeElapsed = finish - start;
+		System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
+		System.out.println("");
+		
 		return buildSolution(graph);
 	}
 	

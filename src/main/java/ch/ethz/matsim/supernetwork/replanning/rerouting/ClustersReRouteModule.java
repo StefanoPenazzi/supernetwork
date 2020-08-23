@@ -27,6 +27,7 @@ public class ClustersReRouteModule extends AbstractModule{
 		//bind(ClustersReRouteModel.class).to(ClustersReRouteModelImpl.class);
 		
 		//only the LeastCostPathCalculator
+		
 		bind(LeastCostPathCalculatorFactory.class).to(SupernetworkLeastCostPathCalculatorFactoryImpl.class);
 		
 		install(new SupernetworkModule());

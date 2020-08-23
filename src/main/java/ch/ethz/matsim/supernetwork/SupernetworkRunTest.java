@@ -34,6 +34,7 @@ public class SupernetworkRunTest {
 		rh.setCut((int)cut);
 		
         final Config config = ConfigUtils.loadConfig(configFile, new SupernetworkConfigGroup(),rh);
+        config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
