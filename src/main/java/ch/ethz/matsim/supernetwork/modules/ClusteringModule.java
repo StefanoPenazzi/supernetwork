@@ -5,9 +5,9 @@ package ch.ethz.matsim.supernetwork.modules;
 
 import java.util.Map;
 import com.google.inject.Provides;
-import ch.ethz.matsim.supernetwork.cluster_analysis.clusters_container.ClustersContainer;
-import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
-import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.RegionHierarchicalCS;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.clusteranalysis.clusters_container.ClustersContainer;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.models.clustering_models.ClusteringModelFactory;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.models.clustering_models.RegionHierarchicalCS;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
 
 /**

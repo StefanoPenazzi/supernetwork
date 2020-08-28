@@ -6,21 +6,21 @@ package ch.ethz.matsim.supernetwork.modules;
 import org.matsim.core.controler.AbstractModule;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
-import ch.ethz.matsim.supernetwork.networkmodels.clustering_models.ClusteringModelFactory;
-import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactory;
-import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.supernetwork.network.planoptimization.containers.PlansForPopulationContainer;
 import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlanManagerFactory;
 import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlansForPopulationManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.supernetwork.network.utilities.ActivityManager;
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostTreeCalculatorFactory;
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkRoutingModuleFactory;
-import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainer;
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactory;
-import ch.ethz.matsim.supernetwork.network.database.manager.RoutingManagerFactory;
-import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.routing.router.SupernetworkLeastCostTreeCalculatorFactory;
+import ch.ethz.matsim.supernetwork.routing.router.SupernetworkRoutingModuleFactory;
+import ch.ethz.matsim.supernetwork.routing.manager.RoutesContainer;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManagerFactory;
+import ch.ethz.matsim.supernetwork.routing.manager.RoutingManagerFactory;
+import ch.ethz.matsim.supernetwork.routing.manager.updatealgorithms.UpdateAlgorithm;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.elements.middlenetwork.MiddlenetworkFactory;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.elements.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.models.clustering_models.ClusteringModelFactory;
 
 
 /**

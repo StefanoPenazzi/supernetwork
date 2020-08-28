@@ -7,12 +7,8 @@ import org.matsim.core.config.groups.GlobalConfigGroup;
 import org.matsim.core.replanning.PlanStrategy;
 import org.matsim.core.replanning.PlanStrategyImpl;
 import org.matsim.core.replanning.selectors.RandomPlanSelector;
-import org.matsim.core.router.TripRouter;
-import org.matsim.facilities.ActivityFacilities;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
 
 
 /**

@@ -5,13 +5,13 @@ package ch.ethz.matsim.supernetwork.modules;
 
 import com.google.inject.Singleton;
 
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.FastDijkstraShortestTreeFactory;
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworRoutingModuleFactoryImpl;
-import ch.ethz.matsim.supernetwork.network.database.containers.RoutesContainerImpl;
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerFactoryImpl;
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManagerImpl;
-import ch.ethz.matsim.supernetwork.network.database.manager.RoutingManagerFactoryImpl;
-import ch.ethz.matsim.supernetwork.network.database.manager.updatealgorithms.UpdateAlgorithmStaticFreqAnalysis;
+import ch.ethz.matsim.supernetwork.routing.router.FastDijkstraShortestTreeFactory;
+import ch.ethz.matsim.supernetwork.routing.router.SupernetworRoutingModuleFactoryImpl;
+import ch.ethz.matsim.supernetwork.routing.manager.RoutesContainerImpl;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManagerFactoryImpl;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManagerImpl;
+import ch.ethz.matsim.supernetwork.routing.manager.RoutingManagerFactoryImpl;
+import ch.ethz.matsim.supernetwork.routing.manager.updatealgorithms.UpdateAlgorithmStaticFreqAnalysis;
 
 /**
  * @author stefanopenazzi

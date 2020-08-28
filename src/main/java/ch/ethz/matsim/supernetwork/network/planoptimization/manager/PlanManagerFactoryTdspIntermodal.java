@@ -5,19 +5,14 @@ package ch.ethz.matsim.supernetwork.network.planoptimization.manager;
 
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Person;
-import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PopulationFactory;
-import org.matsim.core.router.StageActivityTypes;
 import org.matsim.core.router.TripRouter;
 import org.matsim.facilities.ActivityFacilities;
-
 import com.google.inject.Inject;
-
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalGraph;
-import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.OrdaRomOptimizationAlgorithm;
 import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.TdspIntermodalOptimizationAlgorithm;
 import ch.ethz.matsim.supernetwork.network.utilities.ActivityManager;
 

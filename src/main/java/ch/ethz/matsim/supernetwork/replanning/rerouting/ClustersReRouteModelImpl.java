@@ -23,7 +23,7 @@ import org.matsim.facilities.FacilitiesUtils;
 import org.matsim.facilities.Facility;
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManager;
 
 /**
  * @author stefanopenazzi

@@ -6,7 +6,7 @@ package ch.ethz.matsim.supernetwork.network.events;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import com.google.inject.Inject;
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.manager.PlansForPopulationManager;
 
 

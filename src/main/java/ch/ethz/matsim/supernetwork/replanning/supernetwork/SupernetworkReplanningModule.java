@@ -6,12 +6,8 @@ package ch.ethz.matsim.supernetwork.replanning.supernetwork;
 import org.matsim.core.config.groups.GlobalConfigGroup;
 import org.matsim.core.population.algorithms.PlanAlgorithm;
 import org.matsim.core.replanning.modules.AbstractMultithreadedModule;
-
 import com.google.inject.Provider;
 
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
-import ch.ethz.matsim.supernetwork.replanning.rerouting.ClustersReRouteModel;
-import ch.ethz.matsim.supernetwork.replanning.rerouting.ClustersReRouteModelAlgorithm;
 
 /**
  * @author stefanopenazzi

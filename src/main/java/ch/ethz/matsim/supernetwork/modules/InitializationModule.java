@@ -3,11 +3,9 @@
  */
 package ch.ethz.matsim.supernetwork.modules;
 
-import org.matsim.core.router.StageActivityTypes;
-import org.matsim.core.router.StageActivityTypesImpl;
-
 import ch.ethz.matsim.supernetwork.network.utilities.ActivityManagerImpl;
-import ch.ethz.matsim.supernetwork.networkmodels.supernetwork_model.SupernetworkInitializationEvent;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.models.supernetwork_model.SupernetworkInitializationEvent;
+
 
 /**
  * @author stefanopenazzi

@@ -6,9 +6,9 @@ package ch.ethz.matsim.supernetwork.modules;
 import java.util.Map;
 import com.google.inject.Provides;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactory;
-import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactoryFromRegion;
-import ch.ethz.matsim.supernetwork.network.networkelements.middlenetwork.MiddlenetworkFactoryImpl;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.elements.middlenetwork.MiddlenetworkFactory;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.elements.middlenetwork.MiddlenetworkFactoryFromRegion;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.elements.middlenetwork.MiddlenetworkFactoryImpl;
 
 
 /**

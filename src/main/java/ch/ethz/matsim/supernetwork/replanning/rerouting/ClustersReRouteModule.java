@@ -4,11 +4,8 @@
 package ch.ethz.matsim.supernetwork.replanning.rerouting;
 
 import org.matsim.core.controler.AbstractModule;
-import org.matsim.core.router.FastAStarLandmarksFactory;
 import org.matsim.core.router.util.LeastCostPathCalculatorFactory;
-
-import ch.ethz.matsim.supernetwork.algorithms.router.shortest_path.SupernetworkLeastCostPathCalculatorFactoryImpl;
-import ch.ethz.matsim.supernetwork.mobsim.SupernetworkMobsimModule;
+import ch.ethz.matsim.supernetwork.routing.router.SupernetworkLeastCostPathCalculatorFactoryImpl;
 import ch.ethz.matsim.supernetwork.modules.SupernetworkModule;
 
 /**

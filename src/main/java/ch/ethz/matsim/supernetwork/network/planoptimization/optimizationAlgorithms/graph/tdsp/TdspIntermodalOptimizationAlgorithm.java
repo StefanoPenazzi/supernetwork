@@ -4,12 +4,9 @@
 package ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
@@ -17,30 +14,23 @@ import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
-import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.population.routes.NetworkRoute;
 import org.matsim.core.population.routes.RouteUtils;
-import org.matsim.core.router.RoutingModule;
-import org.matsim.core.router.StageActivityTypes;
 import org.matsim.core.router.TripRouter;
 import org.matsim.core.router.TripStructureUtils;
-import org.matsim.core.router.TripStructureUtils.Trip;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.facilities.ActivityFacilities;
 import org.matsim.facilities.FacilitiesUtils;
-
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.GraphImpl;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Link;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Node;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
-import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp.TdspNode;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalGraph;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalLink;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdspIntermodal.TdspIntermodalNode;
-import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.OrdaRomOptimizationAlgorithm.LinkTimeKey;
 import ch.ethz.matsim.supernetwork.network.utilities.ActivityManager;
 
 /**

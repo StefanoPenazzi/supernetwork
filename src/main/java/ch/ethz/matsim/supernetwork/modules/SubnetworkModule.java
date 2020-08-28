@@ -4,12 +4,10 @@
 package ch.ethz.matsim.supernetwork.modules;
 
 import java.util.Map;
-
 import com.google.inject.Provides;
-
-import ch.ethz.matsim.supernetwork.networkmodels.subnetwork_models.SubnetworkFromActivitiesCluster;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.elements.subnetwork.SubnetworkFactory;
+import ch.ethz.matsim.supernetwork.routing.network.cluster.models.subnetwork_models.SubnetworkFromActivitiesCluster;
 import ch.ethz.matsim.supernetwork.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.supernetwork.network.networkelements.subnetwork.SubnetworkFactory;
 
 /**
  * @author stefanopenazzi

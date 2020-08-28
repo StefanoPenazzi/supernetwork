@@ -3,34 +3,22 @@
  */
 package ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.tdsp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.matsim.api.core.v01.population.Activity;
-import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
-import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
 import org.matsim.core.router.TripRouter;
-import org.matsim.core.router.TripStructureUtils;
 import org.matsim.core.scoring.functions.ScoringParametersForPerson;
 import org.matsim.core.utils.misc.Time;
-
 import com.google.inject.Inject;
-
-import ch.ethz.matsim.supernetwork.network.database.manager.ContainerManager;
+import ch.ethz.matsim.supernetwork.routing.manager.ContainerManager;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModel;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.PlanModelFactory;
-import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.Graph;
-import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.GraphImpl;
-import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.elements.NodeImpl;
 import ch.ethz.matsim.supernetwork.network.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
-import ch.ethz.matsim.supernetwork.network.planoptimization.optimizationAlgorithms.graph.tdsp.OrdaRomOptimizationAlgorithm;
-import ch.ethz.matsim.supernetwork.replanning.supernetwork.SupernetworkModel;
 
 /**
  * @author stefanopenazzi
