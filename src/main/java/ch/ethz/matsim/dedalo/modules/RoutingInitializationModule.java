@@ -9,6 +9,7 @@ import ch.ethz.matsim.dedalo.routing.manager.ContainerManagerFactoryImpl;
 import ch.ethz.matsim.dedalo.routing.manager.ContainerManagerImpl;
 import ch.ethz.matsim.dedalo.routing.manager.RoutesContainerImpl;
 import ch.ethz.matsim.dedalo.routing.manager.RoutingManagerFactoryImpl;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingManagerInitialization;
 import ch.ethz.matsim.dedalo.routing.manager.updatealgorithms.UpdateAlgorithmStaticFreqAnalysis;
 import ch.ethz.matsim.dedalo.routing.network.cluster.models.supernetwork_model.SupernetworkInitializationEvent;
 import ch.ethz.matsim.dedalo.routing.router.FastDijkstraShortestTreeFactory;
@@ -25,7 +26,7 @@ public class RoutingInitializationModule extends AbstractSupernetworkExtension {
 	@Override
 	protected void installExtension() {
 		 //network by clustering
-		this.addControlerListenerBinding().to(SupernetworkInitializationEvent.class);
+		this.addControlerListenerBinding().to(RoutingManagerInitialization.class);
 		
 		bindActivityManager().to(ActivityManagerImpl.class).asEagerSingleton();
 
