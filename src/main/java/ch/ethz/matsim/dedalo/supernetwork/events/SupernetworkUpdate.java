@@ -15,19 +15,20 @@ import ch.ethz.matsim.dedalo.supernetwork.planoptimization.manager.PlansForPopul
  * @author stefanopenazzi
  *
  */
-public class SupernetworkContainerFilling implements IterationStartsListener{
+public class SupernetworkUpdate implements IterationStartsListener{
 	
     private ContainerManager containerManager;
     private final PlansForPopulationManager plansForPopulationManager;
 	
 	@Inject
-	public SupernetworkContainerFilling (ContainerManager containerManager,PlansForPopulationManager plansForPopulationManager) {
+	public SupernetworkUpdate (ContainerManager containerManager,PlansForPopulationManager plansForPopulationManager) {
 		this.containerManager = containerManager;
 		this.plansForPopulationManager = plansForPopulationManager;
 	}
 	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
+		//if ClusterRouting is used, it must updated before the supernetwork
 		containerManager.updateContainer("car");
 		this.plansForPopulationManager.populationNewPlans();
 	}

@@ -10,7 +10,7 @@ import ch.ethz.matsim.dedalo.mobsim.SupernetworkMobsimModule;
 import ch.ethz.matsim.dedalo.modules.SupernetworkModule;
 import ch.ethz.matsim.dedalo.modules.Config.RegionHierarchicalCSConfigGroup;
 import ch.ethz.matsim.dedalo.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.dedalo.replanning.rerouting.ClustersReRouteModule;
+import ch.ethz.matsim.dedalo.replanning.routing.ClusterRoutingModule;
 import ch.ethz.matsim.utils.CommandLine;
 import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
 
@@ -45,7 +45,7 @@ public class SupernetworkRunTest {
         // controler
         Controler controler = new Controler(scenario);
         
-        controler.addOverridingModule(new ClustersReRouteModule());
+        controler.addOverridingModule(new ClusterRoutingModule());
         controler.addOverridingQSimModule(new SupernetworkMobsimModule());
         
         //System.setProperty("scenario","sbb");

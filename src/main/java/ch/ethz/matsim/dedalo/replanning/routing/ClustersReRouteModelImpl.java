@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.replanning.rerouting;
+package ch.ethz.matsim.dedalo.replanning.routing;
 
 import java.util.Arrays;
 import java.util.List;

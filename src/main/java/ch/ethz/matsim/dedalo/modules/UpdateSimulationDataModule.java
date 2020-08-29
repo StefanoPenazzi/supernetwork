@@ -5,7 +5,7 @@ package ch.ethz.matsim.dedalo.modules;
 
 import com.google.inject.Singleton;
 
-import ch.ethz.matsim.dedalo.supernetwork.events.SupernetworkContainerFilling;
+import ch.ethz.matsim.dedalo.supernetwork.events.SupernetworkUpdate;
 
 /**
  * @author stefanopenazzi
@@ -22,8 +22,8 @@ public class UpdateSimulationDataModule extends AbstractSupernetworkExtension {
         //this.addControlerListenerBinding().to(LinksTrafficFlowComputation.class);
         //this.addEventHandlerBinding().to(LinksTrafficFlowCollection.class);
 		
-		bind(SupernetworkContainerFilling.class).in(Singleton.class);
-		this.addControlerListenerBinding().to(SupernetworkContainerFilling.class);
+		bind(SupernetworkUpdate.class).in(Singleton.class);
+		this.addControlerListenerBinding().to(SupernetworkUpdate.class);
         
 	}
 

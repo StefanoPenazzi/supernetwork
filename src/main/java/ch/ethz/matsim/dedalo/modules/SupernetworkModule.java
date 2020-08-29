@@ -4,6 +4,10 @@
 package ch.ethz.matsim.dedalo.modules;
 import org.matsim.core.controler.AbstractModule;
 
+import com.google.inject.Singleton;
+
+import ch.ethz.matsim.dedalo.supernetwork.events.SupernetworkUpdate;
+
 
 /**
  * @author stefanopenazzi
@@ -18,10 +22,14 @@ public class SupernetworkModule extends AbstractModule {
 	
 	@Override
 	public void install() {
-//		bind(Network.class).to(NetworkImpl.class).asEagerSingleton();
-//		bind(NetworkFactory.class).to(NetworkFactoryImpl.class);
-//		bind(SupernetPrint.class).to(SupernetPrintImpl.class);
+
+		//initialization
+		//Supernetwork works also without the ClusterRouting but this is faster for massive computation 
+		install(new RoutingInitializationModule());
+		install(new PlanOptimizationModule());
 		
-        install(new ModulesSet());
+		//update
+		bind(SupernetworkUpdate.class).in(Singleton.class);
+		this.addControlerListenerBinding().to(SupernetworkUpdate.class);
 	}
 }
