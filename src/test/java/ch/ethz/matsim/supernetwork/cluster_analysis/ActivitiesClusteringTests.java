@@ -5,7 +5,7 @@ package ch.ethz.matsim.supernetwork.cluster_analysis;
 
 import org.junit.jupiter.api.Test;
 
-import ch.ethz.matsim.supernetwork.routing.network.cluster.clusteranalysis.clusters_container.kd_tree.KDTreeClustersContainer;
+import ch.ethz.matsim.dedalo.routing.network.cluster.clusteranalysis.clusters_container.kd_tree.KDTreeClustersContainer;
 
 
 
