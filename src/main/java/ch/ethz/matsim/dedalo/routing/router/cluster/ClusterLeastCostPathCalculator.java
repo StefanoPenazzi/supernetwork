@@ -1,24 +1,24 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.routing.router;
+package ch.ethz.matsim.dedalo.routing.router.cluster;
 
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.vehicles.Vehicle;
 
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManager;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManager;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetworkLeastCostPathCalculator implements LeastCostPathCalculator {
+public class ClusterLeastCostPathCalculator implements LeastCostPathCalculator {
 
-	private final ContainerManager conatinerManager;
+	private final RoutingGeneralManager conatinerManager;
 	
-	SupernetworkLeastCostPathCalculator(ContainerManager conatinerManager){
+	ClusterLeastCostPathCalculator(RoutingGeneralManager conatinerManager){
 		this.conatinerManager = conatinerManager;
  	}
 	

@@ -45,7 +45,7 @@ public class SupernetworkRunTest {
         // controler
         Controler controler = new Controler(scenario);
         
-        //controler.addOverridingModule(new ClusterRoutingModule());
+        controler.addOverridingModule(new ClusterRoutingModule());
         //controler.addOverridingQSimModule(new SupernetworkMobsimModule());
         
         //System.setProperty("scenario","sbb");

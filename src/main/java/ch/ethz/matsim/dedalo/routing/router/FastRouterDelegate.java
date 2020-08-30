@@ -11,6 +11,8 @@ import org.matsim.core.router.util.PreProcessDijkstra;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.core.utils.collections.RouterPriorityQueue;
 
+import ch.ethz.matsim.dedalo.routing.router.cluster.PredecessorNode;
+
 /**
  * This class is used by the faster implementations of the Dijkstra, AStarEuclidean and
  * AStarLandmarks router. Basically, the methods perform the conversation from the

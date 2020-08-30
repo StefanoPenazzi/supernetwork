@@ -14,7 +14,7 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.elements.middlenetwork.Midd
  * @author stefanopenazzi
  *
  */
-public interface ContainerManager {
+public interface RoutingGeneralManager {
 
 	public void updateContainer(String mode);
 	public Path getPath(Node fromNode, Node toNode ,double time,String mode);

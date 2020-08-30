@@ -23,7 +23,7 @@ import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import org.matsim.facilities.ActivityFacilities;
 import org.matsim.facilities.FacilitiesUtils;
 
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManager;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManager;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModel;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.elements.GraphImpl;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.elements.Link;
@@ -41,7 +41,7 @@ import ch.ethz.matsim.dedalo.supernetwork.utilities.ActivityManager;
 public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgorithm {
 	
 	private final ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph;
-	private final ContainerManager containerManager;
+	private final RoutingGeneralManager routingGeneralManager;
 	private final PopulationFactory populationFactory;
 	private final Network network;
 	private final TripRouter tripRouter;
@@ -58,10 +58,10 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 	boolean notFoundPath = false;
 	
 	
-	public TdspIntermodalOptimizationAlgorithm(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,ContainerManager containerManager,PopulationFactory populationFactory
+	public TdspIntermodalOptimizationAlgorithm(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,RoutingGeneralManager routingGeneralManager,PopulationFactory populationFactory
 			,Network network,TripRouter tripRouter,ActivityFacilities facilities,ActivityManager activityManager) {
 		this.scoringFunctionForPopulationGraph = scoringFunctionForPopulationGraph;
-		this.containerManager = containerManager;
+		this.routingGeneralManager = routingGeneralManager;
 		this.populationFactory = populationFactory;
 		this.network = network;
 		this.tripRouter = tripRouter;
@@ -160,7 +160,7 @@ public class TdspIntermodalOptimizationAlgorithm extends OrdaRomOptimizationAlgo
 						
 						Leg leg = this.populationFactory.createLeg( "car" );
 						
-						Path path = containerManager.getPath(activityManager.ActivityToNode(fromNode.getActivity()),
+						Path path = routingGeneralManager.getPath(activityManager.ActivityToNode(fromNode.getActivity()),
 								activityManager.ActivityFromNode(toNode.getActivity()) , arrivalTime[ltk.getFromNode()][ltk.getTime()],"car");
 						
 						if(path == null || path.links.size()==0) {

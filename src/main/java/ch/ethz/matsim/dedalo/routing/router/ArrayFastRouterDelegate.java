@@ -13,6 +13,9 @@ import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.util.ArrayRoutingNetwork;
 import org.matsim.core.router.util.ArrayRoutingNetworkNode;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
+
+import ch.ethz.matsim.dedalo.routing.router.cluster.PredecessorNode;
+
 import org.matsim.core.router.util.NodeData;
 import org.matsim.core.router.util.NodeDataFactory;
 import org.matsim.core.router.util.RoutingNetworkLink;

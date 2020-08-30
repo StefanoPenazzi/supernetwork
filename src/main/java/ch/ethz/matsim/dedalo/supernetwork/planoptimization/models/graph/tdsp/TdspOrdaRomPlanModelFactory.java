@@ -16,7 +16,7 @@ import org.matsim.core.scoring.functions.ScoringParametersForPerson;
 import org.matsim.core.utils.misc.Time;
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManager;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManager;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModel;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
@@ -27,7 +27,7 @@ import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.scoring.
  */
 public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 
-	private final ContainerManager containerManager;
+	private final RoutingGeneralManager routingGeneralManager;
 	private final ScoringParametersForPerson params;
 	private final TripRouter tripRouter;
 	private final ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph;
@@ -43,10 +43,10 @@ public class TdspOrdaRomPlanModelFactory implements PlanModelFactory {
 	
 	
 	@Inject
-	public TdspOrdaRomPlanModelFactory(ContainerManager containerManager,ScoringParametersForPerson params,TripRouter tripRouter,
+	public TdspOrdaRomPlanModelFactory(RoutingGeneralManager routingGeneralManager,ScoringParametersForPerson params,TripRouter tripRouter,
 			ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph,PlanCalcScoreConfigGroup planCalcScoreConfigGroup,
 			PopulationFactory populationFactory) {
-		this.containerManager = containerManager;
+		this.routingGeneralManager = routingGeneralManager;
 		this.params = params;
 		this.tripRouter = tripRouter;
 		this.scoringFunctionsForPopulationGraph = scoringFunctionsForPopulationGraph;

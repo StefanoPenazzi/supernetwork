@@ -7,7 +7,7 @@ import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.StartupListener;
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManagerFactory;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManagerFactory;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.manager.PlansForPopulationManager;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 
@@ -18,21 +18,21 @@ import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.scoring.
  */
 public class SupernetworkInitializationEvent implements StartupListener {
 
-	private final ContainerManagerFactory containerManagerFactory;
+	private final RoutingGeneralManagerFactory routingGeneralManagerFactory;
 	private final PlansForPopulationManager plansForPopulationManager;
 	private final ScoringFunctionsForPopulationGraph scoringFunctionsForPopulationGraph;
 	
 	@Inject
-	SupernetworkInitializationEvent (ContainerManagerFactory containerManagerFactory,PlansForPopulationManager plansForPopulationManager,
+	SupernetworkInitializationEvent (RoutingGeneralManagerFactory routingGeneralManagerFactory,PlansForPopulationManager plansForPopulationManager,
 			ScoringFunctionsForPopulationGraph scoringFunctionsForPopulationGraph){
-		this.containerManagerFactory = containerManagerFactory;
+		this.routingGeneralManagerFactory = routingGeneralManagerFactory;
 		this.plansForPopulationManager = plansForPopulationManager;
 		this.scoringFunctionsForPopulationGraph = scoringFunctionsForPopulationGraph;
 	}
 
 	@Override
 	public void notifyStartup(StartupEvent event) {
-		containerManagerFactory.setContainerManager();
+		routingGeneralManagerFactory.setContainerManager();
 		this.scoringFunctionsForPopulationGraph.init();
 		plansForPopulationManager.init();
 	}

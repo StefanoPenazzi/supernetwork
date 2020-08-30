@@ -18,27 +18,27 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.elements.subnetwork.Subnetw
  * @author stefanopenazzi
  *
  */
-public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
+public class RoutingGeneralManagerFactoryImpl implements RoutingGeneralManagerFactory {
 
 	private final ClustersContainer clustersContainer;
 	private final SubnetworkFactory subnetworkFactory; 
 	private final MiddlenetworkFactory middlenetworkFactory; 
-	private final ContainerManager containerManager;
+	private final RoutingGeneralManager routingGeneralManager;
 
 	
 	
 	@Inject
-	public ContainerManagerFactoryImpl(
+	public RoutingGeneralManagerFactoryImpl(
 			ClustersContainer clustersContainer,
 			SubnetworkFactory subnetworkFactory, 
 			MiddlenetworkFactory middlenetworkFactory,
-			ContainerManager containerManager
+			RoutingGeneralManager routingGeneralManager
 			
     ) {
 		this.clustersContainer = clustersContainer;
 		this.subnetworkFactory = subnetworkFactory; 
 		this.middlenetworkFactory = middlenetworkFactory; 
-		this.containerManager = containerManager;
+		this.routingGeneralManager = routingGeneralManager;
 
 	}
 	
@@ -55,7 +55,7 @@ public class ContainerManagerFactoryImpl implements ContainerManagerFactory {
 	@Override
 	public void setContainerManager() {
 		
-		containerManager.setMiddlenetworks(containerManagerByClusteringActivities());
+		routingGeneralManager.setMiddlenetworks(containerManagerByClusteringActivities());
 	}
 
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.routing.router;
+package ch.ethz.matsim.dedalo.routing.router.cluster;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,13 +18,13 @@ import org.matsim.core.router.costcalculators.TravelDisutilityFactory;
 import org.matsim.core.router.util.TravelTime;
 
 import ch.ethz.matsim.dedalo.routing.network.cluster.elements.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkRoutingModuleFactory;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterRoutingModuleFactory;
 
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingModuleFactory {
+public class ClusterRoutingModuleFactoryImpl implements ClusterRoutingModuleFactory {
 
 	private String routingMode;
 	
@@ -33,16 +33,16 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 	SingleModeNetworksCache singleModeNetworksCache;
 	Network network;
 	PopulationFactory populationFactory;
-	SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
+	ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory;
 	Scenario scenario ;
 	
 	@Inject
-	public SupernetworRoutingModuleFactoryImpl(Map<String, TravelTime> travelTimes,
+	public ClusterRoutingModuleFactoryImpl(Map<String, TravelTime> travelTimes,
 	 Map<String, TravelDisutilityFactory> travelDisutilityFactories,
 	 SingleModeNetworksCache singleModeNetworksCache,
 	 Network network,
 	 PopulationFactory populationFactory,
-	 SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory,
+	 ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory,
 	 Scenario scenario) {
 		
 		this.travelTimes = travelTimes;
@@ -50,14 +50,14 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 		this.singleModeNetworksCache=singleModeNetworksCache;
 		this.network=network;
 		this.populationFactory=populationFactory;
-		this.supernetworkLeastCostTreeCalculatorFactory=supernetworkLeastCostTreeCalculatorFactory;
+		this.clusterLeastCostTreeCalculatorFactory=clusterLeastCostTreeCalculatorFactory;
 		this.scenario= scenario;
 		this.routingMode = null;
 		
 	}
 
 	@Override
-	public SupernetworkRoutingModule getSupernetworkRoutingModule(String mode,List<Middlenetwork> middlenetworks) {
+	public ClusterRoutingModule getSupernetworkRoutingModule(String mode,List<Middlenetwork> middlenetworks) {
 		this.routingMode = mode ;
 		
 		// the network refers to the (transport)mode:
@@ -76,9 +76,9 @@ public class SupernetworRoutingModuleFactoryImpl implements SupernetworkRoutingM
 			}
 		}
 
-		this.supernetworkLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks); 
+		this.clusterLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks); 
 		
-		return new SupernetworkRoutingModuleImpl(routingMode, this.supernetworkLeastCostTreeCalculatorFactory);
+		return new ClusterRoutingModuleImpl(routingMode, this.clusterLeastCostTreeCalculatorFactory);
 		
 	}
 }

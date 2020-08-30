@@ -4,9 +4,9 @@
 package ch.ethz.matsim.dedalo.routing.manager;
 
 
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkLeastCostTreeCalculatorFactory;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkRoutingModule;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkRoutingModuleImpl;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterLeastCostTreeCalculatorFactory;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterRoutingModule;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterRoutingModuleImpl;
 
 /**
  * @author stefanopenazzi
@@ -14,18 +14,18 @@ import ch.ethz.matsim.dedalo.routing.router.SupernetworkRoutingModuleImpl;
  */
 public class RoutingManagerImpl extends  AbstractMultithreadingRoutingManager {
 
-	private final SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
+	private final ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory;
 	/**
 	 * @param numOfThreads
 	 */
-	public RoutingManagerImpl(int numOfThreads,SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory) {
+	public RoutingManagerImpl(int numOfThreads,ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory) {
 		super(numOfThreads);
-		this.supernetworkLeastCostTreeCalculatorFactory = supernetworkLeastCostTreeCalculatorFactory;
+		this.clusterLeastCostTreeCalculatorFactory = clusterLeastCostTreeCalculatorFactory;
 	}
 	
 	@Override
-	public SupernetworkRoutingModule  getSupernetworkRoutingModule() {
-		return new SupernetworkRoutingModuleImpl("car",this.supernetworkLeastCostTreeCalculatorFactory);
+	public ClusterRoutingModule  getSupernetworkRoutingModule() {
+		return new ClusterRoutingModuleImpl("car",this.clusterLeastCostTreeCalculatorFactory);
 	}
 
 }

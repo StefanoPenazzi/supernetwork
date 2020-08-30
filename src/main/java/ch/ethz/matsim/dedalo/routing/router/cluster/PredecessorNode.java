@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.routing.router;
+package ch.ethz.matsim.dedalo.routing.router.cluster;
 
 import org.matsim.api.core.v01.network.Link;
 

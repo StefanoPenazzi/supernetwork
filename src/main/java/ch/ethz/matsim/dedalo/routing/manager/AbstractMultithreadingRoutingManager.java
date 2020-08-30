@@ -16,7 +16,7 @@ import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 import com.google.common.collect.Iterables;
 
 import ch.ethz.matsim.dedalo.routing.manager.updatealgorithms.UpdateAlgorithmOutput;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkRoutingModule;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterRoutingModule;
 
 /**
  * @author stefanopenazzi
@@ -46,7 +46,7 @@ public abstract class AbstractMultithreadingRoutingManager implements RoutingMan
 		this.count++;
 	}
 	
-	public abstract SupernetworkRoutingModule  getSupernetworkRoutingModule(); 
+	public abstract ClusterRoutingModule  getSupernetworkRoutingModule(); 
 	
 	@Override
 	public List<Pair<PathTimeKey,Path>> run(){
@@ -130,10 +130,10 @@ public abstract class AbstractMultithreadingRoutingManager implements RoutingMan
 	private class RoutingThread implements Callable<List<Pair<PathTimeKey,Path>>> {
 
 		private List<UpdateAlgorithmOutput> updateList = new ArrayList<>();
-		private SupernetworkRoutingModule superNetworkRoutingModule;
+		private ClusterRoutingModule superNetworkRoutingModule;
 		
 
-		public RoutingThread(SupernetworkRoutingModule superNetworkRoutingModule) {
+		public RoutingThread(ClusterRoutingModule superNetworkRoutingModule) {
 			this.superNetworkRoutingModule = superNetworkRoutingModule;
 			
 		}

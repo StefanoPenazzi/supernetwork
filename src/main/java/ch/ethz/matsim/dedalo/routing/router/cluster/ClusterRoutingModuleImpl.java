@@ -1,35 +1,33 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.routing.router;
+package ch.ethz.matsim.dedalo.routing.router.cluster;
 
 import java.util.List;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 
-import ch.ethz.matsim.dedalo.routing.router.LeastCostTreeCalculator;
-
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetworkRoutingModuleImpl implements SupernetworkRoutingModule {
+public class ClusterRoutingModuleImpl implements ClusterRoutingModule {
 
 	private final String mode;
-	private final SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
+	private final ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory;
 
 
-	 public SupernetworkRoutingModuleImpl(
+	 public ClusterRoutingModuleImpl(
 			final String mode,
-			final SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory) {
+			final ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory) {
 		 
-		 this.supernetworkLeastCostTreeCalculatorFactory = supernetworkLeastCostTreeCalculatorFactory;
+		 this.clusterLeastCostTreeCalculatorFactory = clusterLeastCostTreeCalculatorFactory;
 		 this.mode = mode;
 	}
 	
 	public Path[] calcTree(final Node root, List<Node> toNodes ,final double departureTime) {		
 		
-		LeastCostTreeCalculator leastCostTreeCalculator = supernetworkLeastCostTreeCalculatorFactory.createTreeCalculator("car");
+		LeastCostTreeCalculator leastCostTreeCalculator = clusterLeastCostTreeCalculatorFactory.createTreeCalculator("car");
 		Path[] paths = leastCostTreeCalculator.calcLeastCostTree(root, toNodes ,departureTime);
 		//first link and node are the middlelink and supernode this are not considered  in path
 		for(Path p: paths) {

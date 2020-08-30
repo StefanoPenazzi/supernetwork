@@ -10,7 +10,7 @@ import org.matsim.core.router.TripRouter;
 import org.matsim.facilities.ActivityFacilities;
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManager;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManager;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModelFactory;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.scoring.ScoringFunctionsForPopulationGraph;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.tdspIntermodal.TdspIntermodalGraph;
@@ -25,7 +25,7 @@ public class PlanManagerFactoryTdspIntermodal implements PlanManagerFactory {
 
 	private final PlanModelFactory planModelFactory;
 	private final ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph;
-	private final ContainerManager containerManager;
+	private final RoutingGeneralManager routingGeneralManager;
 	private final PopulationFactory populationFactory;
 	private final Network network;
 	private final TripRouter tripRouter;
@@ -35,11 +35,11 @@ public class PlanManagerFactoryTdspIntermodal implements PlanManagerFactory {
 	
 	@Inject
 	public PlanManagerFactoryTdspIntermodal(PlanModelFactory planModelFactory, ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,
-			ContainerManager containerManager,PopulationFactory populationFactory,Network network,TripRouter tripRouter,ActivityFacilities facilities,
+			RoutingGeneralManager routingGeneralManager,PopulationFactory populationFactory,Network network,TripRouter tripRouter,ActivityFacilities facilities,
 			ActivityManager activityManager) {
 		this.planModelFactory = planModelFactory;
 		this.scoringFunctionForPopulationGraph = scoringFunctionForPopulationGraph;
-		this.containerManager = containerManager;
+		this.routingGeneralManager = routingGeneralManager;
 		this.populationFactory = populationFactory;
 		this.network = network;
 		this.tripRouter = tripRouter;
@@ -50,7 +50,7 @@ public class PlanManagerFactoryTdspIntermodal implements PlanManagerFactory {
 	@Override
 	public PlanManager createPlanManager(Person person) {
 		TdspIntermodalGraph planModel = (TdspIntermodalGraph) this.planModelFactory.createPlanModel(person);
-		return new PlanManagerTdspIntermodal(planModel, new TdspIntermodalOptimizationAlgorithm(this.scoringFunctionForPopulationGraph,this.containerManager,
+		return new PlanManagerTdspIntermodal(planModel, new TdspIntermodalOptimizationAlgorithm(this.scoringFunctionForPopulationGraph,this.routingGeneralManager,
 				this.populationFactory,this.network,this.tripRouter, this.facilities,this.activityManager));
 	}
 

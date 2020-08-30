@@ -16,7 +16,6 @@ import org.matsim.core.router.util.ArrayRoutingNetwork;
 import org.matsim.core.router.util.ArrayRoutingNetworkNode;
 import org.matsim.core.router.util.DijkstraNodeData;
 import org.matsim.core.router.util.DijkstraNodeDataFactory;
-import org.matsim.core.router.util.NodeData;
 import org.matsim.core.router.util.PreProcessDijkstra;
 import org.matsim.core.router.util.RoutingNetwork;
 import org.matsim.core.router.util.RoutingNetworkNode;
@@ -25,11 +24,14 @@ import org.matsim.core.router.util.TravelTime;
 import org.matsim.core.utils.collections.RouterPriorityQueue;
 import org.matsim.vehicles.Vehicle;
 
+import ch.ethz.matsim.dedalo.routing.router.cluster.LeastCostTreeCalculator;
+import ch.ethz.matsim.dedalo.routing.router.cluster.PredecessorNode;
+
 /**
  * @author stefanopenazzi
  *
  */
-public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeCalculator {
+public class ClusterFastDijkstra extends Dijkstra implements LeastCostTreeCalculator {
 
 	private final RoutingNetwork routingNetwork;
 	private final FastRouterDelegate fastRouter;
@@ -40,7 +42,7 @@ public class SupernetworkFastDijkstra extends Dijkstra implements LeastCostTreeC
 	private int targetsCounter = 0;
     
 
-	SupernetworkFastDijkstra(final RoutingNetwork routingNetwork, final TravelDisutility costFunction,
+	public ClusterFastDijkstra(final RoutingNetwork routingNetwork, final TravelDisutility costFunction,
 			final TravelTime timeFunction, final PreProcessDijkstra preProcessData,
 			final FastRouterDelegateFactory fastRouterFactory, final Person person) {
 		super(routingNetwork, costFunction, timeFunction, preProcessData);

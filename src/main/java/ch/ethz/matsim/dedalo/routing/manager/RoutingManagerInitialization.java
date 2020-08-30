@@ -14,16 +14,16 @@ import com.google.inject.Inject;
  */
 public class RoutingManagerInitialization implements StartupListener {
 
-	private final ContainerManagerFactory containerManagerFactory;
+	private final RoutingGeneralManagerFactory routingGeneralManagerFactory;
 	
 	@Inject
-	RoutingManagerInitialization (ContainerManagerFactory containerManagerFactory){
-		this.containerManagerFactory = containerManagerFactory;
+	RoutingManagerInitialization (RoutingGeneralManagerFactory routingGeneralManagerFactory){
+		this.routingGeneralManagerFactory = routingGeneralManagerFactory;
 		
 	}
 
 	@Override
 	public void notifyStartup(StartupEvent event) {
-		containerManagerFactory.setContainerManager();
+		routingGeneralManagerFactory.setContainerManager();
 	}
 }

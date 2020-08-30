@@ -6,16 +6,16 @@ package ch.ethz.matsim.dedalo.modules;
 import org.matsim.core.controler.AbstractModule;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManager;
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManagerFactory;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManager;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManagerFactory;
 import ch.ethz.matsim.dedalo.routing.manager.RoutesContainer;
 import ch.ethz.matsim.dedalo.routing.manager.RoutingManagerFactory;
 import ch.ethz.matsim.dedalo.routing.manager.updatealgorithms.UpdateAlgorithm;
 import ch.ethz.matsim.dedalo.routing.network.cluster.elements.middlenetwork.MiddlenetworkFactory;
 import ch.ethz.matsim.dedalo.routing.network.cluster.elements.subnetwork.SubnetworkFactory;
 import ch.ethz.matsim.dedalo.routing.network.cluster.models.clustering_models.ClusteringModelFactory;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkLeastCostTreeCalculatorFactory;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkRoutingModuleFactory;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterLeastCostTreeCalculatorFactory;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterRoutingModuleFactory;
 import ch.ethz.matsim.dedalo.supernetwork.utilities.ActivityManager;
 
 /**
@@ -59,20 +59,20 @@ public abstract class AbstractRoutingExtension extends AbstractModule {
 		return containerBinder.addBinding(mode);
 	}
 	
-	protected final com.google.inject.binder.LinkedBindingBuilder<SupernetworkLeastCostTreeCalculatorFactory> bindSupernetworkLeastCostTreeCalculatorFactory() {
-		return bind(SupernetworkLeastCostTreeCalculatorFactory.class);
+	protected final com.google.inject.binder.LinkedBindingBuilder<ClusterLeastCostTreeCalculatorFactory> bindSupernetworkLeastCostTreeCalculatorFactory() {
+		return bind(ClusterLeastCostTreeCalculatorFactory.class);
 	}
 	
-	protected final com.google.inject.binder.LinkedBindingBuilder<SupernetworkRoutingModuleFactory> bindSupernetworkRoutingModuleFactory() {
-		return bind(SupernetworkRoutingModuleFactory.class);
+	protected final com.google.inject.binder.LinkedBindingBuilder<ClusterRoutingModuleFactory> bindSupernetworkRoutingModuleFactory() {
+		return bind(ClusterRoutingModuleFactory.class);
 	}
 	
-	protected final com.google.inject.binder.LinkedBindingBuilder<ContainerManager> bindContainerManager() {
-		return bind(ContainerManager.class);
+	protected final com.google.inject.binder.LinkedBindingBuilder<RoutingGeneralManager> bindContainerManager() {
+		return bind(RoutingGeneralManager.class);
 	}
 	
-	protected final com.google.inject.binder.LinkedBindingBuilder<ContainerManagerFactory> bindContainerManagerFactory() {
-		return bind(ContainerManagerFactory.class);
+	protected final com.google.inject.binder.LinkedBindingBuilder<RoutingGeneralManagerFactory> bindContainerManagerFactory() {
+		return bind(RoutingGeneralManagerFactory.class);
 	}
 	
 	protected final com.google.inject.binder.LinkedBindingBuilder<RoutingManagerFactory> bindRoutingManagerFactory() {

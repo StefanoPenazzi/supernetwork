@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.routing.router;
+package ch.ethz.matsim.dedalo.routing.router.cluster;
 
 import java.util.List;
 import java.util.Map;
@@ -16,13 +16,16 @@ import org.matsim.core.router.util.RoutingNetwork;
 import org.matsim.core.router.util.TravelTime;
 
 import ch.ethz.matsim.dedalo.routing.network.cluster.elements.middlenetwork.Middlenetwork;
+import ch.ethz.matsim.dedalo.routing.router.ArrayFastRouterDelegateFactory;
+import ch.ethz.matsim.dedalo.routing.router.FastRouterDelegateFactory;
+import ch.ethz.matsim.dedalo.routing.router.ClusterFastDijkstra;
 
 
 /**
  * @author stefanopenazzi
  *
  */
-public class FastDijkstraShortestTreeFactory implements  SupernetworkLeastCostTreeCalculatorFactory {
+public class FastDijkstraShortestTreeFactory implements  ClusterLeastCostTreeCalculatorFactory {
 	private final ArrayRoutingMiddleNetworkFactory routingNetworkFactory;
 	private RoutingNetwork routingNetwork;
 	private boolean routingNetworkSettled = false;
@@ -60,7 +63,7 @@ public class FastDijkstraShortestTreeFactory implements  SupernetworkLeastCostTr
 			//the purpose of this person is only for using calcLeastCostPath in dijkstra. for the shortest tree is not necessary
 			Person person =  scenario.getPopulation().getPersons().values().iterator().next();
 
-			return new SupernetworkFastDijkstra(routingNetwork, travelDisutilityFactory.createTravelDisutility(travelTime), travelTime, null, fastRouterFactory,person);
+			return new ClusterFastDijkstra(routingNetwork, travelDisutilityFactory.createTravelDisutility(travelTime), travelTime, null, fastRouterFactory,person);
 		}
 		else {
 			throw new java.lang.RuntimeException("routingNetwork not initialized in FastDijkstraShortestTreeFactory");

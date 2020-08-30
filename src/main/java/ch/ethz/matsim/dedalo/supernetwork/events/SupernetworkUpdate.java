@@ -7,7 +7,7 @@ import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import com.google.inject.Inject;
 
-import ch.ethz.matsim.dedalo.routing.manager.ContainerManager;
+import ch.ethz.matsim.dedalo.routing.manager.RoutingGeneralManager;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.manager.PlansForPopulationManager;
 
 
@@ -17,19 +17,19 @@ import ch.ethz.matsim.dedalo.supernetwork.planoptimization.manager.PlansForPopul
  */
 public class SupernetworkUpdate implements IterationStartsListener{
 	
-    private ContainerManager containerManager;
+    private RoutingGeneralManager routingGeneralManager;
     private final PlansForPopulationManager plansForPopulationManager;
 	
 	@Inject
-	public SupernetworkUpdate (ContainerManager containerManager,PlansForPopulationManager plansForPopulationManager) {
-		this.containerManager = containerManager;
+	public SupernetworkUpdate (RoutingGeneralManager routingGeneralManager,PlansForPopulationManager plansForPopulationManager) {
+		this.routingGeneralManager = routingGeneralManager;
 		this.plansForPopulationManager = plansForPopulationManager;
 	}
 	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
 		//if ClusterRouting is used, it must updated before the supernetwork
-		containerManager.updateContainer("car");
+		routingGeneralManager.updateContainer("car");
 		this.plansForPopulationManager.populationNewPlans();
 	}
 

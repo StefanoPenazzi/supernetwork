@@ -14,16 +14,16 @@ import com.google.inject.Inject;
  */
 public class RoutingManagerUpdate implements IterationStartsListener{
 	
-    private ContainerManager containerManager;
+    private RoutingGeneralManager routingGeneralManager;
 	
 	@Inject
-	public RoutingManagerUpdate (ContainerManager containerManager) {
-		this.containerManager = containerManager;
+	public RoutingManagerUpdate (RoutingGeneralManager routingGeneralManager) {
+		this.routingGeneralManager = routingGeneralManager;
 	}
 	
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {
-		containerManager.updateContainer("car");
+		routingGeneralManager.updateContainer("car");
 	}
 
 }

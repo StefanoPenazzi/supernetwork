@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.ethz.matsim.dedalo.routing.router;
+package ch.ethz.matsim.dedalo.routing.router.cluster;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.matsim.core.router.util.NodeData;
  * @author stefanopenazzi
  *
  */
-public interface SupernetworkRoutingModule {
+public interface ClusterRoutingModule {
 
 	public Path[] calcTree(final Node root,List<Node> toNodes ,final double departureTime);
 	//public Path calcPathFromTree(final Node toNode,final double startTime ,final PredecessorNode[] pn);

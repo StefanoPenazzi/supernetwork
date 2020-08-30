@@ -35,7 +35,7 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.elements.supernode.Supernod
  * @author stefanopenazzi
  *
  */
-public class ContainerManagerImpl implements ContainerManager {
+public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 	
 	private final Map<String, UpdateAlgorithm> updateAlgorithmsMap;
 	private final Map<String, RoutesContainer> containersMap;
@@ -48,7 +48,7 @@ public class ContainerManagerImpl implements ContainerManager {
 	private final Network network;
 	
 	@Inject
-	public ContainerManagerImpl(RoutingManagerFactory routingManagerFactory,
+	public RoutingGeneralManagerImpl(RoutingManagerFactory routingManagerFactory,
 			Map<String, UpdateAlgorithm> updateAlgorithmsMap,Map<String,
 			RoutesContainer> containersMap,
 			Map<String, TravelTime> travelTimes,ActivityFacilities facilities,

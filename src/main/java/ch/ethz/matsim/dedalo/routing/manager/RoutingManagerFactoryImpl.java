@@ -22,8 +22,8 @@ import org.matsim.core.router.util.TravelTime;
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.dedalo.routing.network.cluster.elements.middlenetwork.Middlenetwork;
-import ch.ethz.matsim.dedalo.routing.router.LeastCostTreeCalculator;
-import ch.ethz.matsim.dedalo.routing.router.SupernetworkLeastCostTreeCalculatorFactory;
+import ch.ethz.matsim.dedalo.routing.router.cluster.LeastCostTreeCalculator;
+import ch.ethz.matsim.dedalo.routing.router.cluster.ClusterLeastCostTreeCalculatorFactory;
 
 /**
  * @author stefanopenazzi
@@ -38,7 +38,7 @@ public class RoutingManagerFactoryImpl implements RoutingManagerFactory{
 	SingleModeNetworksCache singleModeNetworksCache;
 	Network network;
 	PopulationFactory populationFactory;
-	SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory;
+	ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory;
 	Scenario scenario ;
 	
 	@Inject
@@ -47,7 +47,7 @@ public class RoutingManagerFactoryImpl implements RoutingManagerFactory{
 	 SingleModeNetworksCache singleModeNetworksCache,
 	 Network network,
 	 PopulationFactory populationFactory,
-	 SupernetworkLeastCostTreeCalculatorFactory supernetworkLeastCostTreeCalculatorFactory,
+	 ClusterLeastCostTreeCalculatorFactory clusterLeastCostTreeCalculatorFactory,
 	 Scenario scenario) {
 		
 		this.travelTimes = travelTimes;
@@ -55,7 +55,7 @@ public class RoutingManagerFactoryImpl implements RoutingManagerFactory{
 		this.singleModeNetworksCache=singleModeNetworksCache;
 		this.network=network;
 		this.populationFactory=populationFactory;
-		this.supernetworkLeastCostTreeCalculatorFactory=supernetworkLeastCostTreeCalculatorFactory;
+		this.clusterLeastCostTreeCalculatorFactory=clusterLeastCostTreeCalculatorFactory;
 		this.scenario= scenario;
 		this.routingMode = "car";
 		
@@ -81,9 +81,9 @@ public class RoutingManagerFactoryImpl implements RoutingManagerFactory{
 			}
 		}
 		
-		this.supernetworkLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks);
+		this.clusterLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks);
 		
 		// TODO Auto-generated method stub
-		return new RoutingManagerImpl(4,this.supernetworkLeastCostTreeCalculatorFactory);
+		return new RoutingManagerImpl(4,this.clusterLeastCostTreeCalculatorFactory);
 	}
 }
