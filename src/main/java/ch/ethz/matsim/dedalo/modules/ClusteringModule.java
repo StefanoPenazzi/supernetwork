@@ -15,7 +15,7 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.models.clustering_models.Re
  * @author stefanopenazzi
  *
  */
-public class ClusteringModule extends AbstractSupernetworkExtension {
+public class ClusteringModule extends AbstractRoutingExtension {
 
 	public static final String REGION_HIERARCHICAL_CS   = "RegionHierarchicalCS";
 	public static final String REGION_CS   = "RegionCS";

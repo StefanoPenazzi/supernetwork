@@ -21,7 +21,7 @@ import ch.ethz.matsim.dedalo.supernetwork.utilities.ActivityManagerImpl;
  * @author stefanopenazzi
  *
  */
-public class RoutingInitializationModule extends AbstractSupernetworkExtension {
+public class RoutingInitializationModule extends AbstractRoutingExtension {
 
 	@Override
 	protected void installExtension() {

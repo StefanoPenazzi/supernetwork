@@ -4,7 +4,7 @@
 package ch.ethz.matsim.dedalo.replanning.routing;
 
 import com.google.inject.Singleton;
-import ch.ethz.matsim.dedalo.modules.AbstractSupernetworkExtension;
+import ch.ethz.matsim.dedalo.modules.AbstractRoutingExtension;
 import ch.ethz.matsim.dedalo.modules.RoutingInitializationModule;
 import ch.ethz.matsim.dedalo.routing.manager.RoutingManagerUpdate;
 
@@ -12,7 +12,7 @@ import ch.ethz.matsim.dedalo.routing.manager.RoutingManagerUpdate;
  * @author stefanopenazzi
  *
  */
-public class ClusterRoutingModule extends AbstractSupernetworkExtension{
+public class ClusterRoutingModule extends AbstractRoutingExtension{
 	
 	public static final String STRATEGY_NAME = "ClustersReRoute";
 	

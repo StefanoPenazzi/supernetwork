@@ -16,7 +16,7 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.elements.middlenetwork.Midd
  * @author stefanopenazzi
  *
  */
-public class MiddlenetworkModule extends AbstractSupernetworkExtension{
+public class MiddlenetworkModule extends AbstractRoutingExtension{
 
 	public static final String DEFAULT = "Default";
 	public static final String FROMREGION = "FromRegion";

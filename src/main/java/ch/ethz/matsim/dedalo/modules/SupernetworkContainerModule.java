@@ -17,7 +17,7 @@ import ch.ethz.matsim.dedalo.routing.router.SupernetworRoutingModuleFactoryImpl;
  * @author stefanopenazzi
  *
  */
-public class SupernetworkContainerModule extends AbstractSupernetworkExtension {
+public class SupernetworkContainerModule extends AbstractRoutingExtension {
 
 	@Override
 	public void installExtension() {
@@ -33,7 +33,6 @@ public class SupernetworkContainerModule extends AbstractSupernetworkExtension {
 		
 		bindRoutingManagerFactory().to(RoutingManagerFactoryImpl.class);
 		
-		//install(new SupernetworkTripRouterModule());
 	}
 
 	

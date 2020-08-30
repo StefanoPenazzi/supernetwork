@@ -14,7 +14,7 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.models.subnetwork_models.Su
  * @author stefanopenazzi
  *
  */
-public class SubnetworkModule extends AbstractSupernetworkExtension{
+public class SubnetworkModule extends AbstractRoutingExtension{
 
 	public static final String DEFAULT = "Default";
 	
