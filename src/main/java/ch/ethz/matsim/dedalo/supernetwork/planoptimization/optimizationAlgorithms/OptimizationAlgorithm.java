@@ -5,6 +5,7 @@ package ch.ethz.matsim.dedalo.supernetwork.planoptimization.optimizationAlgorith
 
 import java.util.List;
 
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModel;
@@ -15,5 +16,5 @@ import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModel;
  */
 public interface OptimizationAlgorithm {
 
-	public boolean run(PlanModel planModel);
+	public Plan run(PlanModel planModel);
 }

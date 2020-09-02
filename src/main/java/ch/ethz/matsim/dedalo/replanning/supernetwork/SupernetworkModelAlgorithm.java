@@ -12,19 +12,17 @@ import org.matsim.core.population.algorithms.PlanAlgorithm;
  */
 public class SupernetworkModelAlgorithm implements PlanAlgorithm{
 
-	private final SupernetworkModel supernetworkModel;
+	private final SupernetworkStrategyModel supernetworkStrategyModel;
 	
-	public SupernetworkModelAlgorithm(SupernetworkModel supernetworkModel) {
-		this.supernetworkModel =  supernetworkModel;
+	public SupernetworkModelAlgorithm(SupernetworkStrategyModel supernetworkStrategyModel) {
+		this.supernetworkStrategyModel =  supernetworkStrategyModel;
 		
 	}
-	
-	
 	@Override
 	public void run(Plan plan) {
 		// change the plan with the result of the model
-		this.supernetworkModel.newPlan(plan);
-		
+		plan = this.supernetworkStrategyModel.newPlan(plan.getPerson());
+		//System.out.println("...");
 	}
 
 }

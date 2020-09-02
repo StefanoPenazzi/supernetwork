@@ -32,7 +32,7 @@ import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.scoring.
  */
 public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 
-	private final RoutingGeneralManager routingGeneralManager;
+	//private final RoutingGeneralManager routingGeneralManager;
 	private final ScoringParametersForPerson params;
 	private final TripRouter tripRouter;
 	private final ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph;
@@ -42,7 +42,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
     
 	
 	
-	private  List<String> modes = Arrays.asList("car","bike");
+	private  List<String> modes = Arrays.asList("car","walk");
 	private String[] nodeType = {"actStart","actEnd","actDep"};
 	private String[] linkType = {"depStart","startEnd","endDep"};
 	private double timeStep = 1200;
@@ -51,10 +51,10 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	
 	
 	@Inject
-	public TdspIntermodalPlanModelFactory(RoutingGeneralManager routingGeneralManager,ScoringParametersForPerson params,TripRouter tripRouter,
+	public TdspIntermodalPlanModelFactory(ScoringParametersForPerson params,TripRouter tripRouter,
 			ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph,PlanCalcScoreConfigGroup planCalcScoreConfigGroup,
-			PopulationFactory populationFactory) {
-		this.routingGeneralManager = routingGeneralManager;
+			PopulationFactory populationFactory) { //RoutingGeneralManager routingGeneralManager,
+		//this.routingGeneralManager = routingGeneralManager;
 		this.params = params;
 		this.tripRouter = tripRouter;
 		this.scoringFunctionsForPopulationGraph = scoringFunctionsForPopulationGraph;

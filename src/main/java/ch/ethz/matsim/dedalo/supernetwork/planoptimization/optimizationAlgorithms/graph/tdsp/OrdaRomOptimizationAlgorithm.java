@@ -3,6 +3,8 @@
  */
 package ch.ethz.matsim.dedalo.supernetwork.planoptimization.optimizationAlgorithms.graph.tdsp;
 
+import org.matsim.api.core.v01.population.Plan;
+
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.elements.GraphImpl;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.optimizationAlgorithms.OptimizationAlgorithm;
 
@@ -20,7 +22,7 @@ public abstract class OrdaRomOptimizationAlgorithm implements OptimizationAlgori
 	
 	public abstract void setTemporaryLabels(); 
 	
-	public abstract boolean buildSolution(GraphImpl graph);
+	public abstract Plan buildSolution(GraphImpl graph);
 	
 
 	 class LinkTimeKey implements Comparable<LinkTimeKey> {

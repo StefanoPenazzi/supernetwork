@@ -3,11 +3,10 @@
  */
 package ch.ethz.matsim.dedalo.routing.network.cluster.clusteranalysis.cluster_element;
 
+import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.facilities.Facility;
-
 import ch.ethz.matsim.dedalo.routing.network.cluster.clusteranalysis.cluster.Cluster;
-
 
 
 /**
@@ -21,6 +20,7 @@ public class ElementActivity implements Element {
 	private final Person person;
 	private Cluster<ElementActivity> cluster;
 	private final double startTime;
+	private Node toNode;
 	
 	
 	public ElementActivity(Facility facility,Facility nextFacility ,Person person,Cluster<ElementActivity> cluster,double startTime) {
@@ -53,6 +53,13 @@ public class ElementActivity implements Element {
 	
 	public void setCluster(Cluster<ElementActivity> cluster) {
 		this.cluster = cluster;
+	}
+	
+	public void setToNode(Node toNode) {
+		this.toNode = toNode;
+	}
+	public Node getToNode() {
+		return this.toNode;
 	}
 	
 	public double getDistNextFacility() {

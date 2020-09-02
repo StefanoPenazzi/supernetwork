@@ -15,20 +15,20 @@ import com.google.inject.Provider;
  */
 public class SupernetworkReplanningModule extends AbstractMultithreadedModule {
 
-	private final Provider<SupernetworkModel> supernetworkModelProvider;
+	private final Provider<SupernetworkStrategyModel> supernetworkStrategyModelProvider;
 	
 	/**
 	 * @param globalConfigGroup
 	 */
-	public SupernetworkReplanningModule(GlobalConfigGroup globalConfigGroup, Provider<SupernetworkModel> supernetworkModelProvider) {
+	public SupernetworkReplanningModule(GlobalConfigGroup globalConfigGroup, Provider<SupernetworkStrategyModel> supernetworkStrategyModelProvider) {
 		super(globalConfigGroup);
-		this.supernetworkModelProvider =  supernetworkModelProvider;
+		this.supernetworkStrategyModelProvider =  supernetworkStrategyModelProvider;
 	}
 
 	@Override
 	public PlanAlgorithm getPlanAlgoInstance() {
-		SupernetworkModel supernetworkModel =  this.supernetworkModelProvider.get();
-		return new SupernetworkModelAlgorithm(supernetworkModel);
+		SupernetworkStrategyModel supernetworkStrategyModel =  this.supernetworkStrategyModelProvider.get();
+		return new SupernetworkModelAlgorithm(supernetworkStrategyModel);
 	}
 
 }

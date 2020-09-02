@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.Population;
 import com.google.inject.Inject;
@@ -40,10 +41,10 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 		int noPath = 0;
 		for (Person person : this.population.getPersons().values()) {
 			//it is probably better to have this in the replanning strategy but the scoring becomes useless
-			boolean check = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
-			if(check) {
-				noPath++;
-			}
+			Plan check = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
+			/*
+			 * if(check) { noPath++; }
+			 */
 		}
 		long finish = System.nanoTime();
 		long timeElapsed = finish - start;
@@ -57,6 +58,18 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 			PlanManager planManager = this.planManagerFactory.createPlanManager(person);
 			this.plansForPopulationContainer.addPlanManager(person.getId(), planManager);
 		}
+	System.out.println();
+	}
+
+	@Override
+	public Plan personNewPlan(Person person) {
+		long start = System.nanoTime();
+		Plan p = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
+		long fin = System.nanoTime();
+		long timeElapsed = fin - start;
+		System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
+		System.out.println("");
+		return p;
 	
 	}
 

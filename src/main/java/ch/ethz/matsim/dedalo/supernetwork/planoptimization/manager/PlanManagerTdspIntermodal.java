@@ -4,6 +4,8 @@
 package ch.ethz.matsim.dedalo.supernetwork.planoptimization.manager;
 
 import java.util.List;
+
+import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.tdspIntermodal.TdspIntermodalGraph;
@@ -24,7 +26,7 @@ public class PlanManagerTdspIntermodal implements PlanManager {
 	}
 
 	@Override
-	public boolean getNewPlan() {
+	public Plan getNewPlan() {
 		return this.optimizationAlgorithm.run(planModel);
 	}
 

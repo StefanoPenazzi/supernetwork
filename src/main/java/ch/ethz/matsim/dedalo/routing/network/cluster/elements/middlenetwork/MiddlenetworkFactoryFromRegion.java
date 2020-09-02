@@ -64,7 +64,7 @@ public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 		
 		//set toNodes
 		//TODO 
-		//this has to be consistent with the method used in the RoutingModule. Otherwise the path will not be found in the continer
+		//this has to be consistent with the method used in the RoutingModule. Otherwise the path will not be found in the container
 		List<Node> toNodes = new ArrayList<Node>();
 		for(ElementActivity e : r.getComponents()) {
 			if(e.getNextFacility() != null) {
@@ -80,6 +80,7 @@ public class MiddlenetworkFactoryFromRegion implements MiddlenetworkFactory {
 				}
 				Node n = toLink.getFromNode();
 				toNodes.add(n);
+				e.setToNode(n);
 			}
 		}
 		mni.setToNodes(toNodes);

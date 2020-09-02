@@ -24,6 +24,7 @@ public class ClusterRoutingModule extends AbstractRoutingExtension{
 		  //initialization
 		install(new RoutingInitializationModule());
 		
+		
 		  //update during the simulation
 		bind(RoutingManagerUpdate.class).in(Singleton.class);
 		this.addControlerListenerBinding().to(RoutingManagerUpdate.class);

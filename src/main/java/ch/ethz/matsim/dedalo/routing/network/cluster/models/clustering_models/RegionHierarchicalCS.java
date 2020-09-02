@@ -59,7 +59,7 @@ public class RegionHierarchicalCS {
 		    	 
 		    	 KDNode kdn = container.nearestNeighbourSearch(tp.getOriginActivity().getCoord());
 		    	 ElementActivity ea = new ElementActivity(FacilitiesUtils.toFacility(tp.getOriginActivity(),facilities),
-		    			 FacilitiesUtils.toFacility(tp.getDestinationActivity(),facilities),p,kdn.getCluster(),tp.getOriginActivity().getStartTime());
+		    			 FacilitiesUtils.toFacility(tp.getDestinationActivity(),facilities),p,kdn.getCluster(),tp.getOriginActivity().getEndTime());
 		    	 kdn.getCluster().addComponent(ea);
 		    	 
 		     }	

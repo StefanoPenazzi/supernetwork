@@ -25,7 +25,7 @@ public class SupernetworkModule extends AbstractModule {
 
 		//initialization
 		//Supernetwork works also without the ClusterRouting but this is faster for massive computation 
-		install(new RoutingInitializationModule());
+		//install(new RoutingInitializationModule());
 		install(new PlanOptimizationModule());
 		
 		//update
