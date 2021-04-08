@@ -15,6 +15,21 @@ DEDALO provides a framework to design an  <a href="https://maths.dur.ac.uk/lms/1
 
 </div>
 
+<h1> Requirements</h1>
+
+<h3>Runtime</h3>
+<ul>
+  <li>JRE 11: Java runtime version 11 is needed for using the library.</li>
+</ul>
+
+<h3>Build time</h3>
+<ul>
+  <li>JDK 11: The Java JDK 11 must be installed.</li>
+</ul>
+
+<h1> Installing</h1>
+Please note that this library is still in early development stages. Major API changes are expected in the near future.
+
 <h1>Versioning and Packaging</h1>
 
 <h1>Contact</h1>
