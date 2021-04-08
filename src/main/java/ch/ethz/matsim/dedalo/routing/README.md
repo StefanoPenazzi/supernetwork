@@ -5,7 +5,7 @@
 <body>
 
 <p align="center">
-  <img width="800" height="500" src="/src/main/resources/img/RoadNet.png">
+  <img width="800" height="400" src="/src/main/resources/img/RoadNet.png">
 </p>
 
 <h1>Idea</h1>
