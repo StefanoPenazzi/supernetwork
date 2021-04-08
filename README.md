@@ -5,7 +5,7 @@
 <body>
 
 <p align="center">
-  <img width="1400" height="500" src="src/main/resources/img/Maze.png">
+  <img width="1400" height="500" src="src/main/resources/img/Maze.jpg">
 </p>
 
 <h1>DEDALO</h1>
