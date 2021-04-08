@@ -6,11 +6,7 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 
-import ch.ethz.matsim.dedalo.mobsim.SupernetworkMobsimModule;
-import ch.ethz.matsim.dedalo.modules.SupernetworkModule;
-import ch.ethz.matsim.dedalo.modules.Config.RegionHierarchicalCSConfigGroup;
-import ch.ethz.matsim.dedalo.modules.Config.SupernetworkConfigGroup;
-import ch.ethz.matsim.dedalo.replanning.routing.ClusterRoutingModule;
+
 import ch.ethz.matsim.dedalo.replanning.supernetwork.SupernetworkStrategyModule;
 import ch.ethz.matsim.utils.CommandLine;
 import ch.ethz.matsim.utils.CommandLine.ConfigurationException;
@@ -32,11 +28,11 @@ public class SupernetworkRunTest {
 		
 		System.setProperty("matsim.preferLocalDtds", "true");
 		
-		RegionHierarchicalCSConfigGroup rh = new RegionHierarchicalCSConfigGroup();
-		rh.setCut((int)cut);
+		//RegionHierarchicalCSConfigGroup rh = new RegionHierarchicalCSConfigGroup();
+		//rh.setCut((int)cut);
 		
-        final Config config = ConfigUtils.loadConfig(configFile, new SupernetworkConfigGroup(),rh);
-        config.plansCalcRoute().setInsertingAccessEgressWalk(true);
+        final Config config = ConfigUtils.loadConfig(configFile);
+        //config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 
         Scenario scenario = ScenarioUtils.loadScenario(config);
 
@@ -47,8 +43,8 @@ public class SupernetworkRunTest {
         Controler controler = new Controler(scenario);
         
         //routing
-        controler.addOverridingModule(new ClusterRoutingModule());
-        controler.addOverridingQSimModule(new SupernetworkMobsimModule());
+        //controler.addOverridingModule(new ClusterRoutingModule());
+        //controler.addOverridingQSimModule(new SupernetworkMobsimModule());
         //supernetwork
         //controler.addOverridingModule(new SupernetworkModule());
         //supernetworkStrategy

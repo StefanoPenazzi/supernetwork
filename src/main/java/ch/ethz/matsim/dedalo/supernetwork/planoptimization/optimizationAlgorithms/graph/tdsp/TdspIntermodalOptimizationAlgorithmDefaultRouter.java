@@ -4,20 +4,28 @@
 package ch.ethz.matsim.dedalo.supernetwork.planoptimization.optimizationAlgorithms.graph.tdsp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
+import org.matsim.core.controler.Controler;
 import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.router.TripRouter;
 import org.matsim.core.router.TripStructureUtils;
 import org.matsim.facilities.ActivityFacilities;
 import org.matsim.facilities.FacilitiesUtils;
+import org.matsim.facilities.Facility;
+
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.PlanModel;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.elements.GraphImpl;
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.models.graph.elements.Link;
@@ -35,11 +43,11 @@ import ch.ethz.matsim.dedalo.supernetwork.utilities.ActivityManager;
 public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOptimizationAlgorithm {
 	
 	private final ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph;
-	private final PopulationFactory populationFactory;
-	private final Network network;
+	//private final PopulationFactory populationFactory;
+	//private final Network network;
 	private final TripRouter tripRouter;
 	private final ActivityFacilities facilities;
-	private final ActivityManager activityManager;
+	//private final ActivityManager activityManager;
 	
 	private double[] startTimes;
 	private double[][] arrivalTime;
@@ -50,21 +58,43 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 	
 	boolean notFoundPath = false;
 	
-	int count = 0;
+	
+	double routingTimeCar;
+	double routingTimeRide = 0;
+    double routingTimePt = 0;
+	double routingTimeOthers = 0;
+	double countCar = 0;
+	double countPt = 0;
+	double countOthers = 0;
+	double countRide = 0;
+	 
+	 
+	private CacheTripsMap cacheTripsMap; 
+	
+	private static final Logger log = Logger.getLogger(TdspIntermodalOptimizationAlgorithmDefaultRouter.class);
 	
 	
 	public TdspIntermodalOptimizationAlgorithmDefaultRouter(ScoringFunctionsForPopulationGraph scoringFunctionForPopulationGraph,PopulationFactory populationFactory
 			,Network network,TripRouter tripRouter,ActivityFacilities facilities,ActivityManager activityManager) {
 		this.scoringFunctionForPopulationGraph = scoringFunctionForPopulationGraph;
-		this.populationFactory = populationFactory;
-		this.network = network;
+		//this.populationFactory = populationFactory;
+		//this.network = network;
 		this.tripRouter = tripRouter;
 		this.facilities = facilities;
-		this.activityManager = activityManager;
+		//this.activityManager = activityManager;
 	}
 	
 	
 	public void init(GraphImpl g) {
+		
+	     routingTimeCar = 0;
+		 routingTimePt = 0;
+		 routingTimeOthers = 0;
+		 countCar = 0;
+		 countPt = 0;
+		 countOthers = 0;
+		
+		cacheTripsMap = new CacheTripsMap();
 		
 		this.graph = (TdspIntermodalGraph)g;
 		
@@ -146,25 +176,106 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 				
 				if(link.getType() == "depStart") {
 					
-					count++;
-					
 					TdspIntermodalNode fromNode = (TdspIntermodalNode)this.graph.getNodes()[ltk.getFromNode()];
 					TdspIntermodalNode toNode = (TdspIntermodalNode)this.graph.getNodes()[ltk.getToNode()];
 					
-					final List<? extends PlanElement> newTrip =
-							tripRouter.calcRoute(
-									link.getMode(),
-								  FacilitiesUtils.toFacility(fromNode.getActivity(), facilities ),
-								  FacilitiesUtils.toFacility(toNode.getActivity(), facilities ),
-										  arrivalTime[ltk.getFromNode()][ltk.getTime()],
-										  graph.getPerson());
-					for(PlanElement l: newTrip) {
-						if(l instanceof Leg ) {
-							travelTime = travelTime + ((Leg)l).getTravelTime();
-							label = label - this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson(), (Leg)l);
-						}
+					Facility fromFracility = FacilitiesUtils.toFacility(fromNode.getActivity(), facilities );
+					Facility toFracility = FacilitiesUtils.toFacility(toNode.getActivity(), facilities );
+					//TODO why sometimes mode is = null?
+					String mode = link.getMode() != null?  link.getMode() : "walk";
+					
+					double depTime = arrivalTime[ltk.getFromNode()][ltk.getTime()];
+					
+					//departure times after 24h are considered infinite
+					if(depTime >= 86000) {
+						tempLabelsMap.put(ltk, new UfTime(Double.MAX_VALUE,Double.MAX_VALUE));
+						continue;
 					}
-					tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()] + travelTime));
+					
+					CacheTripKey cacheTrip = null;
+					UfTime cacheUft = null;
+					
+					/*
+					 * try {
+					 */
+						cacheTrip = new CacheTripKey(fromFracility,toFracility,mode);
+						cacheUft = cacheTripsMap.get(cacheTrip, depTime);
+						
+                    /*}catch(NullPointerException e) {
+						log.error("errore nella chiave:");
+						log.error("fromfacility = : " + fromFracility.getLinkId().toString());
+						log.error("tofacility = : " + toFracility.getLinkId().toString());
+						log.error("mode : "+ mode);
+					}*/
+						
+					if(cacheUft != null) {
+						travelTime = travelTime + cacheUft.time ;
+						label = label + cacheUft.uf;
+					}
+					else {
+						
+						List<? extends PlanElement> newTrip = null;
+						try {
+							long start = System.nanoTime();
+							newTrip =
+								tripRouter.calcRoute(
+										mode,
+										fromFracility,
+										toFracility,
+										depTime,
+									    graph.getPerson());
+							long fin = System.nanoTime();
+							long timeElapsed = fin - start;
+							
+							switch (mode) {
+							case "car":
+								routingTimeCar += ((double)timeElapsed/1000000);
+								countCar++;
+								break;
+							case "pt":
+								routingTimePt += ((double)timeElapsed/1000000);
+								countPt++;
+								break;
+							case "ride":
+								routingTimeRide += ((double)timeElapsed/1000000);
+								countRide++;
+							    break;
+							case "bicycle":
+								routingTimeOthers += ((double)timeElapsed/1000000);
+								countOthers++;
+								break;
+							case "walk":
+								routingTimeOthers += ((double)timeElapsed/1000000);
+								countOthers++;;
+								break;
+							
+							}
+							
+						
+						  } catch (ArrayIndexOutOfBoundsException e) {
+						  
+						  log.error("Out of time in optimization : person id = "+
+						  graph.getPerson().getId().toString() ); e.printStackTrace();
+						  tempLabelsMap.put(ltk, new UfTime(Double.MAX_VALUE,Double.MAX_VALUE));
+						  continue; }
+						
+						
+						
+						double linkTravelTime = 0;
+						double labelLink = 0;
+						
+						for(PlanElement l: newTrip) {
+							if(l instanceof Leg ) {
+								linkTravelTime = linkTravelTime + ((Leg)l).getTravelTime();
+								labelLink = labelLink - this.scoringFunctionForPopulationGraph.getLegUtilityFunctionValueForAgent(graph.getPerson(), (Leg)l);
+							}
+						}
+						
+						cacheTripsMap.put(cacheTrip,depTime,new UfTime(labelLink,linkTravelTime));
+						travelTime = travelTime + linkTravelTime;
+						label = label + labelLink;
+					}
+					tempLabelsMap.put(ltk, new UfTime(label,depTime + travelTime));
 					
 				}else if(link.getType() == "startEnd") {
 					label = label - link.getUtility();
@@ -172,7 +283,7 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 				
 				}
 				else {
-					label = permanentLabel;
+					label = permanentLabel + link.getUtility(); 
 					tempLabelsMap.put(ltk, new UfTime(label,arrivalTime[ltk.getFromNode()][ltk.getTime()]));
 					
 				}
@@ -182,7 +293,11 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 	
 	public Plan buildSolution(GraphImpl g) {
 		
-		//I should use the RoutingModules
+		/*
+		 * //I should use the RoutingModules
+		 * if(g.getPerson().getId().toString().equals("10000001")) {
+		 * System.out.println(); }
+		 */
 		
 		double fTime = 86400;
 		double sTime = 0;
@@ -193,6 +308,7 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 		TdspIntermodalGraph graph = (TdspIntermodalGraph)g;
 		
 		OptimalSolution optimalSolution =  optimalPath(graph);
+		if (optimalSolution == null) return null;
 		int optStartTime = optimalSolution.startTime;
 		List<Integer> optPath = optimalSolution.path;
 		
@@ -224,6 +340,7 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 			activities.get(index).setEndTime(depTime);
 			
 			String mode = ((TdspIntermodalNode)graph.getNodes()[optimalSolution.path.get(i)]).getMode();
+			if(mode == null) return null;
 			
 			final List<? extends PlanElement> newTrip =
 					tripRouter.calcRoute(
@@ -246,6 +363,7 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 		activities.get(index).setEndTime(startTimes[optimalSolution.startTime]);
 		//first leg
 		String mode = ((TdspIntermodalNode)graph.getNodes()[optimalSolution.path.get(optimalSolution.path.size()-2)]).getMode();
+		if(mode == null) return null;
 		final List<? extends PlanElement> newTrip =
 				tripRouter.calcRoute(
 						mode,
@@ -285,7 +403,11 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 				minStartTime = i;
 			}
 		}
-		 
+		
+		if(min == Double.MAX_VALUE || arrivalTime[graph.getDestinationId()][minStartTime] >86400) {
+			return null;
+		}
+		
 		//System.out.println(permanentLabels[graph.getDestinationId()][minStartTime]);
 		
 		boolean rootFind = false;
@@ -332,6 +454,21 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 		//System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
 		//System.out.println("");
 		
+		
+//		  log.error("routing time agent id = "+
+//		  planModel.getPerson().getId().toString() + " is CarTime = " + routingTimeCar
+//		  + " CarCount = " + countCar + " is PtTime = " + routingTimePt + " PtCount = "
+//		  + countPt + " is RideTime = " + routingTimeRide + " RideCount = " + countRide
+//		  + " is OthersTime = " + routingTimeOthers + " OthersCount = " + countOthers
+//		  );
+		
+//		
+//		log.error("algotime;"+planModel.getPerson().getId().toString() + "," + routingTimeCar
+//				  + "," + countCar + "," + routingTimePt + ","+ countPt + "," + routingTimeRide + "," + countRide
+//				  + "," + routingTimeOthers + "," + countOthers
+//				  );
+		 
+		
 		return buildSolution(graph);
 	}
 	
@@ -355,5 +492,87 @@ public class TdspIntermodalOptimizationAlgorithmDefaultRouter extends OrdaRomOpt
 			this.uf = uf;
 			this.time = time;
 		}
+	}
+	
+	private class CacheTripsMap{
+		private double error = 600;
+		private Map<CacheTripKey, NavigableMap<Double,UfTime>> cacheTripsMap = new HashMap<CacheTripKey, NavigableMap<Double,UfTime>>();
+		public void put(CacheTripKey ctk, double depTime, UfTime uft) {
+			if(cacheTripsMap.containsKey(ctk)) {
+				cacheTripsMap.get(ctk).put(depTime,uft);
+			}
+			else {
+				NavigableMap<Double,UfTime> map = new TreeMap<Double,UfTime>();
+				map.put(depTime,uft);
+				cacheTripsMap.put(ctk, map);
+			}
+		}
+		public UfTime get(CacheTripKey ctk, double depTime) {
+			if(cacheTripsMap.containsKey(ctk)) {
+				NavigableMap<Double,UfTime> map = cacheTripsMap.get(ctk);
+				Map.Entry<Double,UfTime> res = map.floorEntry(depTime);
+				if(res == null) return null;
+				if(depTime >= res.getKey() - error && depTime <= res.getKey() + error ) {
+					return res.getValue();
+				}
+				else {
+					return null;
+				}
+			}
+			else {
+				return null;
+			}
+		}
+		
+	}
+	
+	private class CacheTripKey{
+		private final Facility fromFacility;
+		private final Facility toFacility;
+		private final String mode;
+		
+		public CacheTripKey(Facility fromFacility, Facility toFacility, 
+				String mode) {
+			this.fromFacility = fromFacility;
+			this.toFacility = toFacility;
+			this.mode = mode;
+	
+			
+		}
+		
+		@Override
+	    public boolean equals(Object o) {
+			if(this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			CacheTripKey ct  = (CacheTripKey)o;
+			if(this.fromFacility.getLinkId().toString().equals(ct.fromFacility.getLinkId().toString())
+					&& this.toFacility.getLinkId().toString().equals(ct.toFacility.getLinkId().toString()) &&
+					this.mode.equals(mode)) {
+				return true;
+			}
+			else {return false;}
+			
+		}
+		@Override    
+	    public int hashCode() {
+			String s1 = this.fromFacility.getLinkId().toString();
+			String s2 = this.toFacility.getLinkId().toString();
+			s1 = s1 != null? s1 : "0";
+			s2 = s2 != null? s2 : "0";
+			return s1.hashCode() * s2.hashCode() *
+					this.mode.hashCode();
+			/*
+			 * int result = (fromFacility != null ? fromFacility.hashCode() : 0); result =
+			 * 31 * result + (toFacility != null ? toFacility.hashCode() : 0); result = 31 *
+			 * result + (mode != null ? mode.hashCode() : 0); return result;
+			 */
+		}
+		
+		public void print() {
+			System.out.println("--------------");
+			System.out.println("FromFacility : "+ fromFacility.getLinkId() + " - ToFacility : "+ toFacility.getLinkId() + " - Mode  : "+ mode);
+			System.out.println(" >>>> hashCode : " + this.hashCode());
+			System.out.println("--------------");
+		} 
 	}
 }

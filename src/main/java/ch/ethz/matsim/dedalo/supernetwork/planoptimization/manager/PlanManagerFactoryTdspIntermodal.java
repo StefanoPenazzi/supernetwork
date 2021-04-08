@@ -51,6 +51,10 @@ public class PlanManagerFactoryTdspIntermodal implements PlanManagerFactory {
 	@Override
 	public PlanManager createPlanManager(Person person) {
 		TdspIntermodalGraph planModel = (TdspIntermodalGraph) this.planModelFactory.createPlanModel(person);
+		if(planModel == null) 
+			{
+			return null;
+			}
 		return new PlanManagerTdspIntermodal(planModel, new TdspIntermodalOptimizationAlgorithmDefaultRouter(this.scoringFunctionForPopulationGraph,
 				this.populationFactory,this.network,this.tripRouter, this.facilities,this.activityManager));
 	}

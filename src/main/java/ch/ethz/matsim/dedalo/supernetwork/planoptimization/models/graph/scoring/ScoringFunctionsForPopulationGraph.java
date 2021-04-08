@@ -18,6 +18,7 @@ import org.matsim.core.controler.events.StartupEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.controler.listener.StartupListener;
 import org.matsim.core.events.algorithms.Vehicle2DriverEventHandler;
+import org.matsim.core.router.TripStructureUtils.Trip;
 import org.matsim.core.scoring.EventsToActivities;
 import org.matsim.core.scoring.EventsToLegs;
 import org.matsim.core.scoring.ScoringFunction;
@@ -65,8 +66,11 @@ public class ScoringFunctionsForPopulationGraph {
 		
 		public double getActivityUtilityFunctionValueForAgent(final Person person, Activity activity, double duration) {
 			ScoringParameters parameters = params.getScoringParameters( person );
-			double openingTime = parameters.utilParams.get(activity.getType()).getOpeningTime();
-			openingTime = (Time.isUndefinedTime(openingTime)) ? 0 : openingTime;
+			double openingTime = 0;
+			if(parameters.utilParams.get(activity.getType()) != null) {
+				openingTime = parameters.utilParams.get(activity.getType()).getOpeningTime();
+				openingTime = (Time.isUndefinedTime(openingTime)) ? 0 : openingTime;
+			}
 			activity.setMaximumDuration(duration);
 			activity.setStartTime(openingTime);
 			activity.setEndTime(openingTime+duration);
@@ -82,8 +86,17 @@ public class ScoringFunctionsForPopulationGraph {
  			double oldScore = scoringFunction.getScore();
  			scoringFunction.handleLeg(leg);
  			double newScore = scoringFunction.getScore();
+			return (newScore - oldScore);
+		}
+		
+		public double getTripUtilityFunctionValueForAgent(Person person, Trip trip) {
+			ScoringFunction scoringFunction = this.agentScorers.get(person.getId());
+ 			double oldScore = scoringFunction.getScore();
+ 			scoringFunction.handleTrip(trip);
+ 			double newScore = scoringFunction.getScore();
 			return newScore - oldScore;
 		}
+		
 		
 		
 }

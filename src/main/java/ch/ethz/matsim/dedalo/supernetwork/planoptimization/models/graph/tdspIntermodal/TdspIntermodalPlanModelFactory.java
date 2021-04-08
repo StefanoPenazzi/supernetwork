@@ -11,6 +11,7 @@ import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
+import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
 import org.matsim.core.population.PopulationUtils;
@@ -38,11 +39,12 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	private final ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph;
 	private final PlanCalcScoreConfigGroup planCalcScoreConfigGroup;
     private final PopulationFactory populationFactory;
+    private final Config config;
    
     
 	
-	
-	private  List<String> modes = Arrays.asList("car","walk");
+    //private  List<String> modes = Arrays.asList("car","walk"); //,"bicycle","ride"
+	private  List<String> modes = Arrays.asList("car","walk","bicycle","ride","pt");
 	private String[] nodeType = {"actStart","actEnd","actDep"};
 	private String[] linkType = {"depStart","startEnd","endDep"};
 	private double timeStep = 1200;
@@ -53,13 +55,14 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	@Inject
 	public TdspIntermodalPlanModelFactory(ScoringParametersForPerson params,TripRouter tripRouter,
 			ScoringFunctionsForPopulationGraph  scoringFunctionsForPopulationGraph,PlanCalcScoreConfigGroup planCalcScoreConfigGroup,
-			PopulationFactory populationFactory) { //RoutingGeneralManager routingGeneralManager,
+			PopulationFactory populationFactory,Config config) { //RoutingGeneralManager routingGeneralManager,
 		//this.routingGeneralManager = routingGeneralManager;
 		this.params = params;
 		this.tripRouter = tripRouter;
 		this.scoringFunctionsForPopulationGraph = scoringFunctionsForPopulationGraph;
 		this.planCalcScoreConfigGroup = planCalcScoreConfigGroup;
 		this.populationFactory = populationFactory;
+		this.config = config;
 		
 		
 	}
@@ -68,30 +71,46 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		this.scoringFunctionsForPopulationGraph.init();
 	}
 	
+	public boolean check(Plan plan) {
+		
+//		if(TripStructureUtils.getTrips(plan, tripRouter.getStageActivityTypes()).size() == 0) {
+//			return false;
+//		}
+		if(plan.getPlanElements().size() <= 1) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	
 	@Override
 	public TdspIntermodalGraph createPlanModel(Person person) {
 		
+		if(!check(person.getSelectedPlan())) return null;
 		
-		TdspIntermodalGraph graph = new TdspIntermodalGraph(person,convertPlanForModel(person.getPlans().get(0)));
+		TdspIntermodalGraph graph = new TdspIntermodalGraph(person,convertPlanForModel(person.getSelectedPlan()));
 		Plan plan = graph.getPlan();
 		
 		//final List<Activity> activities = TripStructureUtils.getActivities( plan , tripRouter.getStageActivityTypes() );
 		
 		final List<Trip> trips = TripStructureUtils.getTrips(plan, tripRouter.getStageActivityTypes());
+		
 		List<Activity> activities = new ArrayList<>();
+		
 		for(Trip trip: trips) {
 			activities.add(trip.getOriginActivity());
 		}
+		
 		activities.add(trips.get(trips.size()-1).getDestinationActivity());
 		
 		int idNode = 0;
 		int idLink = 0;
 		List<String> planModes = new ArrayList<>(modes);
-		if(plan.getPerson().getAttributes().getAttribute("car_avail") != "always") {
-			//planModes.remove("car");
-		}
+		/*
+		 * if(!person.getAttributes().getAttribute("carAvail").equals("always")) {
+		 * planModes.remove("car"); }
+		 */
 		List<TdspIntermodalNode> nodesList = new ArrayList<>();
 		List<List<TdspIntermodalNode>> nodesListPerPosition = new ArrayList<>();
 		
@@ -167,7 +186,7 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 								idLink++;
 								n.addOutLink(link);
 								nn.addInLink(link);
-								System.out.println("");
+								//System.out.println("");
 							}
 						}
 					}
@@ -242,7 +261,6 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 			}
 		}
 		graph.buildLinksIntoNodes(nodesList);
-		//graph.print();
 		return graph;
 	}
 	
@@ -259,38 +277,88 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 		
 		// single duration for the interaction
 		if (activity.getType().endsWith("interaction")) {
-			result = new double[1];
-			result[0] = endTime - startTime;
-			return result;
+			/*
+			 * result = new double[1]; result[0] = endTime - startTime;
+			 */
+			throw new RuntimeException("interaction activities must not be considered as nodes of the graph");
+			//return result;
 		}
 		
-		if(!Time.isUndefinedTime(activityParams.getMinimalDuration())) {
-			minDuration = activityParams.getMinimalDuration();
-			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
-				maxDuration = activity.getMaximumDuration();
-			}
-			else {
-				maxDuration = endTime - startTime+defaultRange/2;
-			}
+//		if(activityParams != null) {
+//			if(!Time.isUndefinedTime(activityParams.getMinimalDuration())) {
+//				minDuration = activityParams.getMinimalDuration();
+//				if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
+//					maxDuration = activity.getMaximumDuration();
+//				}
+//				else {
+//					maxDuration = minDuration+defaultRange/2;
+//				}
+//			}
+//			else {
+//				minDuration = endTime - startTime-defaultRange/2;
+//				minDuration = (minDuration < 0)? 0: minDuration; 
+//				
+//				if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
+//					maxDuration = activity.getMaximumDuration();
+//				}
+//				else {
+//					maxDuration = endTime - startTime+defaultRange/2;
+//				}
+//			}
+//		}
+//		else {
+//			
+//			minDuration = endTime - startTime-defaultRange/2;
+//			minDuration = (minDuration < 0)? 0: minDuration; 
+//			
+//			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
+//				minDuration = activity.getMaximumDuration()-defaultRange/2;
+//				maxDuration = activity.getMaximumDuration()+defaultRange/2;
+//			}
+//			else {
+//				maxDuration = endTime - startTime+defaultRange/2;
+//			}
+//		}
+//		maxDuration = (maxDuration > 86400)? 86400: maxDuration; 
+		
+		//simp version----------------------
+		double dur = config.planCalcScore().getActivityParams(activity.getType()).getTypicalDuration();
+//		if(Time.isUndefinedTime(dur)) {
+//			dur = endTime - startTime;
+//		}
+		if((dur * 0.2) > defaultRange/2) {
+			maxDuration = dur+defaultRange/2;
+			minDuration = dur-defaultRange/2;
+			timeStep = 1200;
 		}
 		else {
-			minDuration = endTime - startTime-defaultRange/2;
-			minDuration = (minDuration < 0)? 0: minDuration; 
-			
-			if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
-				maxDuration = activity.getMaximumDuration();
+			if(dur == 0.0) {
+				maxDuration = defaultRange/2;
+				minDuration = 0;
+				timeStep = 600;
 			}
-			else {
-				maxDuration = endTime - startTime+defaultRange/2;
+			else
+			{
+				maxDuration = dur + (dur * 0.2);
+				minDuration = dur - (dur * 0.2);
+				timeStep = dur * 0.1;
 			}
 		}
-		maxDuration = (maxDuration > 86400)? 86400: maxDuration; 
+		if(!Time.isUndefinedTime(config.planCalcScore().getActivityParams(activity.getType()).getMinimalDuration())) {
+			if(minDuration < config.planCalcScore().getActivityParams(activity.getType()).getMinimalDuration()) {
+				minDuration = activityParams.getMinimalDuration();
+			}
+		}
+		//--------------------------------
+		
+		
 		range = maxDuration - minDuration;
 		if(range <= 0) {
 			result = new double[1];
 			result[0] = maxDuration;
 			return result;
 		}
+		
 		steps = (int) Math.floor(range/timeStep);
 		result = new double[steps+2];
 		for(int j = 0;j<=steps; ++j) {
@@ -302,12 +370,13 @@ public class TdspIntermodalPlanModelFactory implements PlanModelFactory {
 	
 	public double[] multiStartTimes(Activity activity) {
 		
+		timeStep = 3600;
 		double[] res;
 		double duration = 0;
 		int steps = (int)Math.ceil((defaultRange/2)/timeStep);
 		
-		if(!Time.isUndefinedTime(activity.getMaximumDuration())) {
-			duration = activity.getMaximumDuration();
+		if(!Time.isUndefinedTime(activity.getEndTime())) {
+			duration = activity.getEndTime();
 		}
 		
 		if(duration == 0) {

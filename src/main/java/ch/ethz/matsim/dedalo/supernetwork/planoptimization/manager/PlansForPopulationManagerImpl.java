@@ -6,10 +6,14 @@ package ch.ethz.matsim.dedalo.supernetwork.planoptimization.manager;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.api.core.v01.population.Plan;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.Population;
+import org.matsim.core.controler.Controler;
+
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.dedalo.supernetwork.planoptimization.containers.PlansForPopulationContainer;
@@ -24,6 +28,8 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 	private final PlansForPopulationContainer plansForPopulationContainer;
 	private final Population population;
 	private final PlanManagerFactory planManagerFactory;
+	private static final Logger log = Logger.getLogger(PlansForPopulationManagerImpl.class);
+	private int count = 0;
 	
 	@Inject
 	public PlansForPopulationManagerImpl(PlansForPopulationContainer plansForPopulationContainer,
@@ -36,7 +42,7 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 	@Override
 	public void populationNewPlans() {
 		//TODO
-		System.out.println("");
+		//System.out.println("");
 		long start = System.nanoTime();
 		int noPath = 0;
 		for (Person person : this.population.getPersons().values()) {
@@ -48,8 +54,8 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 		}
 		long finish = System.nanoTime();
 		long timeElapsed = finish - start;
-		System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
-		System.out.println("");
+		//System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
+		//System.out.println("");
 	}
 
 	@Override
@@ -58,17 +64,31 @@ public class PlansForPopulationManagerImpl implements PlansForPopulationManager{
 			PlanManager planManager = this.planManagerFactory.createPlanManager(person);
 			this.plansForPopulationContainer.addPlanManager(person.getId(), planManager);
 		}
-	System.out.println();
+	//System.out.println();
 	}
 
 	@Override
 	public Plan personNewPlan(Person person) {
-		long start = System.nanoTime();
-		Plan p = plansForPopulationContainer.getPlanManagerForAgent(person.getId()).getNewPlan();
-		long fin = System.nanoTime();
-		long timeElapsed = fin - start;
-		System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
-		System.out.println("");
+		//long start = System.nanoTime();
+		
+		PlanManager pm = plansForPopulationContainer.getPlanManagerForAgent(person.getId());
+		if(pm == null) return null;
+		Plan p = pm.getNewPlan();
+//		
+//		long fin = System.nanoTime();
+//		long timeElapsed = fin - start;
+//		
+//		int nact = 0;
+//		for (PlanElement pe: person.getSelectedPlan().getPlanElements()) {
+//			if(pe instanceof Activity) {
+//				if(!((Activity)pe).getType().contains("inter")) {
+//				   nact++;
+//				}
+//			}
+//		}
+//		log.warn("Time to solve the graph agent id;"+ person.getId().toString() +";" + ((double)timeElapsed/1000000)+";"+nact );
+		//System.out.printf(" exe time : %f", ((double)timeElapsed/1000000));
+		//System.out.println("");
 		return p;
 	
 	}
