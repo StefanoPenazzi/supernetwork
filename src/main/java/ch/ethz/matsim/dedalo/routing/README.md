@@ -11,6 +11,9 @@
 <h1>Idea</h1>
 <div align="justify">
   
+  <p align="center">
+  <img width="800" height="450" src="/src/main/resources/img/SuperNetwork.png">
+  </p>
 
 
 </div>
