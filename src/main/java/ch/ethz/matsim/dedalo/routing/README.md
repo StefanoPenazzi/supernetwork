@@ -21,11 +21,11 @@
 <h1>How to use it</h1>
 <div align="justify">
   
-  '''
+```
 Controler controler = new Controler(scenario);       
 controler.addOverridingModule(new ClusterRoutingModule());        
 controler.run();
-  '''
+```
 
 
 </div>
