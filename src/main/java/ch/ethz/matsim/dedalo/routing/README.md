@@ -12,7 +12,7 @@
 <div align="justify">
   
   <p align="center">
-  <img width="1000" height="450" src="/src/main/resources/img/SuperNetwork.png">
+  <img width="1000" height="400" src="/src/main/resources/img/SuperNetwork.png">
   </p>
 
 
