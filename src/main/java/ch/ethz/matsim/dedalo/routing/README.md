@@ -30,6 +30,12 @@ controler.run();
 
 </div>
 
+<h1>Structure</h1>
+<div align="justify">
+
+
+</div>
+
 
 </body>
 </html>
