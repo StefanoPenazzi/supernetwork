@@ -27,8 +27,12 @@ DEDALO provides a framework to design an  <a href="https://maths.dur.ac.uk/lms/1
   <li>JDK 11: The Java JDK 11 must be installed.</li>
 </ul>
 
-<h1> Installing</h1>
+<h1>Installing</h1>
 Please note that this library is still in early development stages. Major API changes are expected in the near future.
+
+<h1>Idea</h1>
+
+
 
 <h1>Versioning and Packaging</h1>
 
