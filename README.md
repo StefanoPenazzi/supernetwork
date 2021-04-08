@@ -15,5 +15,17 @@ DEDALO provides a framework to design an informed proposal distribution in the c
 
 </div>
 
+<h1>Versioning and Packaging</h1>
+
+<h1>Contact</h1>
+<div align="justify">
+E-Mail Adresse: stefano.penazzi@ivt.baug.ethz.ch <br />
+<a href="https://www.linkedin.com/in/stefano-penazzi-datascientist/">LinkedIn</a> <br />
+</div>
+
+<h1>References</h1>
+<a id="1">[1]</a> 
+<a href="https://matsim.org/the-book">The Multi-Agent Transport Simulation MATSim</a><br />
+
 </body>
 </html>
