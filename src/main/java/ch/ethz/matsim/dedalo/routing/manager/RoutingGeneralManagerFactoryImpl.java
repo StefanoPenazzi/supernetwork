@@ -6,6 +6,10 @@ package ch.ethz.matsim.dedalo.routing.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.matsim.core.controler.events.StartupEvent;
+import org.matsim.core.controler.listener.StartupListener;
+
 import com.google.inject.Inject;
 
 import ch.ethz.matsim.dedalo.routing.network.cluster.clusteranalysis.cluster.centroid.ClusterActivitiesLocation;
@@ -18,10 +22,9 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.elements.subnetwork.Subnetw
  * @author stefanopenazzi
  *
  */
-public class RoutingGeneralManagerFactoryImpl implements RoutingGeneralManagerFactory {
+public class RoutingGeneralManagerFactoryImpl implements RoutingGeneralManagerFactory, StartupListener {
 
 	private final ClustersContainer clustersContainer;
-	private final SubnetworkFactory subnetworkFactory; 
 	private final MiddlenetworkFactory middlenetworkFactory; 
 	private final RoutingGeneralManager routingGeneralManager;
 
@@ -30,13 +33,11 @@ public class RoutingGeneralManagerFactoryImpl implements RoutingGeneralManagerFa
 	@Inject
 	public RoutingGeneralManagerFactoryImpl(
 			ClustersContainer clustersContainer,
-			SubnetworkFactory subnetworkFactory, 
 			MiddlenetworkFactory middlenetworkFactory,
 			RoutingGeneralManager routingGeneralManager
 			
     ) {
 		this.clustersContainer = clustersContainer;
-		this.subnetworkFactory = subnetworkFactory; 
 		this.middlenetworkFactory = middlenetworkFactory; 
 		this.routingGeneralManager = routingGeneralManager;
 
@@ -56,6 +57,11 @@ public class RoutingGeneralManagerFactoryImpl implements RoutingGeneralManagerFa
 	public void setContainerManager() {
 		
 		routingGeneralManager.setMiddlenetworks(containerManagerByClusteringActivities());
+	}
+	
+	@Override
+	public void notifyStartup(StartupEvent event) {
+	     this.setContainerManager();
 	}
 
 }

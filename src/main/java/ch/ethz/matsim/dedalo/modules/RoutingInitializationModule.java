@@ -25,8 +25,7 @@ public class RoutingInitializationModule extends AbstractRoutingExtension {
 
 	@Override
 	protected void installExtension() {
-		 //network by clustering
-		this.addControlerListenerBinding().to(RoutingManagerInitialization.class);
+		 
 		
 		bindActivityManager().to(ActivityManagerImpl.class).asEagerSingleton();
 
@@ -34,11 +33,13 @@ public class RoutingInitializationModule extends AbstractRoutingExtension {
         install(new SubnetworkModule());
         install(new MiddlenetworkModule());
         
-		    //routing manager
+		//routing manager
 		bind(LeastCostPathCalculatorFactory.class).to(ClusterLeastCostPathCalculatorFactoryImpl.class);
 		
 		bindContainerManager().to(RoutingGeneralManagerImpl.class).asEagerSingleton();
 		bindContainerManagerFactory().to(RoutingGeneralManagerFactoryImpl.class);
+		//network by clustering
+		this.addControlerListenerBinding().to(RoutingGeneralManagerFactoryImpl.class);
 		
 		bindRoutesContainer("car").to(RoutesContainerImpl.class);
 		bindUpdateAlgorithm("car").to(UpdateAlgorithmStaticFreqAnalysis.class);

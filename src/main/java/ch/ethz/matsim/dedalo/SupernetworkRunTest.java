@@ -43,12 +43,14 @@ public class SupernetworkRunTest {
         Controler controler = new Controler(scenario);
         
         //routing
-        //controler.addOverridingModule(new ClusterRoutingModule());
+        controler.addOverridingModule(new ClusterRoutingModule());
         //controler.addOverridingQSimModule(new SupernetworkMobsimModule());
+        
         //supernetwork
         //controler.addOverridingModule(new SupernetworkModule());
+        
         //supernetworkStrategy
-        controler.addOverridingModule(new SupernetworkStrategyModule());
+        //controler.addOverridingModule(new SupernetworkStrategyModule());
         
         //System.setProperty("scenario","sbb");
         
