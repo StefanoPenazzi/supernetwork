@@ -33,6 +33,7 @@ import ch.ethz.matsim.dedalo.routing.network.cluster.elements.supernode.Supernod
 
 /**
  * @author stefanopenazzi
+ * 
  *
  */
 public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
@@ -72,11 +73,6 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 	  routingManager.init();
 	  for (UpdateAlgorithmOutput uao: inputs) {
 		  routingManager.addRequest(uao);
-//		  Path [] paths= this.supernetworkRoutingModule.calcTree(mn.getSupernode().getNode(), mn.getToNodes(),mn.getTime());
-//		  for(Path p: paths) {
-//			  src.add(mn.getSupernode(),Iterables.getLast(p.nodes),mn.getTime(),p);
-//		  }
-		  
 	  }	
 	  List<Pair<PathTimeKey,Path>> res = routingManager.run();
 	  for(Pair<PathTimeKey,Path> p: res) {
@@ -97,24 +93,6 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 		return this.middlenetworks;
 	}
 	
-	@Override
-	public void setMiddlenetworks(List<Middlenetwork> middlenetworks) {
-		this.middlenetworks = middlenetworks;
-		initialize();
-	}
-	
-	public void initialize() {
-		
-		routingManager = routingManagerFactory.createRoutingManager(middlenetworks);
-		
-		for(Middlenetwork mn: this.middlenetworks) {
-			List<ElementActivity> activities = mn.getCluster().getComponents();
-			for(ElementActivity ea : activities) {
-				Coordin c = new Coordin(ea.getFacility().getCoord());
-				activitySupernodeMap.put(c,mn.getSuperNode());
-			}
-		}
-	}
 	
 	class Coordin implements Comparable<Coordin>{
 
@@ -152,6 +130,21 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 				else {
 					return 0;
 				}
+			}
+		}
+		
+	}
+
+	@Override
+	public void initialize(List<Middlenetwork> middlenetworks) {
+		this.middlenetworks = middlenetworks;
+        routingManager = routingManagerFactory.createRoutingManager(middlenetworks);
+		
+		for(Middlenetwork mn: this.middlenetworks) {
+			List<ElementActivity> activities = mn.getCluster().getComponents();
+			for(ElementActivity ea : activities) {
+				Coordin c = new Coordin(ea.getFacility().getCoord());
+				activitySupernodeMap.put(c,mn.getSuperNode());
 			}
 		}
 		

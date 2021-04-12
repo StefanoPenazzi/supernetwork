@@ -18,6 +18,6 @@ public interface RoutingGeneralManager {
 
 	public void updateContainer(String mode);
 	public Path getPath(Node fromNode, Node toNode ,double time,String mode);
-	public void setMiddlenetworks(List<Middlenetwork> middlenetworks);
+	public void initialize(List<Middlenetwork> middlenetworks);
 	public List<Middlenetwork> getMiddlenetworks();
 }

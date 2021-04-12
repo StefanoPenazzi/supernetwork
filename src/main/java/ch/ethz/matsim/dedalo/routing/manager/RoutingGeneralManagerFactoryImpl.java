@@ -56,7 +56,7 @@ public class RoutingGeneralManagerFactoryImpl implements RoutingGeneralManagerFa
 	@Override
 	public void setContainerManager() {
 		
-		routingGeneralManager.setMiddlenetworks(containerManagerByClusteringActivities());
+		routingGeneralManager.initialize(containerManagerByClusteringActivities());
 	}
 	
 	@Override
