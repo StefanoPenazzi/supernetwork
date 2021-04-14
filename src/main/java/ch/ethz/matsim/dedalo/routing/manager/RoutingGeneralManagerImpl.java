@@ -44,9 +44,9 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 	private final RoutingManagerFactory routingManagerFactory; 
 	private RoutingManager routingManager;
 	private List<Middlenetwork> middlenetworks;
-	private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
-	private final ActivityFacilities facilities;
-	private final Network network;
+	//private  TreeMap<Coordin, Supernode> activitySupernodeMap = new TreeMap<Coordin, Supernode>();
+	//private final ActivityFacilities facilities;
+	//private final Network network;
 	
 	@Inject
 	public RoutingGeneralManagerImpl(RoutingManagerFactory routingManagerFactory,
@@ -59,8 +59,8 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 		this.containersMap = containersMap;
 		this.middlenetworks = null;
 		this.travelTimes = travelTimes;
-		this.facilities = facilities;
-		this.network= network;
+		//this.facilities = facilities;
+		//this.network= network;
 		
 	}
 
@@ -78,6 +78,7 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 	  for(Pair<PathTimeKey,Path> p: res) {
 		  src.add(p.getValue0().getFromNode(),Iterables.getLast(p.getValue1().nodes),p.getValue0().getTime(),p.getValue1());
 	  }
+	  System.out.println();
 	}
 	
 	@Override
@@ -88,10 +89,10 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 		return containersMap.get(mode).getPath(fromNode, toNode, time);
 	}
 	
-	@Override 
-	public List<Middlenetwork> getMiddlenetworks(){
-		return this.middlenetworks;
-	}
+//	@Override 
+//	public List<Middlenetwork> getMiddlenetworks(){
+//		return this.middlenetworks;
+//	}
 	
 	
 	class Coordin implements Comparable<Coordin>{
@@ -139,14 +140,13 @@ public class RoutingGeneralManagerImpl implements RoutingGeneralManager {
 	public void initialize(List<Middlenetwork> middlenetworks) {
 		this.middlenetworks = middlenetworks;
         routingManager = routingManagerFactory.createRoutingManager(middlenetworks);
-		
-		for(Middlenetwork mn: this.middlenetworks) {
-			List<ElementActivity> activities = mn.getCluster().getComponents();
-			for(ElementActivity ea : activities) {
-				Coordin c = new Coordin(ea.getFacility().getCoord());
-				activitySupernodeMap.put(c,mn.getSuperNode());
-			}
-		}
+//		for(Middlenetwork mn: this.middlenetworks) {
+//			List<ElementActivity> activities = mn.getCluster().getComponents();
+//			for(ElementActivity ea : activities) {
+//				Coordin c = new Coordin(ea.getFacility().getCoord());
+//				activitySupernodeMap.put(c,mn.getSuperNode());
+//			}
+//		}
 		
 	}
 

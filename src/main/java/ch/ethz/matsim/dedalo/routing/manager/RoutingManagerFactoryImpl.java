@@ -84,6 +84,6 @@ public class RoutingManagerFactoryImpl implements RoutingManagerFactory{
 		this.clusterLeastCostTreeCalculatorFactory.setRoutingNetwork(filteredNetwork, middlenetworks);
 		
 		// TODO Auto-generated method stub
-		return new RoutingManagerImpl(4,this.clusterLeastCostTreeCalculatorFactory);
+		return new RoutingManagerImpl(16,this.clusterLeastCostTreeCalculatorFactory);
 	}
 }
